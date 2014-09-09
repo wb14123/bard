@@ -1,52 +1,56 @@
 package org.binwang.bard.core;
 
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Server extends org.eclipse.jetty.server.Server {
 
-    private AnnotationFilterMap map;
+    private AnnotationMapper mapper = new AnnotationMapper();
+    private List<Class<? extends Handler>> handlers = new LinkedList<Class<? extends Handler>>();
 
-    public void bind(Class<? extends Annotation> annotationClass,
-                     Class<? extends Handler> handlerClass) {
-        map.map.put(annotationClass, handlerClass);
+    public void addFilter(final Class<? extends Annotation> annotationClass,
+                          final Class<? extends Filter> filterClass) {
+        mapper.filterMap.put(annotationClass, filterClass);
     }
 
-    public void addHandler(String method, String path, final Class<? extends Handler> handlerClass) {
-        super.setHandler(new AbstractHandler() {
-            @Override
-            public void handle(String s,
-                               Request request,
-                               HttpServletRequest httpServletRequest,
-                               HttpServletResponse httpServletResponse)
-                    throws IOException, ServletException {
-                Context c = new Context();
-                c.target = s;
-                c.baseRequest = request;
-                c.request = httpServletRequest;
-                c.response = httpServletResponse;
+    public void addAdapter(final Class<? extends Annotation> annotationClass,
+                           final Class<? extends Adapter> adapterClass) {
+        mapper.adapterMap.put(annotationClass, adapterClass);
+    }
 
-                try {
-                    Handler handler = Handler.newHandlerInstance(handlerClass, c, map);
-                    handler.run();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
+    public void addInjector(final Class<? extends Annotation> annotationClass,
+                            final Class<? extends Injector> injectorClass) {
+        mapper.injectorMap.put(annotationClass, injectorClass);
+    }
+
+    public void addHandler(final Class<? extends Handler> handlerClass) {
+        handlers.add(handlerClass);
+    }
+
+    public void serve(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // TODO: performance for adapter? (instead of linear time)
+            for (Class<? extends Handler> handlerClass : handlers) {
+                Context context = new Context(request, response);
+                Handler handler = Handler.newInstance(handlerClass, context, mapper);
+                Object result = handler.run();
+                if (result.getClass() != NoAdapter.class) {
+                    return;
                 }
             }
-        });
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
     }
 }
 

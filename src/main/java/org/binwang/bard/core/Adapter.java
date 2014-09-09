@@ -1,37 +1,38 @@
 package org.binwang.bard.core;
 
-import org.binwang.bard.core.marker.Handle;
+import org.binwang.bard.core.marker.Match;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public abstract class Handler extends GenericHandler<Object, Annotation> {
-    public Handler(Context context,
+public abstract class Adapter<AnnotationType extends Annotation> extends GenericHandler<Object, AnnotationType> {
+    public Adapter(Context context,
                    Object variable,
-                   Annotation annotation,
+                   AnnotationType annotation,
                    AnnotationMapper mapper) {
         super(context, variable, annotation, mapper);
     }
 
-    public static Handler newInstance(
-            Class<? extends Handler> handlerClass,
+    public static Adapter newInstance(
+            Class<? extends Adapter> adapterClass,
             Context context,
+            Annotation annotation,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return handlerClass.getDeclaredConstructor(Context.class, Object.class, Annotation.class, AnnotationMapper.class)
-                .newInstance(context, null, null, mapper);
+        return adapterClass.getDeclaredConstructor(Context.class, Object.class, Annotation.class, AnnotationMapper.class)
+                .newInstance(context, null, annotation, mapper);
     }
 
-    public Object run()
+    public boolean match()
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
-            Object result = runMethod(method, Handle.class);
-            if (result.getClass() != NoAdapter.class) {
-                return result;
+            Boolean result = (Boolean) runMethod(method, Match.class);
+            if (!result) {
+                return false;
             }
         }
-        return new NoAdapter();
+        return true;
     }
 }
