@@ -12,9 +12,9 @@ import java.util.LinkedList;
  */
 public abstract class GenericHandler<ReturnType, AnnotationType extends Annotation> {
     // HTTP context
-    public Context context;
+    protected Context context;
     // used by Injector, after run all the injectors, this variable should be the result
-    public ReturnType variable;
+    protected ReturnType variable;
     // annotation bind to this handler
     protected AnnotationType annotation;
     // how to find handler class from annotation class
