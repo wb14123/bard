@@ -1,5 +1,6 @@
 package org.binwang.bard.core;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
@@ -7,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Server {
+public class Servlet extends HttpServlet {
     private AnnotationMapper mapper = new AnnotationMapper();
     private List<Class<? extends Handler>> handlers = new LinkedList<Class<? extends Handler>>();
 
@@ -30,7 +31,8 @@ public class Server {
         handlers.add(handlerClass);
     }
 
-    public void serve(HttpServletRequest request, HttpServletResponse response) {
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response) {
         try {
             // TODO: performance for adapter? (instead of linear time)
             for (Class<? extends Handler> handlerClass : handlers) {
