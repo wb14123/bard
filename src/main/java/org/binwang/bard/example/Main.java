@@ -1,4 +1,4 @@
-package org.binwang.bard.exmaple;
+package org.binwang.bard.example;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;

@@ -58,7 +58,7 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
         LinkedList<Filter> filters = new LinkedList<Filter>();
 
         for (Annotation annotation : annotations) {
-            Class<? extends Annotation> annotationClass = annotation.getClass();
+            Class<? extends Annotation> annotationClass = annotation.annotationType();
             if (annotationClass == requiredAnnotation) {
                 shouldRun = true;
             }
@@ -119,22 +119,23 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
         for (; i < parameters.length; i++) {
             args[i] = getParams(parameters[i]);
         }
-        return m.invoke(args);
+        return m.invoke(this, args);
     }
 
     // get method params from injectors
     private Object getParams(Parameter parameter)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Annotation[] annotations = parameter.getAnnotations();
+        Class<?> paramaterClass = parameter.getClass();
         LinkedList<Injector> injectors = new LinkedList<Injector>();
         Object var = null;
         for (Annotation annotation : annotations) {
-            Class<? extends Annotation> annotationClass = annotation.getClass();
+            Class<? extends Annotation> annotationClass = annotation.annotationType();
             Class<? extends Injector> injectorClass = mapper.injectorMap.get(annotationClass);
             if (injectorClass == null)
                 continue;
             Injector injector = Injector.newInstance(
-                    injectorClass, context, var, annotation, mapper);
+                    injectorClass, annotationClass, context, var, annotation, mapper);
             injector.before();
             var = injector.variable;
             context = injector.context;

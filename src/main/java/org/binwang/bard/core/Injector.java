@@ -7,10 +7,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Injector<ReturnType, AnnotationType extends Annotation> extends GenericHandler<ReturnType, AnnotationType> {
-    public Injector() {
-        super();
-    }
-
     public Injector(Context context,
                     ReturnType variable,
                     AnnotationType annotation,
@@ -20,13 +16,14 @@ public abstract class Injector<ReturnType, AnnotationType extends Annotation> ex
 
     public static Injector newInstance(
             Class<? extends Injector> injectorClass,
+            Class<? extends Annotation> annotationClass,
             Context context,
             Object variable,
             Annotation annotation,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // TODO: check constructor type?
-        return injectorClass.getDeclaredConstructor(Context.class, Object.class, Annotation.class, AnnotationMapper.class)
+        return injectorClass.getDeclaredConstructor(Context.class, Object.class, annotationClass, AnnotationMapper.class)
                 .newInstance(context, variable, annotation, mapper);
     }
 

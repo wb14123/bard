@@ -7,10 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class Handler extends GenericHandler<Object, Annotation> {
-    public Handler() {
-        super();
-    }
-
     public Handler(Context context, AnnotationMapper mapper) {
         super(context, null, null, mapper);
     }
@@ -20,7 +16,7 @@ public abstract class Handler extends GenericHandler<Object, Annotation> {
             Context context,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return handlerClass.getDeclaredConstructor(Context.class, AnnotationMapper.class)
+        return handlerClass.getConstructor(Context.class, AnnotationMapper.class)
                 .newInstance(context, mapper);
     }
 

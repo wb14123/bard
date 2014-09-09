@@ -12,13 +12,14 @@ public class QueryParamInjector<ReturnType> extends Injector<ReturnType, QueryPa
     }
 
     @Before
-    public void getParams() {
+    public Object getParams() {
         String param = context.request.getParameter(annotation.value());
         if (variable instanceof Integer) {
             variable = (ReturnType) Integer.getInteger(param);
         } else if (variable instanceof Double) {
             variable = (ReturnType) Double.valueOf(param);
         }
+        return null;
     }
 
     @Override
