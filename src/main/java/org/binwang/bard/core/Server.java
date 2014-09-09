@@ -7,8 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Server extends org.eclipse.jetty.server.Server {
-
+public class Server {
     private AnnotationMapper mapper = new AnnotationMapper();
     private List<Class<? extends Handler>> handlers = new LinkedList<Class<? extends Handler>>();
 
