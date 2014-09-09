@@ -9,6 +9,9 @@ public class Context {
     public HttpServletRequest request;
     public HttpServletResponse response;
 
+    // store result returned by handler
+    public Object result;
+
     // custom context
     public Map<String, Object> custom = new HashMap<String, Object>();
 

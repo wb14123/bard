@@ -29,6 +29,7 @@ public abstract class Handler extends GenericHandler<Object, Annotation> {
         for (Method method : methods) {
             Object result = runMethod(method, Handle.class);
             if (result != NoAdapter.NO_ADAPTER) {
+                context.result = result;
                 return result;
             }
         }
