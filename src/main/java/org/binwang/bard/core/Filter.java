@@ -7,11 +7,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Filter<AnnotationType extends Annotation> extends GenericHandler<Object, AnnotationType> {
+    public Filter() {
+        super();
+    }
+
     public Filter(Context context,
-                  Object variable,
                   AnnotationType annotation,
                   AnnotationMapper mapper) {
-        super(context, variable, annotation, mapper);
+        super(context, null, annotation, mapper);
     }
 
     public static Filter newInstance(
@@ -20,8 +23,9 @@ public abstract class Filter<AnnotationType extends Annotation> extends GenericH
             Annotation annotation,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return filterClass.getDeclaredConstructor(Context.class, Object.class, Annotation.class, AnnotationMapper.class)
-                .newInstance(context, null, annotation, mapper);
+        // TODO: Annotation.class or AnnotationType?
+        return filterClass.getDeclaredConstructor(Context.class, Annotation.class, AnnotationMapper.class)
+                .newInstance(context, annotation, mapper);
     }
 
     public void before()

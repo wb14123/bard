@@ -31,6 +31,9 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
         this.mapper = mapper;
     }
 
+    public GenericHandler() {
+    }
+
     public abstract void handleError(Exception e);
 
     public abstract void generateDoc();

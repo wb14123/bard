@@ -7,6 +7,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class Adapter<AnnotationType extends Annotation> extends GenericHandler<Object, AnnotationType> {
+    public Adapter() {
+        super();
+    }
+
     public Adapter(Context context,
                    Object variable,
                    AnnotationType annotation,
@@ -20,6 +24,7 @@ public abstract class Adapter<AnnotationType extends Annotation> extends Generic
             Annotation annotation,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        // TODO: check constructor type?
         return adapterClass.getDeclaredConstructor(Context.class, Object.class, Annotation.class, AnnotationMapper.class)
                 .newInstance(context, null, annotation, mapper);
     }
