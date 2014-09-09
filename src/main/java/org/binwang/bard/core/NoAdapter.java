@@ -1,6 +1,5 @@
 package org.binwang.bard.core;
 
-public class NoAdapter {
-    public NoAdapter() {
-    }
+public enum NoAdapter {
+    NO_ADAPTER
 }

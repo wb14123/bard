@@ -37,7 +37,7 @@ public class Server {
                 Context context = new Context(request, response);
                 Handler handler = Handler.newInstance(handlerClass, context, mapper);
                 Object result = handler.run();
-                if (result.getClass() != NoAdapter.class) {
+                if (result != NoAdapter.NO_ADAPTER) {
                     return;
                 }
             }

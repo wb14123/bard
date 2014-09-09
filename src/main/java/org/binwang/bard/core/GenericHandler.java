@@ -48,7 +48,7 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
     protected Object runMethod(Method m, Class<? extends Annotation> requiredAnnotation)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Boolean shouldRun = false;
-        NoAdapter noAdapter = new NoAdapter();
+        NoAdapter noAdapter = NoAdapter.NO_ADAPTER;
 
         Annotation[] annotations = m.getAnnotations();
         LinkedList<Adapter> adapters = new LinkedList<Adapter>();

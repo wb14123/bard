@@ -28,10 +28,10 @@ public abstract class Handler extends GenericHandler<Object, Annotation> {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             Object result = runMethod(method, Handle.class);
-            if (result.getClass() != NoAdapter.class) {
+            if (result != NoAdapter.NO_ADAPTER) {
                 return result;
             }
         }
-        return new NoAdapter();
+        return NoAdapter.NO_ADAPTER;
     }
 }
