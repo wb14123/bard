@@ -1,7 +1,5 @@
 package org.binwang.bard.example;
 
-import org.binwang.bard.core.AnnotationMapper;
-import org.binwang.bard.core.Context;
 import org.binwang.bard.core.Handler;
 import org.binwang.bard.core.marker.Handle;
 import org.binwang.bard.util.QueryParam;

@@ -22,7 +22,10 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     // how to find handler class from annotation class
     protected AnnotationMapper mapper;
 
-    public void build (
+    public GenericHandler() {
+    }
+
+    public void build(
             Context context,
             Object variable,
             Class<?> returnType,
@@ -33,9 +36,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         this.returnType = returnType;
         this.annotation = annotation;
         this.mapper = mapper;
-    }
-
-    public GenericHandler() {
     }
 
     public abstract void handleError(Exception e);
