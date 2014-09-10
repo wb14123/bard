@@ -1,5 +1,7 @@
 package org.binwang.bard.core;
 
+import org.reflections.Reflections;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,10 +9,40 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Servlet extends HttpServlet {
     private AnnotationMapper mapper = new AnnotationMapper();
     private List<Class<? extends Handler>> handlers = new LinkedList<Class<? extends Handler>>();
+
+    public Servlet(String... pkgs) throws NoSuchFieldException, IllegalAccessException, InstantiationException, NoSuchMethodException {
+        for (String pkg : pkgs) {
+            Reflections reflections = new Reflections(pkg);
+
+            Set<Class<? extends Filter>> filters = reflections.getSubTypesOf(Filter.class);
+            for (Class<? extends Filter> filterClass : filters) {
+                BindTo bindTo = filterClass.getAnnotation(BindTo.class);
+                addFilter(bindTo.value(), filterClass);
+            }
+
+            Set<Class<? extends Adapter>> adapters = reflections.getSubTypesOf(Adapter.class);
+            for (Class<? extends Adapter> adapterClass : adapters) {
+                BindTo bindTo = adapterClass.getAnnotation(BindTo.class);
+                addAdapter(bindTo.value(), adapterClass);
+            }
+
+            Set<Class<? extends Injector>> injectors = reflections.getSubTypesOf(Injector.class);
+            for (Class<? extends Injector> injectorClass : injectors) {
+                BindTo bindTo = injectorClass.getAnnotation(BindTo.class);
+                addInjector(bindTo.value(), injectorClass);
+            }
+
+            Set<Class<? extends Handler>> handlers = reflections.getSubTypesOf(Handler.class);
+            for (Class<? extends Handler> handlerClass : handlers) {
+                addHandler(handlerClass);
+            }
+        }
+    }
 
     public void addFilter(final Class<? extends Annotation> annotationClass,
                           final Class<? extends Filter> filterClass) {

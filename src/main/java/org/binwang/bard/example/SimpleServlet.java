@@ -1,15 +1,14 @@
 package org.binwang.bard.example;
 
-import org.binwang.bard.util.UtilServlet;
+import org.binwang.bard.core.Servlet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SimpleServlet extends UtilServlet {
+public class SimpleServlet extends Servlet {
 
-    public SimpleServlet() {
-        super();
-        addHandler(SimpleHandler.class);
+    public SimpleServlet() throws NoSuchFieldException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+        super("org.binwang.bard.util", "org.binwang.bard.example");
     }
 
     protected void service(HttpServletRequest req, HttpServletResponse resp) {

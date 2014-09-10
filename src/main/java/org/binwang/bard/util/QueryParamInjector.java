@@ -1,8 +1,10 @@
 package org.binwang.bard.util;
 
+import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Injector;
 import org.binwang.bard.core.marker.Before;
 
+@BindTo(QueryParam.class)
 public class QueryParamInjector extends Injector<QueryParam> {
 
     @Before

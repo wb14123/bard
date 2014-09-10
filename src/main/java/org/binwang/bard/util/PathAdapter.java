@@ -1,8 +1,10 @@
 package org.binwang.bard.util;
 
 import org.binwang.bard.core.Adapter;
+import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.marker.Match;
 
+@BindTo(Path.class)
 public class PathAdapter extends Adapter<Path> {
 
     @Match
