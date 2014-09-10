@@ -10,6 +10,7 @@ public class UtilServlet extends Servlet {
     public UtilServlet() {
         addInjector(QueryParam.class, QueryParamInjector.class);
         addAdapter(Path.class, PathAdapter.class);
+        addFilter(PlainText.class, PlainTextFilter.class);
     }
 
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
