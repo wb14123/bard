@@ -5,21 +5,20 @@ import org.binwang.bard.core.Context;
 import org.binwang.bard.core.Injector;
 import org.binwang.bard.core.marker.Before;
 
-public class QueryParamInjector<ReturnType> extends Injector<ReturnType, QueryParam> {
+public class QueryParamInjector extends Injector<QueryParam> {
 
-    public QueryParamInjector(Context context, ReturnType variable, QueryParam annotation, AnnotationMapper mapper) {
-        super(context, variable, annotation, mapper);
+    public QueryParamInjector(Context context, Object variable, Class<?> returnType, QueryParam annotation, AnnotationMapper mapper) {
+        super(context, variable, returnType, annotation, mapper);
     }
 
     @Before
-    public Object getParams() {
+    public void getParams() {
         String param = context.request.getParameter(annotation.value());
-        if (variable instanceof Integer) {
-            variable = (ReturnType) Integer.getInteger(param);
-        } else if (variable instanceof Double) {
-            variable = (ReturnType) Double.valueOf(param);
+        if (returnType == Integer.class) {
+            this.variable = Integer.parseInt(param);
+        } else if (returnType == Double.class) {
+            this.variable = Double.parseDouble(param);
         }
-        return null;
     }
 
     @Override

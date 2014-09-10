@@ -16,7 +16,7 @@ public class SimpleHandler extends Handler {
 
     @Handle
     public Integer printParams(@QueryParam("id") Integer id) throws IOException {
-        context.response.getWriter().print("hello, world!");
+        context.response.getWriter().print("hello, " + id.toString());
         return id;
     }
 

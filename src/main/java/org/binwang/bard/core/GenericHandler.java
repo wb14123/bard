@@ -10,11 +10,13 @@ import java.util.LinkedList;
 /*
     GenericHandler. Used by Filter, Injector, Matcher and Handler
  */
-public abstract class GenericHandler<ReturnType, AnnotationType extends Annotation> {
+public abstract class GenericHandler<AnnotationType extends Annotation> {
     // HTTP context
     protected Context context;
     // used by Injector, after run all the injectors, this variable should be the result
-    protected ReturnType variable;
+    protected Object variable;
+    // type of variable
+    protected Class returnType;
     // annotation bind to this handler
     protected AnnotationType annotation;
     // how to find handler class from annotation class
@@ -22,16 +24,15 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
 
     public GenericHandler(
             Context context,
-            ReturnType variable,
+            Object variable,
+            Class<?> returnType,
             AnnotationType annotation,
             AnnotationMapper mapper) {
         this.context = context;
         this.variable = variable;
+        this.returnType = returnType;
         this.annotation = annotation;
         this.mapper = mapper;
-    }
-
-    public GenericHandler() {
     }
 
     public abstract void handleError(Exception e);
@@ -66,14 +67,14 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
             Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
             if (adapterClass != null) {
                 Adapter adapter = Adapter.newInstance(
-                        adapterClass, context, annotation, mapper);
+                        adapterClass, annotationClass, context, annotation, mapper);
                 adapters.add(adapter);
             }
 
             Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
             if (filterClass != null) {
                 Filter filter = Filter.newInstance(
-                        filterClass, context, annotation, mapper);
+                        filterClass, annotationClass, context, annotation, mapper);
                 filters.add(filter);
             }
         }
@@ -126,7 +127,7 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
     private Object getParams(Parameter parameter)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Annotation[] annotations = parameter.getAnnotations();
-        Class<?> paramaterClass = parameter.getClass();
+        Class<?> parameterClass = parameter.getType();
         LinkedList<Injector> injectors = new LinkedList<Injector>();
         Object var = null;
         for (Annotation annotation : annotations) {
@@ -135,7 +136,7 @@ public abstract class GenericHandler<ReturnType, AnnotationType extends Annotati
             if (injectorClass == null)
                 continue;
             Injector injector = Injector.newInstance(
-                    injectorClass, annotationClass, context, var, annotation, mapper);
+                    injectorClass, annotationClass, context, var, parameterClass, annotation, mapper);
             injector.before();
             var = injector.variable;
             context = injector.context;

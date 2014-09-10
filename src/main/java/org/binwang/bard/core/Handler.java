@@ -6,9 +6,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public abstract class Handler extends GenericHandler<Object, Annotation> {
+public abstract class Handler extends GenericHandler<Annotation> {
+
     public Handler(Context context, AnnotationMapper mapper) {
-        super(context, null, null, mapper);
+        super(context, null, Object.class, null, mapper);
     }
 
     public static Handler newInstance(

@@ -6,12 +6,14 @@ import org.binwang.bard.core.marker.Before;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class Injector<ReturnType, AnnotationType extends Annotation> extends GenericHandler<ReturnType, AnnotationType> {
+public abstract class Injector<AnnotationType extends Annotation> extends GenericHandler<AnnotationType> {
+
     public Injector(Context context,
-                    ReturnType variable,
+                    Object variable,
+                    Class<?> returnType,
                     AnnotationType annotation,
                     AnnotationMapper mapper) {
-        super(context, variable, annotation, mapper);
+        super(context, variable, returnType, annotation, mapper);
     }
 
     public static Injector newInstance(
@@ -19,11 +21,12 @@ public abstract class Injector<ReturnType, AnnotationType extends Annotation> ex
             Class<? extends Annotation> annotationClass,
             Context context,
             Object variable,
+            Class<?> returnType,
             Annotation annotation,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return injectorClass.getDeclaredConstructor(Context.class, Object.class, annotationClass, AnnotationMapper.class)
-                .newInstance(context, variable, annotation, mapper);
+        return injectorClass.getDeclaredConstructor(Context.class, Object.class, Class.class, annotationClass, AnnotationMapper.class)
+                .newInstance(context, variable, returnType, annotation, mapper);
     }
 
     public void before()
