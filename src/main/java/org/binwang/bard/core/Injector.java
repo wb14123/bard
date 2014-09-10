@@ -22,7 +22,6 @@ public abstract class Injector<ReturnType, AnnotationType extends Annotation> ex
             Annotation annotation,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        // TODO: check constructor type?
         return injectorClass.getDeclaredConstructor(Context.class, Object.class, annotationClass, AnnotationMapper.class)
                 .newInstance(context, variable, annotation, mapper);
     }
