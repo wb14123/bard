@@ -15,7 +15,9 @@ public class Servlet extends HttpServlet {
     private AnnotationMapper mapper = new AnnotationMapper();
     private List<Class<? extends Handler>> handlers = new LinkedList<Class<? extends Handler>>();
 
-    public Servlet(String... pkgs) throws NoSuchFieldException, IllegalAccessException, InstantiationException, NoSuchMethodException {
+    public Servlet(String... pkgs)
+        throws NoSuchFieldException, IllegalAccessException, InstantiationException,
+        NoSuchMethodException {
         for (String pkg : pkgs) {
             Reflections reflections = new Reflections(pkg);
 
@@ -45,17 +47,17 @@ public class Servlet extends HttpServlet {
     }
 
     public void addFilter(final Class<? extends Annotation> annotationClass,
-                          final Class<? extends Filter> filterClass) {
+        final Class<? extends Filter> filterClass) {
         mapper.filterMap.put(annotationClass, filterClass);
     }
 
     public void addAdapter(final Class<? extends Annotation> annotationClass,
-                           final Class<? extends Adapter> adapterClass) {
+        final Class<? extends Adapter> adapterClass) {
         mapper.adapterMap.put(annotationClass, adapterClass);
     }
 
     public void addInjector(final Class<? extends Annotation> annotationClass,
-                            final Class<? extends Injector> injectorClass) {
+        final Class<? extends Injector> injectorClass) {
         mapper.injectorMap.put(annotationClass, injectorClass);
     }
 

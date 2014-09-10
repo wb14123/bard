@@ -9,17 +9,19 @@ import java.lang.reflect.Method;
 public abstract class Handler extends GenericHandler<Annotation> {
 
     public static Handler newInstance(
-            Class<? extends Handler> handlerClass,
-            Context context,
-            AnnotationMapper mapper)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Class<? extends Handler> handlerClass,
+        Context context,
+        AnnotationMapper mapper)
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+        InstantiationException {
         Handler handler = handlerClass.newInstance();
         handler.build(context, null, Object.class, null, mapper);
         return handler;
     }
 
     public Object run()
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+        IllegalAccessException {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
             Object result = runMethod(method, Handle.class);

@@ -26,11 +26,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     }
 
     public void build(
-            Context context,
-            Object variable,
-            Class<?> returnType,
-            AnnotationType annotation,
-            AnnotationMapper mapper) {
+        Context context,
+        Object variable,
+        Class<?> returnType,
+        AnnotationType annotation,
+        AnnotationMapper mapper) {
         this.context = context;
         this.variable = variable;
         this.returnType = returnType;
@@ -44,7 +44,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
     // run methods with specified annotation
     protected void runMethods(Class<? extends Annotation> requiredAnnotation)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+        IllegalAccessException {
         Method[] methods = this.getClass().getMethods();
         for (Method m : methods) {
             runMethod(m, requiredAnnotation);
@@ -53,7 +54,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
     // run method with adapters, filters and injectors; this method should have some specified annotation class on it
     protected Object runMethod(Method m, Class<? extends Annotation> requiredAnnotation)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+        InstantiationException {
         Boolean shouldRun = false;
         NoAdapter noAdapter = NoAdapter.NO_ADAPTER;
 
@@ -70,14 +72,14 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
             if (adapterClass != null) {
                 Adapter adapter = Adapter.newInstance(
-                        adapterClass, context, annotation, mapper);
+                    adapterClass, context, annotation, mapper);
                 adapters.add(adapter);
             }
 
             Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
             if (filterClass != null) {
                 Filter filter = Filter.newInstance(
-                        filterClass, context, annotation, mapper);
+                    filterClass, context, annotation, mapper);
                 filters.add(filter);
             }
         }
@@ -122,7 +124,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
     // run the method with injectors
     private Object runWithInjectors(Method m)
-            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+        throws InvocationTargetException, IllegalAccessException, NoSuchMethodException,
+        InstantiationException {
         Parameter[] parameters = m.getParameters();
         Object[] args = new Object[parameters.length];
         int i = 0;
@@ -134,7 +137,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
     // get method params from injectors
     private Object getParams(Parameter parameter)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+        IllegalAccessException {
         Annotation[] annotations = parameter.getAnnotations();
         Class<?> parameterClass = parameter.getType();
         LinkedList<Injector> injectors = new LinkedList<Injector>();
@@ -142,10 +146,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         for (Annotation annotation : annotations) {
             Class<? extends Annotation> annotationClass = annotation.annotationType();
             Class<? extends Injector> injectorClass = mapper.injectorMap.get(annotationClass);
-            if (injectorClass == null)
+            if (injectorClass == null) {
                 continue;
+            }
             Injector injector = Injector.newInstance(
-                    injectorClass, context, var, parameterClass, annotation, mapper);
+                injectorClass, context, var, parameterClass, annotation, mapper);
             injector.before();
             var = injector.variable;
             context = injector.context;

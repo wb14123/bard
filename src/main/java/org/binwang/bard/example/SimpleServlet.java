@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SimpleServlet extends Servlet {
 
-    public SimpleServlet() throws NoSuchFieldException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public SimpleServlet()
+        throws NoSuchFieldException, InstantiationException, IllegalAccessException,
+        NoSuchMethodException {
         super("org.binwang.bard.util", "org.binwang.bard.example");
     }
 

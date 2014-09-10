@@ -20,8 +20,9 @@ public class SimpleHandler extends Handler {
     @Handle
     @Path("/add")
     @PlainText
-    public Integer add(@QueryParam("a") Integer a,
-                       @QueryParam("b") Integer b) throws IOException {
+    public Integer add(
+        @QueryParam("a") Integer a,
+        @QueryParam("b") Integer b) throws IOException {
         return a + b;
     }
 
