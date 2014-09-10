@@ -111,7 +111,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         // TODO: handle error
 
         // run after actions, reverse order
-        // TODO: filter result?
         Iterator<Filter> iterator = filters.descendingIterator();
         if (iterator.hasNext()) {
             Filter filter = iterator.next();
