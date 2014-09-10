@@ -8,19 +8,15 @@ import java.lang.reflect.Method;
 
 public abstract class Adapter<AnnotationType extends Annotation> extends GenericHandler<AnnotationType> {
 
-    public Adapter(Context context, AnnotationType annotation, AnnotationMapper mapper) {
-        super(context, null, Object.class, annotation, mapper);
-    }
-
     public static Adapter newInstance(
             Class<? extends Adapter> adapterClass,
-            Class<? extends Annotation> annotationClass,
             Context context,
             Annotation annotation,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return adapterClass.getDeclaredConstructor(Context.class, annotationClass, AnnotationMapper.class)
-                .newInstance(context, annotation, mapper);
+        Adapter adapter = adapterClass.newInstance();
+        adapter.build(context, null, Object.class, annotation, mapper);
+        return adapter;
     }
 
     public boolean match()

@@ -10,10 +10,6 @@ import java.io.IOException;
 
 public class SimpleHandler extends Handler {
 
-    public SimpleHandler(Context context, AnnotationMapper mapper) {
-        super(context, mapper);
-    }
-
     @Handle
     public Integer printParams(@QueryParam("id") Integer id) throws IOException {
         context.response.getWriter().print("hello, " + id.toString());

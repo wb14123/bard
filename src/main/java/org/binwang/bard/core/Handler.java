@@ -8,17 +8,14 @@ import java.lang.reflect.Method;
 
 public abstract class Handler extends GenericHandler<Annotation> {
 
-    public Handler(Context context, AnnotationMapper mapper) {
-        super(context, null, Object.class, null, mapper);
-    }
-
     public static Handler newInstance(
             Class<? extends Handler> handlerClass,
             Context context,
             AnnotationMapper mapper)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return handlerClass.getConstructor(Context.class, AnnotationMapper.class)
-                .newInstance(context, mapper);
+        Handler handler = handlerClass.newInstance();
+        handler.build(context, null, Object.class, null, mapper);
+        return handler;
     }
 
     public Object run()

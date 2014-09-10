@@ -20,9 +20,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     // annotation bind to this handler
     protected AnnotationType annotation;
     // how to find handler class from annotation class
-    private AnnotationMapper mapper;
+    protected AnnotationMapper mapper;
 
-    public GenericHandler(
+    public void build (
             Context context,
             Object variable,
             Class<?> returnType,
@@ -33,6 +33,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         this.returnType = returnType;
         this.annotation = annotation;
         this.mapper = mapper;
+    }
+
+    public GenericHandler() {
     }
 
     public abstract void handleError(Exception e);
@@ -67,14 +70,14 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
             if (adapterClass != null) {
                 Adapter adapter = Adapter.newInstance(
-                        adapterClass, annotationClass, context, annotation, mapper);
+                        adapterClass, context, annotation, mapper);
                 adapters.add(adapter);
             }
 
             Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
             if (filterClass != null) {
                 Filter filter = Filter.newInstance(
-                        filterClass, annotationClass, context, annotation, mapper);
+                        filterClass, context, annotation, mapper);
                 filters.add(filter);
             }
         }
@@ -136,7 +139,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             if (injectorClass == null)
                 continue;
             Injector injector = Injector.newInstance(
-                    injectorClass, annotationClass, context, var, parameterClass, annotation, mapper);
+                    injectorClass, context, var, parameterClass, annotation, mapper);
             injector.before();
             var = injector.variable;
             context = injector.context;

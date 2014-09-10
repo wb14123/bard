@@ -7,10 +7,6 @@ import org.binwang.bard.core.marker.Before;
 
 public class QueryParamInjector extends Injector<QueryParam> {
 
-    public QueryParamInjector(Context context, Object variable, Class<?> returnType, QueryParam annotation, AnnotationMapper mapper) {
-        super(context, variable, returnType, annotation, mapper);
-    }
-
     @Before
     public void getParams() {
         String param = context.request.getParameter(annotation.value());
@@ -23,7 +19,6 @@ public class QueryParamInjector extends Injector<QueryParam> {
 
     @Override
     public void handleError(Exception e) {
-
     }
 
     @Override
