@@ -1,5 +1,7 @@
 package org.binwang.bard.core;
 
+import org.binwang.bard.core.marker.Handle;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -84,6 +86,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
         // is the method has the specified annotation?
         if (!shouldRun && requiredAnnotation != null) {
+            return noAdapter;
+        }
+
+        // if no adapter specified on handler
+        if (this instanceof Handler && adapters.size() == 0) {
             return noAdapter;
         }
 
