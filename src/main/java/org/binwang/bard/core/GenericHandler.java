@@ -1,7 +1,5 @@
 package org.binwang.bard.core;
 
-import org.binwang.bard.core.marker.Handle;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -108,6 +106,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
         // run the method with injectors
         Object result = runWithInjectors(m);
+        context.result = result;
 
         // TODO: handle error
 
@@ -117,6 +116,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         if (iterator.hasNext()) {
             Filter filter = iterator.next();
             filter.after();
+            context = filter.context;
         }
         return result;
     }
