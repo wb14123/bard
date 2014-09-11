@@ -1,11 +1,9 @@
 package org.binwang.bard.core;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /*
@@ -17,7 +15,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     // used by Injector, after run all the injectors, this variable should be the result
     protected Object variable;
     // type of variable
-    protected Class returnType;
+    protected Class returnType = Object.class;
     // annotation bind to this handler
     protected AnnotationType annotation;
     // how to find handler class from annotation class
@@ -26,19 +24,19 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     public GenericHandler() {
     }
 
-    public void build(
-        Context context,
-        Object variable,
+    public <HandlerType extends GenericHandler> HandlerType newFromThis(
+        Class<? extends HandlerType> handlerClass,
         Class<?> returnType,
-        AnnotationType annotation,
-        AnnotationMapper mapper) {
-        this.context = context;
-        this.variable = variable;
-        this.returnType = returnType;
-        this.annotation = annotation;
-        this.mapper = mapper;
+        Annotation annotation
+    ) throws IllegalAccessException, InstantiationException {
+        HandlerType handler = handlerClass.newInstance();
+        handler.context = context;
+        handler.variable = variable;
+        handler.returnType = returnType;
+        handler.annotation = annotation;
+        handler.mapper = mapper;
+        return handler;
     }
-
 
     public abstract void generateDoc();
 
@@ -72,15 +70,13 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
             Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
             if (adapterClass != null) {
-                Adapter adapter = Adapter.newInstance(
-                    adapterClass, context, annotation, mapper);
+                Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
                 adapters.add(adapter);
             }
 
             Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
             if (filterClass != null) {
-                Filter filter = Filter.newInstance(
-                    filterClass, context, annotation, mapper);
+                Filter filter = newFromThis(filterClass, Object.class, annotation);
                 filters[filterSize++] = filter;
             }
         }
@@ -117,7 +113,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         } catch (final InvocationTargetException e) {
             context.exception = new Exception(e.getCause());
         } finally {
-            for (i = i-1; i >= 0; i--) {
+            for (i = i - 1; i >= 0; i--) {
                 filters[i].context = context;
                 filters[i].after();
                 context = filters[i].context;
@@ -154,8 +150,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             if (injectorClass == null) {
                 continue;
             }
-            Injector injector = Injector.newInstance(
-                injectorClass, context, var, parameterClass, annotation, mapper);
+            Injector injector = newFromThis(injectorClass, parameterClass, annotation);
+            injector.variable = var;
             injector.before();
             var = injector.variable;
             context = injector.context;

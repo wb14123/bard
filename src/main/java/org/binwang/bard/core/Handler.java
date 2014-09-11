@@ -15,7 +15,8 @@ public abstract class Handler extends GenericHandler<Annotation> {
         throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
         InstantiationException {
         Handler handler = handlerClass.newInstance();
-        handler.build(context, null, Object.class, null, mapper);
+        handler.context = context;
+        handler.mapper = mapper;
         return handler;
     }
 

@@ -9,18 +9,6 @@ import java.lang.reflect.Method;
 public abstract class Adapter<AnnotationType extends Annotation>
     extends GenericHandler<AnnotationType> {
 
-    public static Adapter newInstance(
-        Class<? extends Adapter> adapterClass,
-        Context context,
-        Annotation annotation,
-        AnnotationMapper mapper)
-        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-        InstantiationException {
-        Adapter adapter = adapterClass.newInstance();
-        adapter.build(context, null, Object.class, annotation, mapper);
-        return adapter;
-    }
-
     public boolean match()
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,
         IllegalAccessException {
