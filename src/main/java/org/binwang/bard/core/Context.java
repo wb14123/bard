@@ -14,7 +14,7 @@ public class Context {
     public Exception exception;
 
     // custom context
-    public Map<String, Object> custom = new HashMap<String, Object>();
+    public Map<String, Object> custom = new HashMap<>();
 
     public Context(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;

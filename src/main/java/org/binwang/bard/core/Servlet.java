@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class Servlet extends HttpServlet {
     private AnnotationMapper mapper = new AnnotationMapper();
-    private List<Class<? extends Handler>> handlers = new LinkedList<Class<? extends Handler>>();
+    private List<Class<? extends Handler>> handlers = new LinkedList<>();
 
     public Servlet(String... pkgs)
         throws NoSuchFieldException, IllegalAccessException, InstantiationException,
@@ -77,13 +77,7 @@ public class Servlet extends HttpServlet {
                     return;
                 }
             }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
     }

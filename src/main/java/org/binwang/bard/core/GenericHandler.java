@@ -58,7 +58,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         NoAdapter noAdapter = NoAdapter.NO_ADAPTER;
 
         Annotation[] annotations = m.getAnnotations();
-        LinkedList<Adapter> adapters = new LinkedList<Adapter>();
+        LinkedList<Adapter> adapters = new LinkedList<>();
         Filter[] filters = new Filter[annotations.length];
         int filterSize = 0;
 
@@ -142,7 +142,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         IllegalAccessException {
         Annotation[] annotations = parameter.getAnnotations();
         Class<?> parameterClass = parameter.getType();
-        LinkedList<Injector> injectors = new LinkedList<Injector>();
+        LinkedList<Injector> injectors = new LinkedList<>();
         Object var = null;
         for (Annotation annotation : annotations) {
             Class<? extends Annotation> annotationClass = annotation.annotationType();
