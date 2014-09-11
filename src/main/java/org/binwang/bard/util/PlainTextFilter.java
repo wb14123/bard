@@ -11,12 +11,11 @@ public class PlainTextFilter extends Filter<PlainText> {
 
     @After
     public void writeResult() throws IOException {
-        context.response.getWriter().print(context.result);
-    }
-
-    @Override
-    public void handleError(Exception e) {
-
+        if (context.exception != null) {
+            context.response.getWriter().print(context.exception);
+        } else {
+            context.response.getWriter().print(context.result);
+        }
     }
 
     @Override

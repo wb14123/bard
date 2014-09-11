@@ -18,10 +18,6 @@ public class QueryParamInjector extends Injector<QueryParam> {
     }
 
     @Override
-    public void handleError(Exception e) {
-    }
-
-    @Override
     public void generateDoc() {
 
     }

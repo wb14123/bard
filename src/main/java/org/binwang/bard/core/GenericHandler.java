@@ -1,6 +1,7 @@
 package org.binwang.bard.core;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -38,7 +39,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         this.mapper = mapper;
     }
 
-    public abstract void handleError(Exception e);
 
     public abstract void generateDoc();
 
@@ -54,14 +54,15 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
     // run method with adapters, filters and injectors; this method should have some specified annotation class on it
     protected Object runMethod(Method m, Class<? extends Annotation> requiredAnnotation)
-        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-        InstantiationException {
+        throws NoSuchMethodException, IllegalAccessException,
+        InstantiationException, InvocationTargetException {
         Boolean shouldRun = false;
         NoAdapter noAdapter = NoAdapter.NO_ADAPTER;
 
         Annotation[] annotations = m.getAnnotations();
         LinkedList<Adapter> adapters = new LinkedList<Adapter>();
-        LinkedList<Filter> filters = new LinkedList<Filter>();
+        Filter[] filters = new Filter[annotations.length];
+        int filterSize = 0;
 
         for (Annotation annotation : annotations) {
             Class<? extends Annotation> annotationClass = annotation.annotationType();
@@ -80,7 +81,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             if (filterClass != null) {
                 Filter filter = Filter.newInstance(
                     filterClass, context, annotation, mapper);
-                filters.add(filter);
+                filters[filterSize++] = filter;
             }
         }
 
@@ -101,27 +102,28 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             }
         }
 
-        // run filter's before actions
-        for (Filter filter : filters) {
-            filter.context = context;
-            filter.before();
-            context = filter.context;
+        Object result = null;
+        int i = 0;
+        // run filters
+        try {
+            for (; i < filterSize; i++) {
+                filters[i].context = context;
+                filters[i].before();
+                context = filters[i].context;
+            }
+            // run the method with injectors
+            result = runWithInjectors(m);
+            context.result = result;
+        } catch (final InvocationTargetException e) {
+            context.exception = new Exception(e.getCause());
+        } finally {
+            for (i = i-1; i >= 0; i--) {
+                filters[i].context = context;
+                filters[i].after();
+                context = filters[i].context;
+            }
         }
 
-        // run the method with injectors
-        Object result = runWithInjectors(m);
-        context.result = result;
-
-        // TODO: handle error
-
-        // run after actions, reverse order
-        Iterator<Filter> iterator = filters.descendingIterator();
-        if (iterator.hasNext()) {
-            Filter filter = iterator.next();
-            filter.context = context;
-            filter.after();
-            context = filter.context;
-        }
         return result;
     }
 

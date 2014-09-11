@@ -15,10 +15,6 @@ public class PathAdapter extends Adapter<Path> {
     }
 
     @Override
-    public void handleError(Exception e) {
-    }
-
-    @Override
     public void generateDoc() {
 
     }

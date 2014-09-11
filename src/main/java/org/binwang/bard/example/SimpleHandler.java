@@ -27,11 +27,6 @@ public class SimpleHandler extends Handler {
     }
 
     @Override
-    public void handleError(Exception e) {
-    }
-
-    @Override
     public void generateDoc() {
-
     }
 }
