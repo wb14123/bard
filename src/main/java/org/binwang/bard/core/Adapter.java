@@ -21,4 +21,6 @@ public abstract class Adapter<AnnotationType extends Annotation>
         }
         return true;
     }
+
+    public abstract void generateDoc();
 }

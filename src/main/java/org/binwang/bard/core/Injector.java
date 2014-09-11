@@ -20,4 +20,6 @@ public abstract class Injector<AnnotationType extends Annotation>
         InvocationTargetException {
         runMethods(After.class);
     }
+
+    public abstract void generateDoc();
 }

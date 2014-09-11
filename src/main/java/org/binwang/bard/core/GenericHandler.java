@@ -38,8 +38,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         return handler;
     }
 
-    public abstract void generateDoc();
-
     // run methods with specified annotation
     protected void runMethods(Class<? extends Annotation> requiredAnnotation)
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,

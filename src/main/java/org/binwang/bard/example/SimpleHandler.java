@@ -22,8 +22,4 @@ public class SimpleHandler extends Handler {
         @QueryParam("b") Integer b) throws IOException {
         return a + b;
     }
-
-    @Override
-    public void generateDoc() {
-    }
 }
