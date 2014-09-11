@@ -103,7 +103,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
         // run filter's before actions
         for (Filter filter : filters) {
+            filter.context = context;
             filter.before();
+            context = filter.context;
         }
 
         // run the method with injectors
@@ -116,6 +118,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         Iterator<Filter> iterator = filters.descendingIterator();
         if (iterator.hasNext()) {
             Filter filter = iterator.next();
+            filter.context = context;
             filter.after();
             context = filter.context;
         }
