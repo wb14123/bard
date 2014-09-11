@@ -1,7 +1,5 @@
 package org.binwang.bard.core;
 
-import org.binwang.bard.core.marker.Handle;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -25,7 +23,8 @@ public abstract class Handler extends GenericHandler<Annotation> {
         IllegalAccessException {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
-            Object result = runMethod(method, Handle.class);
+            // need not specified any annotation, since it just run methods with adapter annotations
+            Object result = runMethod(method, null);
             if (result != NoAdapter.NO_ADAPTER) {
                 return result;
             }
