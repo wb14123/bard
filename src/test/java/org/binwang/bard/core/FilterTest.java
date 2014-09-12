@@ -50,6 +50,7 @@ public class FilterTest {
         }
     }
 
+
     public static class ExceptionFilterHandler extends Handler {
         @TrueAdapter1
         @AddHeaderFilter(name = "test_name", value = "test_value")
