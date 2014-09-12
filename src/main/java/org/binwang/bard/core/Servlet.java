@@ -40,9 +40,7 @@ public class Servlet extends HttpServlet {
             }
 
             Set<Class<? extends Handler>> handlers = reflections.getSubTypesOf(Handler.class);
-            for (Class<? extends Handler> handlerClass : handlers) {
-                addHandler(handlerClass);
-            }
+            handlers.forEach(this::addHandler);
         }
     }
 
