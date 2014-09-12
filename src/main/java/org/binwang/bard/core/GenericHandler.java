@@ -52,24 +52,35 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     protected Object runMethod(Method m, Class<? extends Annotation> requiredAnnotation)
         throws NoSuchMethodException, IllegalAccessException,
         InstantiationException, InvocationTargetException {
-        Boolean shouldRun = false;
+        Boolean findRequiredAnnotation = false;
+        Boolean findAdapterOnMethod = false;
         NoAdapter noAdapter = NoAdapter.NO_ADAPTER;
 
-        Annotation[] annotations = m.getAnnotations();
+        Annotation[] methodAnnotations = m.getAnnotations();
+        Annotation[] classAnnotations = this.getClass().getAnnotations();
         LinkedList<Adapter> adapters = new LinkedList<>();
-        Filter[] filters = new Filter[annotations.length];
+        Filter[] filters = new Filter[methodAnnotations.length + classAnnotations.length];
         int filterSize = 0;
 
-        for (Annotation annotation : annotations) {
+        for (int i = 0; i < methodAnnotations.length + classAnnotations.length; i++) {
+            Annotation annotation;
+            if (i < methodAnnotations.length) {
+                annotation = methodAnnotations[i];
+            } else {
+                annotation = classAnnotations[i - methodAnnotations.length];
+            }
             Class<? extends Annotation> annotationClass = annotation.annotationType();
             if (annotationClass == requiredAnnotation) {
-                shouldRun = true;
+                findRequiredAnnotation = true;
             }
 
             Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
             if (adapterClass != null) {
                 Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
                 adapters.add(adapter);
+                if (i < methodAnnotations.length) {
+                    findAdapterOnMethod = true;
+                }
             }
 
             Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
@@ -80,12 +91,12 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         }
 
         // is the method has the specified annotation?
-        if (!shouldRun && requiredAnnotation != null) {
+        if (!findRequiredAnnotation && requiredAnnotation != null) {
             return noAdapter;
         }
 
         // if no adapter specified on handler
-        if (this instanceof Handler && adapters.size() == 0) {
+        if (this instanceof Handler && !findAdapterOnMethod) {
             return noAdapter;
         }
 

@@ -7,16 +7,15 @@ import org.binwang.bard.util.QueryParam;
 
 import java.io.IOException;
 
+@PlainText
 public class SimpleHandler extends Handler {
 
     @Path("/get")
-    @PlainText
     public Integer printParams(@QueryParam("id") Integer id) throws IOException {
         return id;
     }
 
     @Path("/add")
-    @PlainText
     public Integer add(
         @QueryParam("a") Integer a,
         @QueryParam("b") Integer b) throws IOException {
