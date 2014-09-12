@@ -14,8 +14,9 @@ public abstract class Adapter<AnnotationType extends Annotation>
         IllegalAccessException {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
-            Boolean result = (Boolean) runMethod(method, Match.class);
-            if (!result) {
+            Object result = runMethod(method, Match.class);
+            // if result is match method and result is not true
+            if (result != NoAdapter.NO_ADAPTER && !((Boolean) result)) {
                 return false;
             }
         }
