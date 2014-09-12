@@ -10,7 +10,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class FilterTest {
     public Servlet servlet = null;
@@ -33,7 +33,7 @@ public class FilterTest {
 
     public static class SimpleFilterHandler extends Handler {
         @TrueAdapter1
-        @AddHeaderFilter(name="test_name", value="test_value")
+        @AddHeaderFilter(name = "test_name", value = "test_value")
         public void addHeader() {
         }
     }
