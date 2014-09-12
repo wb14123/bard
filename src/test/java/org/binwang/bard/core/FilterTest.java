@@ -33,7 +33,7 @@ public class FilterTest {
 
     public static class SimpleFilterHandler extends Handler {
         @TrueAdapter1
-        @AddHeaderFilter(name="test_name1", value="test_value1")
+        @AddHeaderFilter(name="test_name", value="test_value")
         public void addHeader() {
         }
     }
