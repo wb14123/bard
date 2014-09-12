@@ -1,6 +1,7 @@
 package org.binwang.bard.core;
 
 import org.binwang.bard.core.defines.AddHeaderFilter;
+import org.binwang.bard.core.defines.ExceptionFilter;
 import org.binwang.bard.core.defines.TrueAdapter1;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,12 +30,33 @@ public class FilterTest {
         servlet.addHandler(SimpleFilterHandler.class);
         servlet.service(request, response);
         assertEquals("test_value", response.getHeader("test_name"));
+        assertEquals("handler_value", response.getHeader("handler_header"));
+    }
+
+    @Test
+    public void exceptionFilterTest() {
+        servlet.addHandler(ExceptionFilterHandler.class);
+        servlet.service(request, response);
+        assertEquals("test_value", response.getHeader("test_name"));
+        assertEquals("handler_value", response.getHeader("handler_header"));
+        assertEquals("true", response.getHeader("exception"));
     }
 
     public static class SimpleFilterHandler extends Handler {
         @TrueAdapter1
         @AddHeaderFilter(name = "test_name", value = "test_value")
         public void addHeader() {
+            context.response.setHeader("handler_header", "handler_value");
+        }
+    }
+
+    public static class ExceptionFilterHandler extends Handler {
+        @TrueAdapter1
+        @AddHeaderFilter(name = "test_name", value = "test_value")
+        @ExceptionFilter
+        public void exception() {
+            context.response.setHeader("handler_header", "handler_value");
+            throw new NullPointerException("test");
         }
     }
 
