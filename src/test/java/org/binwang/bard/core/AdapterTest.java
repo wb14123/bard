@@ -5,7 +5,6 @@ import org.binwang.bard.core.defines.FalseAdapter1;
 import org.binwang.bard.core.defines.FalseAdapter2;
 import org.binwang.bard.core.defines.TrueAdapter1;
 import org.binwang.bard.core.defines.TrueAdapter2;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -26,11 +25,6 @@ public class AdapterTest {
         servlet = new Servlet("org.binwang.bard.core.defines");
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
-    }
-
-    @After
-    public void tearDown() {
-        servlet = null;
     }
 
     @Test
