@@ -10,10 +10,18 @@ public class QueryParamInjector extends Injector<QueryParam> {
     @Before
     public void getParams() {
         String param = context.request.getParameter(annotation.value());
-        if (returnType == Integer.class) {
-            this.variable = Integer.parseInt(param);
-        } else if (returnType == Double.class) {
-            this.variable = Double.parseDouble(param);
+        if (param == null || param.equals("")) {
+            variable = null;
+            return;
+        }
+        try {
+            if (returnType == Integer.class) {
+                this.variable = Integer.parseInt(param);
+            } else if (returnType == Double.class) {
+                this.variable = Double.parseDouble(param);
+            }
+        } catch (NumberFormatException e) {
+            this.variable = null;
         }
     }
 

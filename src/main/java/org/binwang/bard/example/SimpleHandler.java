@@ -4,6 +4,7 @@ import org.binwang.bard.core.Handler;
 import org.binwang.bard.util.Path;
 import org.binwang.bard.util.PlainText;
 import org.binwang.bard.util.QueryParam;
+import org.binwang.bard.util.Required;
 
 import java.io.IOException;
 
@@ -17,8 +18,8 @@ public class SimpleHandler extends Handler {
 
     @Path("/add")
     public Integer add(
-        @QueryParam("a") Integer a,
-        @QueryParam("b") Integer b) throws IOException {
+        @QueryParam("a") @Required Integer a,
+        @QueryParam("b") @Required Integer b) throws IOException {
         return a + b;
     }
 }
