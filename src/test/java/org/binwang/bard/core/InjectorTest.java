@@ -1,5 +1,6 @@
 package org.binwang.bard.core;
 
+import org.binwang.bard.core.defines.ExceptionInjector;
 import org.binwang.bard.core.defines.IntegerZeroInjector;
 import org.binwang.bard.core.defines.TrueAdapter1;
 import org.junit.Before;
@@ -31,6 +32,13 @@ public class InjectorTest {
         assertEquals("0", response.getHeader("handler_header"));
     }
 
+    @Test
+    public void exceptionInjectorTest() {
+        servlet.addHandler(ExceptionInjectorHandler.class);
+        servlet.service(request, response);
+        assertEquals("true", response.getHeader("get_exception"));
+    }
+
     public static class SimpleInjectorHandler extends Handler {
         @TrueAdapter1
         public void addHeader(@IntegerZeroInjector Integer zero) {
@@ -39,5 +47,10 @@ public class InjectorTest {
     }
 
 
+    public static class ExceptionInjectorHandler extends Handler {
+        @TrueAdapter1
+        public void exceptionHandler(@ExceptionInjector Object whatever) {
+        }
+    }
 
 }
