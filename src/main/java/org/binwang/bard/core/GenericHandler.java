@@ -123,13 +123,18 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         int filterI = 0;
         int injectorI;
         LinkedList<LinkedList<Injector>> injectors = new LinkedList<>();
+        LinkedList<Filter> runFilters = new LinkedList<>();
         // try-catch, so that if error occurs, recovery to run filters' and injectors' after actions
         try {
             // run filters before
             for (; filterI < filterSize; filterI++) {
                 filters[filterI].context = context;
+                runFilters.addFirst(filters[filterI]);
                 filters[filterI].before();
                 context = filters[filterI].context;
+                if (context.exception != null) {
+                    throw context.exception;
+                }
             }
 
             // run injectors before to get params
@@ -193,11 +198,10 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             }
 
             // then run filter after actions
-            // TODO: this is a bug, which filter to run maybe error
-            for (filterI = filterI - 1; filterI >= 0; filterI--) {
-                filters[filterI].context = context;
-                filters[filterI].after();
-                context = filters[filterI].context;
+            for (Filter filter : runFilters) {
+                filter.context = context;
+                filter.after();
+                context = filter.context;
             }
         }
 

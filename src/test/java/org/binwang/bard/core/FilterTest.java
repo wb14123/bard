@@ -38,7 +38,7 @@ public class FilterTest {
         servlet.addHandler(ExceptionFilterHandler.class);
         servlet.service(request, response);
         assertEquals("test_value", response.getHeader("test_name"));
-        assertEquals("handler_value", response.getHeader("handler_header"));
+        assertEquals(null, response.getHeader("handler_header"));
         assertEquals("true", response.getHeader("exception"));
     }
 
@@ -57,7 +57,6 @@ public class FilterTest {
         @ExceptionFilter
         public void exception() {
             context.response.setHeader("handler_header", "handler_value");
-            throw new NullPointerException("test");
         }
     }
 
