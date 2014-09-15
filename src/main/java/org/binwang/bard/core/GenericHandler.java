@@ -17,15 +17,30 @@ import java.util.LinkedList;
  * @see org.binwang.bard.core.Handler
  */
 public abstract class GenericHandler<AnnotationType extends Annotation> {
-    // HTTP context
+    /**
+     * The context in this handler.
+     */
     protected Context context;
-    // used by Injector, after run all the injectors, this variable should be the result
+
+    /**
+     * Only used by {@link org.binwang.bard.core.Injector}, store the current variable that will be injected.
+     */
     protected Object variable;
-    // type of variable
+
+    /**
+     * Only used by {@link org.binwang.bard.core.Injector}, the type inject variable.
+     */
     protected Class returnType = Object.class;
-    // annotation bind to this handler
+
+    /**
+     * Used by {@link org.binwang.bard.core.Filter}, {@link org.binwang.bard.core.Injector} and
+     * {@link org.binwang.bard.core.Adapter}, the annotation instance that bind to it.
+     */
     protected AnnotationType annotation;
-    // how to find handler class from annotation class
+
+    /**
+     * A mapper to find GenericHandler from annotation class.
+     */
     protected AnnotationMapper mapper;
 
     public GenericHandler() {
@@ -56,7 +71,15 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         return handler;
     }
 
-    // run methods with specified annotation
+    /**
+     * Invoke runMethod on methods with specified annotation.
+     *
+     * @param requiredAnnotation Run methods with the annotation.
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     protected void runMethods(Class<? extends Annotation> requiredAnnotation)
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,
         IllegalAccessException {
