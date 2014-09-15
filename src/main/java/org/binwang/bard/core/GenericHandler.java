@@ -22,6 +22,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected Context context;
 
+    // TODO: should variable and returnType more suitable in context?
     /**
      * Only used by {@link org.binwang.bard.core.Injector}, store the current variable that will be injected.
      */
