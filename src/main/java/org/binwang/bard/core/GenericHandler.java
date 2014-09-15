@@ -6,8 +6,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.LinkedList;
 
-/*
-    GenericHandler. Used by Filter, Injector, Matcher and Handler
+/**
+ * GenericHandler is a class that is the foundation of Adapter, Filter, Injector and Handler.
+ * It could run its method with defined annotations.
+ *
+ * @param <AnnotationType> Which annotation is this GenericHandler bind to. No need on Handler.
+ * @see org.binwang.bard.core.Adapter
+ * @see org.binwang.bard.core.Filter
+ * @see org.binwang.bard.core.Injector
+ * @see org.binwang.bard.core.Handler
  */
 public abstract class GenericHandler<AnnotationType extends Annotation> {
     // HTTP context
@@ -24,6 +31,17 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     public GenericHandler() {
     }
 
+    /**
+     * Create new instance given the class. Put current context and mapper in it.
+     *
+     * @param handlerClass  Which class is the new instance?
+     * @param returnType    The type of variable.
+     * @param annotation    The annotation in it.
+     * @param <HandlerType> The class of the new instance, too. Used for compiling safety.
+     * @return The new created instance.
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
     public <HandlerType extends GenericHandler> HandlerType newFromThis(
         Class<? extends HandlerType> handlerClass,
         Class<?> returnType,
@@ -67,13 +85,15 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         Boolean findAdapterOnMethod = false;
         NoAdapter noAdapter = NoAdapter.NO_ADAPTER;
 
+        // get method's annotation
         Annotation[] methodAnnotations = m.getAnnotations();
+        // get class's annotation
         Annotation[] classAnnotations = this.getClass().getAnnotations();
         LinkedList<Adapter> adapters = new LinkedList<>();
         Filter[] filters = new Filter[methodAnnotations.length + classAnnotations.length];
         int filterSize = 0;
 
-        // get method's annotation, say adapters and filters
+        // check the annotations, to get adapters and filters
         for (int i = 0; i < methodAnnotations.length + classAnnotations.length; i++) {
             Annotation annotation;
             if (i < methodAnnotations.length) {

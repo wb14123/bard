@@ -6,6 +6,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * Adapter is used on Handler's methods.
+ *
+ * @param <AnnotationType> Which annotation is this adapter bind to.
+ */
 public abstract class Adapter<AnnotationType extends Annotation>
     extends GenericHandler<AnnotationType> {
 
