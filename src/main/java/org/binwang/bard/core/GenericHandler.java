@@ -134,7 +134,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
         // run adapter first, check if all the adapters return true
         for (Adapter adapter : adapters) {
-            if (!adapter.match()) {
+            boolean matching = adapter.match();
+            adapter.after();
+            if (!matching) {
                 return noAdapter;
             }
         }

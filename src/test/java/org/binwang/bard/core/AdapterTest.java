@@ -32,6 +32,7 @@ public class AdapterTest {
         servlet.addHandler(AllTrueAdapterHandler.class);
         servlet.service(request, response);
         Assert.assertEquals("all_true", response.getHeader("test"));
+        Assert.assertEquals("true", response.getHeader("after"));
     }
 
     @Test
@@ -39,6 +40,7 @@ public class AdapterTest {
         servlet.addHandler(AllFalseAdapterHandler.class);
         servlet.service(request, response);
         Assert.assertEquals(null, response.getHeader("test"));
+        Assert.assertEquals("true", response.getHeader("after"));
     }
 
     @Test

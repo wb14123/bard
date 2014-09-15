@@ -1,5 +1,6 @@
 package org.binwang.bard.core;
 
+import org.binwang.bard.core.marker.After;
 import org.binwang.bard.core.marker.Match;
 
 import java.lang.annotation.Annotation;
@@ -26,6 +27,12 @@ public abstract class Adapter<AnnotationType extends Annotation>
             }
         }
         return true;
+    }
+
+    public void after()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException,
+        InvocationTargetException {
+        runMethods(After.class);
     }
 
     public abstract void generateDoc();
