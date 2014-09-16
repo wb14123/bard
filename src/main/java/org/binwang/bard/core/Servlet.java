@@ -82,7 +82,8 @@ public class Servlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getPathInfo().equals("/api-doc")) {
+        String path = request.getPathInfo();
+        if (path != null && path.equals("/api-doc")) {
             try {
                 response.getWriter().write(getDocument().toJson());
                 response.getWriter().close();
