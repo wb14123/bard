@@ -6,8 +6,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * GenericHandler is a class that is the foundation of Adapter, Filter, Injector and Handler.
@@ -185,7 +187,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         Annotation[] methodAnnotations = m.getAnnotations();
         // get class's annotation
         Annotation[] classAnnotations = this.getClass().getAnnotations();
-        LinkedList<Adapter> adapters = new LinkedList<>();
+        Map<Class<? extends Annotation>, List<Adapter>> adapterMap = new HashMap<>();
         Filter[] filters = new Filter[methodAnnotations.length + classAnnotations.length];
         int filterSize = 0;
 
@@ -205,7 +207,16 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
             if (adapterClass != null) {
                 Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
+                /*
+                 Add the adapters with the same annotation type to one list, in order to processing them together.
+                 Helpful while define adapters could be used both on class and method.
+                */
+                List<Adapter> adapters = adapterMap.get(annotationClass);
+                if (adapters == null) {
+                    adapters = new LinkedList<>();
+                }
                 adapters.add(adapter);
+                adapterMap.put(annotationClass, adapters);
                 if (i >= classAnnotations.length) {
                     findAdapterOnMethod = true;
                 }
@@ -228,28 +239,34 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             return noAdapter;
         }
 
-        // run adapter first, check if all the adapters return true
-        boolean matching = true;
-        LinkedList<Adapter> runAdapters = new LinkedList<>();
-        for (Adapter adapter : adapters) {
-            adapter.context = context;
-            runAdapters.addFirst(adapter);
-            matching = adapter.match();
-            context = adapter.context;
+        /*
+         Run adapter first, check if all the adapters return true.
+         If some adapters has the same annotation type (this only happens both class and method has the same annotation),
+         run all the chain, if one get true then it is successful.
+         It is very helpful to define adapter annotations that could be used both on class and method: such as Path.
+        */
+        for (Map.Entry<Class<? extends Annotation>, List<Adapter>> entry : adapterMap.entrySet()) {
+            boolean matching = false;
+
+            List<Adapter> adapters = entry.getValue();
+            LinkedList<Adapter> runAdapters = new LinkedList<>();
+
+            for (Adapter adapter : adapters) {
+                adapter.context = context;
+                runAdapters.addFirst(adapter);
+                matching = adapter.match() || matching;
+                context = adapter.context;
+            }
+
+            for (Adapter adapter : runAdapters) {
+                adapter.after();
+                context = adapter.context;
+            }
+
             if (!matching) {
-                break;
+                return NoAdapter.NO_ADAPTER;
             }
         }
-
-        for (Adapter adapter : runAdapters) {
-            adapter.after();
-            context = adapter.context;
-        }
-
-        if (!matching) {
-            return NoAdapter.NO_ADAPTER;
-        }
-
 
         Object result = null;
         int filterI = 0;

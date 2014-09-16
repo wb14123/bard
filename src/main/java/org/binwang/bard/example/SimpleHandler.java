@@ -9,6 +9,7 @@ import org.binwang.bard.util.Required;
 import java.io.IOException;
 
 @PlainText
+@Path("/myapp")
 public class SimpleHandler extends Handler {
 
     @Path("/get")
