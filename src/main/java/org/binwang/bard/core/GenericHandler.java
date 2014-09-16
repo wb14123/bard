@@ -105,7 +105,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     }
 
     /**
-     * Generate ApiDescription from the methods' annotations.
+     * Generate {@link org.binwang.bard.core.doc.Api} from the methods' annotations. Store them in this.api.
+     * If the class is {@link org.binwang.bard.core.Handler}, get a list of Api for each method, store them in this.apis.
      *
      * @throws InstantiationException
      * @throws IllegalAccessException
