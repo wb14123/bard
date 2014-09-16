@@ -111,6 +111,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * @throws IllegalAccessException
      */
     protected void generateApi() throws InstantiationException, IllegalAccessException {
+        // TODO: class annotations
         Method[] methods = this.getClass().getMethods();
         for (Method m : methods) {
             boolean isHandler = false;
@@ -190,10 +191,10 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         // check the annotations, to get adapters and filters
         for (int i = 0; i < methodAnnotations.length + classAnnotations.length; i++) {
             Annotation annotation;
-            if (i < methodAnnotations.length) {
-                annotation = methodAnnotations[i];
+            if (i < classAnnotations.length) {
+                annotation = classAnnotations[i];
             } else {
-                annotation = classAnnotations[i - methodAnnotations.length];
+                annotation = methodAnnotations[i - classAnnotations.length];
             }
             Class<? extends Annotation> annotationClass = annotation.annotationType();
             if (annotationClass == requiredAnnotation) {
@@ -204,7 +205,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             if (adapterClass != null) {
                 Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
                 adapters.add(adapter);
-                if (i < methodAnnotations.length) {
+                if (i >= classAnnotations.length) {
                     findAdapterOnMethod = true;
                 }
             }
@@ -227,13 +228,27 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         }
 
         // run adapter first, check if all the adapters return true
+        boolean matching = true;
+        LinkedList<Adapter> runAdapters = new LinkedList<>();
         for (Adapter adapter : adapters) {
-            boolean matching = adapter.match();
-            adapter.after();
+            adapter.context = context;
+            runAdapters.addFirst(adapter);
+            matching = adapter.match();
+            context = adapter.context;
             if (!matching) {
-                return noAdapter;
+                break;
             }
         }
+
+        for (Adapter adapter : runAdapters) {
+            adapter.after();
+            context = adapter.context;
+        }
+
+        if (!matching) {
+            return NoAdapter.NO_ADAPTER;
+        }
+
 
         Object result = null;
         int filterI = 0;
