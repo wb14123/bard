@@ -1,10 +1,13 @@
 package org.binwang.bard.core;
 
+import org.binwang.bard.core.doc.Api;
+import org.binwang.bard.core.doc.Document;
 import org.reflections.Reflections;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -63,8 +66,36 @@ public class Servlet extends HttpServlet {
         handlers.add(handlerClass);
     }
 
+    public Document getDocument()
+        throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+        IllegalAccessException {
+        List<Api> apis = new LinkedList<>();
+        for (Class<? extends Handler> handlerClass : handlers) {
+            Handler handler = Handler.newInstance(handlerClass, null, mapper);
+            handler.generateApi();
+            apis.addAll(handler.apis);
+        }
+        Document document = new Document();
+        document.apis = apis;
+        return document;
+    }
+
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getPathInfo().equals("/api-doc")) {
+            try {
+                response.getWriter().write(getDocument().toJson());
+                response.getWriter().close();
+                return;
+            } catch (IOException |
+                InvocationTargetException |
+                NoSuchMethodException |
+                InstantiationException |
+                IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         try {
             // TODO: performance for adapter? (instead of linear time)
             for (Class<? extends Handler> handlerClass : handlers) {

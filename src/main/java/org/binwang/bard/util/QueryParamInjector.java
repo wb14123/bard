@@ -2,6 +2,7 @@ package org.binwang.bard.util;
 
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Injector;
+import org.binwang.bard.core.doc.Parameter;
 import org.binwang.bard.core.marker.Before;
 
 @BindTo(QueryParam.class)
@@ -27,6 +28,9 @@ public class QueryParamInjector extends Injector<QueryParam> {
 
     @Override
     public void generateDoc() {
-
+        Parameter parameter = new Parameter();
+        parameter.name = annotation.value();
+        parameter.type = returnType;
+        api.parameters.add(parameter);
     }
 }

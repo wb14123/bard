@@ -1,10 +1,13 @@
 package org.binwang.bard.core;
 
+import org.binwang.bard.core.doc.Api;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * GenericHandler is a class that is the foundation of Adapter, Filter, Injector and Handler.
@@ -44,6 +47,16 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected AnnotationMapper mapper;
 
+    /**
+     * API document, used except in {@link org.binwang.bard.core.Handler}
+     */
+    protected Api api = new Api();
+
+    /**
+     * APIs, used in {@link org.binwang.bard.core.Handler}
+     */
+    protected List<Api> apis = new LinkedList<>();
+
     public GenericHandler() {
     }
 
@@ -69,6 +82,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         handler.returnType = returnType;
         handler.annotation = annotation;
         handler.mapper = mapper;
+        handler.api = api;
         return handler;
     }
 
@@ -87,6 +101,62 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         Method[] methods = this.getClass().getMethods();
         for (Method m : methods) {
             runMethod(m, requiredAnnotation);
+        }
+    }
+
+    /**
+     * Generate ApiDescription from the methods' annotations.
+     *
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    protected void generateApi() throws InstantiationException, IllegalAccessException {
+        Method[] methods = this.getClass().getMethods();
+        for (Method m : methods) {
+            boolean isHandler = false;
+            Annotation[] annotations = m.getAnnotations();
+            for (Annotation annotation : annotations) {
+                Class<? extends Annotation> annotationClass = annotation.annotationType();
+
+                Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
+                if (filterClass != null) {
+                    Filter filter = newFromThis(filterClass, Object.class, annotation);
+                    filter.generateApi();
+                    filter.generateDoc();
+                    api = filter.api;
+                }
+
+                Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
+                if (adapterClass != null) {
+                    isHandler = true;
+                    Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
+                    adapter.generateApi();
+                    adapter.generateDoc();
+                    api = adapter.api;
+                }
+            }
+
+            Parameter[] parameters = m.getParameters();
+            for (Parameter parameter : parameters) {
+                Annotation[] pAnnotations = parameter.getAnnotations();
+                for (Annotation annotation : pAnnotations) {
+                    Class<? extends Annotation> annotationClass = annotation.annotationType();
+                    Class<? extends Injector> injectorClass =
+                        mapper.injectorMap.get(annotationClass);
+                    if (injectorClass != null) {
+                        Injector injector =
+                            newFromThis(injectorClass, parameter.getType(), annotation);
+                        injector.generateApi();
+                        injector.generateDoc();
+                        api = injector.api;
+                    }
+                }
+            }
+
+            if (isHandler && this instanceof Handler) {
+                apis.add(api);
+                api = new Api();
+            }
         }
     }
 

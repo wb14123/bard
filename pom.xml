@@ -18,7 +18,7 @@
                 </configuration>
             </plugin>
             <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -35,18 +35,40 @@
     </properties>
 
     <dependencies>
+        <!-- servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
         </dependency>
+
+        <!-- reflections -->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.9-RC2</version>
         </dependency>
+
+        <!-- json -->
         <dependency>
-            <groupId>junit</groupId>
+            <groupId>com.fasterxml.jackson</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jsonSchema</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+        <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.9</version>
             <scope>test</scope>
@@ -57,6 +79,8 @@
             <version>4.1.0.RELEASE</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- for examples -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
