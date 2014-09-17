@@ -107,7 +107,13 @@ public class Servlet extends HttpServlet {
                     return;
                 }
             }
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            response.setStatus(404);
+            response.getWriter().println("page not found");
+        } catch (NoSuchMethodException |
+            IllegalAccessException |
+            InvocationTargetException |
+            InstantiationException |
+            IOException e) {
             e.printStackTrace();
         }
     }
