@@ -1,10 +1,7 @@
 package org.binwang.bard.example;
 
 import org.binwang.bard.core.Handler;
-import org.binwang.bard.util.Path;
-import org.binwang.bard.util.PlainText;
-import org.binwang.bard.util.QueryParam;
-import org.binwang.bard.util.Required;
+import org.binwang.bard.util.*;
 
 import java.io.IOException;
 
@@ -13,14 +10,16 @@ import java.io.IOException;
 public class SimpleHandler extends Handler {
 
     @Path("/get")
+    @Doc("A simple handler just return what you give")
     public Integer printParams(@QueryParam("id") Integer id) throws IOException {
         return id;
     }
 
     @Path("/add")
+    @Doc("Add two numbers")
     public Integer add(
-        @QueryParam("a") @Required Integer a,
-        @QueryParam("b") @Required Integer b) throws IOException {
+        @QueryParam("a") @Required @Doc("first number") Integer a,
+        @QueryParam("b") @Required @Doc("second number") Integer b) throws IOException {
         return a + b;
     }
 }

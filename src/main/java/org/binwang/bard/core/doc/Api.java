@@ -1,9 +1,6 @@
 package org.binwang.bard.core.doc;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,17 +23,13 @@ public class Api {
     @JsonProperty(value = "consumes")
     public String consumes;
 
-    @JsonIgnore
-    public Class returnType;
-
     @JsonProperty(value = "parameters")
     public List<DocParameter> parameters = new LinkedList<>();
+
+    @JsonProperty(value = "responses")
+    public List<Response> responses = new LinkedList<>();
 
     @JsonProperty(value = "extensions")
     public Map<String, Object> extensions = new HashMap<>();
 
-    @JsonProperty(value = "return")
-    public JsonSchema getReturn() throws JsonMappingException {
-        return Document.toJsonSchema(returnType);
-    }
 }
