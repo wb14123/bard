@@ -114,14 +114,20 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * @throws IllegalAccessException
      */
     protected void generateApi() throws InstantiationException, IllegalAccessException {
-        // TODO: class annotations
         Method[] methods = this.getClass().getMethods();
+        Annotation[] classAnnotations = this.getClass().getAnnotations();
         for (Method m : methods) {
             boolean isHandler = false;
-            Annotation[] annotations = m.getAnnotations();
-            for (Annotation annotation : annotations) {
-                Class<? extends Annotation> annotationClass = annotation.annotationType();
+            Annotation[] methodAnnotations = m.getAnnotations();
+            for (int i = 0; i < methodAnnotations.length + classAnnotations.length; i++) {
+                Annotation annotation;
+                if (i < classAnnotations.length) {
+                    annotation = classAnnotations[i];
+                } else {
+                    annotation = methodAnnotations[i - classAnnotations.length];
+                }
 
+                Class<? extends Annotation> annotationClass = annotation.annotationType();
                 Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
                 if (filterClass != null) {
                     Filter filter = newFromThis(filterClass, Object.class, annotation);
@@ -132,7 +138,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
                 Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
                 if (adapterClass != null) {
-                    isHandler = true;
+                    if (i >= classAnnotations.length) {
+                        isHandler = true;
+                    }
                     Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
                     adapter.generateApi();
                     adapter.generateDoc();
