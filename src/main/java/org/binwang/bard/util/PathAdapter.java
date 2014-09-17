@@ -28,6 +28,9 @@ public class PathAdapter extends Adapter<Path> {
 
     @Override
     public void generateDoc() {
-
+        if (api.path == null) {
+            api.path = "";
+        }
+        api.path += annotation.value();
     }
 }
