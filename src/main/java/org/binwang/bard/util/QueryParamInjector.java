@@ -11,24 +11,24 @@ public class QueryParamInjector extends Injector<QueryParam> {
     public void getParams() {
         String param = context.request.getParameter(annotation.value());
         if (param == null || param.equals("")) {
-            variable = null;
+            injectorVariable = null;
             return;
         }
         try {
-            if (returnType == Integer.class) {
-                this.variable = Integer.parseInt(param);
-            } else if (returnType == Double.class) {
-                this.variable = Double.parseDouble(param);
+            if (injectorVariableType == Integer.class) {
+                this.injectorVariable = Integer.parseInt(param);
+            } else if (injectorVariableType == Double.class) {
+                this.injectorVariable = Double.parseDouble(param);
             }
         } catch (NumberFormatException e) {
-            this.variable = null;
+            this.injectorVariable = null;
         }
     }
 
     @Override
     public void generateDoc() {
         docParameter.name = annotation.value();
-        docParameter.type = returnType;
+        docParameter.type = injectorVariableType;
         docParameter.belongs = "url-query";
     }
 }

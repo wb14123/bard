@@ -28,16 +28,16 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected Context context;
 
-    // TODO: should variable and returnType more suitable in context?
+    // TODO: should injectorVariable and injectorVariableType more suitable in context?
     /**
-     * Only used by {@link org.binwang.bard.core.Injector}, store the current variable that will be injected.
+     * Only used by {@link org.binwang.bard.core.Injector}, store the current injectorVariable that will be injected.
      */
-    protected Object variable;
+    protected Object injectorVariable;
 
     /**
-     * Only used by {@link org.binwang.bard.core.Injector}, the type inject variable.
+     * Only used by {@link org.binwang.bard.core.Injector}, the type of inject injectorVariable.
      */
-    protected Class returnType = Object.class;
+    protected Class injectorVariableType = Object.class;
 
     /**
      * Used by {@link org.binwang.bard.core.Filter}, {@link org.binwang.bard.core.Injector} and
@@ -68,7 +68,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     /**
      * Handler return type, used for generate API. Used in {@link org.binwang.bard.core.Filter}
      */
-    protected Class handlerReturnType;
+    protected Class returnType;
 
     public GenericHandler() {
     }
@@ -76,23 +76,23 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     /**
      * Create new instance given the class. Put current context and mapper in it.
      *
-     * @param handlerClass  Which class is the new instance?
-     * @param returnType    The type of variable.
-     * @param annotation    The annotation in it.
-     * @param <HandlerType> The class of the new instance, too. Used for compiling safety.
+     * @param handlerClass         Which class is the new instance?
+     * @param injectorVariableType The type of injectorVariable.
+     * @param annotation           The annotation in it.
+     * @param <HandlerType>        The class of the new instance, too. Used for compiling safety.
      * @return The new created instance.
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
     public <HandlerType extends GenericHandler> HandlerType newFromThis(
         Class<? extends HandlerType> handlerClass,
-        Class<?> returnType,
+        Class<?> injectorVariableType,
         Annotation annotation
     ) throws IllegalAccessException, InstantiationException {
         HandlerType handler = handlerClass.newInstance();
         handler.context = context;
-        handler.variable = variable;
-        handler.returnType = returnType;
+        handler.injectorVariable = injectorVariable;
+        handler.injectorVariableType = injectorVariableType;
         handler.annotation = annotation;
         handler.mapper = mapper;
         handler.api = api;
@@ -143,7 +143,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
                 if (filterClass != null) {
                     Filter filter = newFromThis(filterClass, Object.class, annotation);
-                    filter.handlerReturnType = m.getReturnType();
+                    filter.returnType = m.getReturnType();
                     filter.generateApi();
                     filter.generateDoc();
                     api = filter.api;
@@ -333,11 +333,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                     }
                     Injector injector = newFromThis(injectorClass, parameterClass, annotation);
                     injector.context = context;
-                    injector.variable = var;
+                    injector.injectorVariable = var;
                     // add injector, in order to run after actions
                     paramInjectors.addFirst(injector);
                     injector.before();
-                    var = injector.variable;
+                    var = injector.injectorVariable;
                     context = injector.context;
                     if (context.exception != null) {
                         throw context.exception;

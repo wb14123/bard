@@ -9,7 +9,7 @@ import org.binwang.bard.core.marker.Before;
 public class RequiredInjector extends Injector<Required> {
     @Before
     public void validateParam() throws RequiredNullException {
-        if (variable == null) {
+        if (injectorVariable == null) {
             throw new RequiredNullException();
         }
     }

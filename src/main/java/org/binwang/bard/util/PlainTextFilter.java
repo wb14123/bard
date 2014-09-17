@@ -21,6 +21,6 @@ public class PlainTextFilter extends Filter<PlainText> {
     @Override
     public void generateDoc() {
         api.produces = "text/plain";
-        api.returnType = handlerReturnType;
+        api.returnType = returnType;
     }
 }
