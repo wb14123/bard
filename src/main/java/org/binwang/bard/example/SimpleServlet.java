@@ -10,7 +10,7 @@ public class SimpleServlet extends Servlet {
     public SimpleServlet()
         throws NoSuchFieldException, InstantiationException, IllegalAccessException,
         NoSuchMethodException {
-        super("org.binwang.bard.util", "org.binwang.bard.example");
+        super("org.binwang.bard.basic", "org.binwang.bard.example");
     }
 
     protected void service(HttpServletRequest req, HttpServletResponse resp) {

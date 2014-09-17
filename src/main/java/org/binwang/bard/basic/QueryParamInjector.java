@@ -1,5 +1,6 @@
-package org.binwang.bard.util;
+package org.binwang.bard.basic;
 
+import org.binwang.bard.basic.marker.QueryParam;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Injector;
 import org.binwang.bard.core.marker.Before;

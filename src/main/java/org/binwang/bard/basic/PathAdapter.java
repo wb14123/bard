@@ -1,5 +1,6 @@
-package org.binwang.bard.util;
+package org.binwang.bard.basic;
 
+import org.binwang.bard.basic.marker.Path;
 import org.binwang.bard.core.Adapter;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.marker.After;
