@@ -38,7 +38,7 @@ public abstract class Adapter<AnnotationType extends Annotation>
     public boolean match()
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,
         IllegalAccessException {
-        Method[] methods = this.getClass().getMethods();
+        Method[] methods = this.getClass().getDeclaredMethods();
         for (Method method : methods) {
             Object result = runMethod(method, Match.class);
             // if result is match method and result is not true

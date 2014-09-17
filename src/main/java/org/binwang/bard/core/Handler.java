@@ -21,7 +21,7 @@ public abstract class Handler extends GenericHandler<Annotation> {
     public Object run()
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,
         IllegalAccessException {
-        Method[] methods = this.getClass().getMethods();
+        Method[] methods = this.getClass().getDeclaredMethods();
         for (Method method : methods) {
             // need not specified any annotation, since it just run methods with adapter annotations
             Object result = runMethod(method, null);

@@ -107,7 +107,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     protected void runMethods(Class<? extends Annotation> requiredAnnotation)
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,
         IllegalAccessException {
-        Method[] methods = this.getClass().getMethods();
+        Method[] methods = this.getClass().getDeclaredMethods();
         for (Method m : methods) {
             runMethod(m, requiredAnnotation);
         }
