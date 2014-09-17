@@ -30,7 +30,7 @@ public class Api {
     public Class returnType;
 
     @JsonProperty(value = "parameters")
-    public List<Parameter> parameters = new LinkedList<>();
+    public List<DocParameter> parameters = new LinkedList<>();
 
     @JsonProperty(value = "extensions")
     public Map<String, Object> extensions = new HashMap<>();

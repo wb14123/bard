@@ -8,7 +8,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Parameter {
+public class DocParameter {
     @JsonProperty(value = "name")
     public String name;
 

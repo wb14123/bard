@@ -1,6 +1,7 @@
 package org.binwang.bard.core;
 
 import org.binwang.bard.core.doc.Api;
+import org.binwang.bard.core.doc.DocParameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +51,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     protected AnnotationMapper mapper;
 
     /**
-     * API document, used except in {@link org.binwang.bard.core.Handler}
+     * API document, used in {@link org.binwang.bard.core.Filter} and {@link org.binwang.bard.core.Adapter}
      */
     protected Api api = new Api();
 
@@ -58,6 +59,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * APIs, used in {@link org.binwang.bard.core.Handler}
      */
     protected List<Api> apis = new LinkedList<>();
+
+    /**
+     * Parameter in API, used in {@link org.binwang.bard.core.Injector}
+     */
+    protected DocParameter docParameter;
 
     public GenericHandler() {
     }
@@ -85,6 +91,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         handler.annotation = annotation;
         handler.mapper = mapper;
         handler.api = api;
+        handler.docParameter = docParameter;
         return handler;
     }
 
@@ -114,7 +121,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * @throws IllegalAccessException
      */
     protected void generateApi() throws InstantiationException, IllegalAccessException {
-        Method[] methods = this.getClass().getMethods();
+        Method[] methods = this.getClass().getDeclaredMethods();
         Annotation[] classAnnotations = this.getClass().getAnnotations();
         for (Method m : methods) {
             boolean isHandler = false;
@@ -150,18 +157,24 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
             Parameter[] parameters = m.getParameters();
             for (Parameter parameter : parameters) {
+                docParameter = new DocParameter();
+                boolean hasInjector = false;
                 Annotation[] pAnnotations = parameter.getAnnotations();
                 for (Annotation annotation : pAnnotations) {
                     Class<? extends Annotation> annotationClass = annotation.annotationType();
                     Class<? extends Injector> injectorClass =
                         mapper.injectorMap.get(annotationClass);
                     if (injectorClass != null) {
+                        hasInjector = true;
                         Injector injector =
                             newFromThis(injectorClass, parameter.getType(), annotation);
                         injector.generateApi();
                         injector.generateDoc();
-                        api = injector.api;
+                        docParameter = injector.docParameter;
                     }
+                }
+                if (hasInjector) {
+                    api.parameters.add(docParameter);
                 }
             }
 

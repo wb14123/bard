@@ -23,6 +23,7 @@ public class RequiredInjector extends Injector<Required> {
     }
 
     @Override public void generateDoc() {
+        docParameter.limitations.put("required", true);
     }
 
 
