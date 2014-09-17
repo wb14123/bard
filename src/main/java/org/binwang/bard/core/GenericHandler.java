@@ -65,6 +65,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected DocParameter docParameter;
 
+    /**
+     * Handler return type, used for generate API. Used in {@link org.binwang.bard.core.Filter}
+     */
+    protected Class handlerReturnType;
+
     public GenericHandler() {
     }
 
@@ -138,6 +143,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
                 if (filterClass != null) {
                     Filter filter = newFromThis(filterClass, Object.class, annotation);
+                    filter.handlerReturnType = m.getReturnType();
                     filter.generateApi();
                     filter.generateDoc();
                     api = filter.api;
