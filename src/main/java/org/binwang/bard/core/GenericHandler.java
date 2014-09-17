@@ -6,7 +6,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -195,7 +195,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         Annotation[] methodAnnotations = m.getAnnotations();
         // get class's annotation
         Annotation[] classAnnotations = this.getClass().getAnnotations();
-        Map<Class<? extends Annotation>, List<Adapter>> adapterMap = new HashMap<>();
+        Map<Class<? extends Annotation>, List<Adapter>> adapterMap = new LinkedHashMap<>();
         Filter[] filters = new Filter[methodAnnotations.length + classAnnotations.length];
         int filterSize = 0;
 
