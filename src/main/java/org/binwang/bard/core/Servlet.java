@@ -1,7 +1,10 @@
 package org.binwang.bard.core;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import org.binwang.bard.core.doc.Api;
 import org.binwang.bard.core.doc.Document;
+import org.binwang.bard.core.marker.Model;
 import org.reflections.Reflections;
 
 import javax.servlet.http.HttpServlet;
@@ -10,17 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Servlet extends HttpServlet {
+    public Map<String, JsonSchema> models = new HashMap<>();
     private AnnotationMapper mapper = new AnnotationMapper();
     private List<Class<? extends Handler>> handlers = new LinkedList<>();
 
     public Servlet(String... pkgs)
         throws NoSuchFieldException, IllegalAccessException, InstantiationException,
-        NoSuchMethodException {
+        NoSuchMethodException, JsonMappingException {
         for (String pkg : pkgs) {
             Reflections reflections = new Reflections(pkg);
 
@@ -44,6 +46,13 @@ public class Servlet extends HttpServlet {
 
             Set<Class<? extends Handler>> handlers = reflections.getSubTypesOf(Handler.class);
             handlers.forEach(this::addHandler);
+
+            // get models
+            Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Model.class);
+            for (Class<?> c : classes) {
+                JsonSchema schema = Document.toJsonSchema(c);
+                models.put(schema.getId(), schema);
+            }
         }
     }
 
@@ -77,6 +86,7 @@ public class Servlet extends HttpServlet {
         }
         Document document = new Document();
         document.apis = apis;
+        document.models = models;
         return document;
     }
 

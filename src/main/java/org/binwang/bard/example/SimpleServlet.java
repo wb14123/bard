@@ -1,5 +1,6 @@
 package org.binwang.bard.example;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.binwang.bard.core.Servlet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +10,7 @@ public class SimpleServlet extends Servlet {
 
     public SimpleServlet()
         throws NoSuchFieldException, InstantiationException, IllegalAccessException,
-        NoSuchMethodException {
+        NoSuchMethodException, JsonMappingException {
         super("org.binwang.bard.basic", "org.binwang.bard.example");
     }
 

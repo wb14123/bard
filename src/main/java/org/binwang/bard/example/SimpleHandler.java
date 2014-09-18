@@ -11,8 +11,10 @@ public class SimpleHandler extends Handler {
 
     @Path("/get")
     @Doc("A simple handler just return what you give")
-    public Integer printParams(@QueryParam("id") Integer id) throws IOException {
-        return id;
+    public User printParams(@QueryParam("id") Integer id) throws IOException {
+        User user = new User();
+        user.id = id;
+        return user;
     }
 
     @Path("/add")

@@ -7,12 +7,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Document {
     @JsonProperty(value = "APIs")
     public List<Api> apis = new LinkedList<>();
+
+    @JsonProperty(value = "models")
+    public Map<String, JsonSchema> models = new HashMap<>();
 
     public static JsonSchema toJsonSchema(Class c) throws JsonMappingException {
         if (c == null) {
