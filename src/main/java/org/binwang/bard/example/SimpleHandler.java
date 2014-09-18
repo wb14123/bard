@@ -5,7 +5,7 @@ import org.binwang.bard.core.Handler;
 
 import java.io.IOException;
 
-@PlainText
+@Produce("application/json")
 @Path("/myapp")
 public class SimpleHandler extends Handler {
 
