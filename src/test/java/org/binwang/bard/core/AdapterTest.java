@@ -1,5 +1,6 @@
 package org.binwang.bard.core;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import junit.framework.Assert;
 import org.binwang.bard.core.defines.FalseAdapter1;
 import org.binwang.bard.core.defines.FalseAdapter2;
@@ -21,7 +22,7 @@ public class AdapterTest {
     @Before
     public void setUp()
         throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-        NoSuchFieldException {
+        NoSuchFieldException, JsonMappingException {
         servlet = new Servlet("org.binwang.bard.core.defines");
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
