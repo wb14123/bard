@@ -1,5 +1,6 @@
 package org.binwang.bard.basic;
 
+import com.github.drapostolos.typeparser.TypeParser;
 import org.binwang.bard.basic.marker.QueryParam;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Injector;
@@ -11,19 +12,8 @@ public class QueryParamInjector extends Injector<QueryParam> {
     @Before
     public void getParams() {
         String param = context.request.getParameter(annotation.value());
-        if (param == null || param.equals("")) {
-            injectorVariable = null;
-            return;
-        }
-        try {
-            if (injectorVariableType == Integer.class) {
-                this.injectorVariable = Integer.parseInt(param);
-            } else if (injectorVariableType == Double.class) {
-                this.injectorVariable = Double.parseDouble(param);
-            }
-        } catch (NumberFormatException e) {
-            this.injectorVariable = null;
-        }
+        TypeParser parser = TypeParser.newBuilder().build();
+        injectorVariable = parser.parse(param, injectorVariableType);
     }
 
     @Override

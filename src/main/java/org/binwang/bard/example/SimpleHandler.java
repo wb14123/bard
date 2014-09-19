@@ -9,11 +9,15 @@ import java.io.IOException;
 @Path("/myapp")
 public class SimpleHandler extends Handler {
 
-    @Path("/get")
+    @Path("/get/{id}/{name}")
     @Doc("A simple handler just return what you give")
-    public User printParams(@QueryParam("id") Integer id) throws IOException {
+    public User printParams(
+        @PathParam("id") Integer id,
+        @PathParam("name") String name
+    ) throws IOException {
         User user = new User();
         user.id = id;
+        user.name = name;
         return user;
     }
 

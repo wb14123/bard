@@ -24,6 +24,11 @@ public class ProduceFilter extends Filter<Produce> {
 
     @After public void filterResult() throws IOException {
         PrintWriter writer = context.response.getWriter();
+        if (context.exception != null) {
+            writer.print(context.exception);
+            writer.close();
+            return;
+        }
         try {
             String v = objectMapper.writeValueAsString(context.result);
             writer.print(v);

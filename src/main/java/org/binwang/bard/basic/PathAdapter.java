@@ -5,6 +5,10 @@ import org.binwang.bard.core.Adapter;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.marker.After;
 import org.binwang.bard.core.marker.Match;
+import org.glassfish.jersey.uri.PathTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @BindTo(Path.class)
 public class PathAdapter extends Adapter<Path> {
@@ -18,8 +22,14 @@ public class PathAdapter extends Adapter<Path> {
         }
         String currentPath = oldPath + annotation.value();
         context.custom.put("path", currentPath);
+        PathTemplate pathTemplate = new PathTemplate(currentPath);
+        Map<String, String> values = new HashMap<>();
         String realPath = context.request.getPathInfo();
-        return currentPath.equals(realPath);
+        if (pathTemplate.match(realPath, values)) {
+            context.custom.put("path-params", values);
+            return true;
+        }
+        return false;
     }
 
     @After
