@@ -1,12 +1,12 @@
 package org.binwang.bard.basic;
 
-import org.binwang.bard.basic.marker.Path;
 import org.binwang.bard.core.Adapter;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.marker.After;
 import org.binwang.bard.core.marker.Match;
 import org.glassfish.jersey.uri.PathTemplate;
 
+import javax.ws.rs.Path;
 import java.util.HashMap;
 import java.util.Map;
 

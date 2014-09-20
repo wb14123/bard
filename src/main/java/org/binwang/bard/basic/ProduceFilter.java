@@ -2,17 +2,17 @@ package org.binwang.bard.basic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.binwang.bard.basic.marker.Produce;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Filter;
 import org.binwang.bard.core.doc.Response;
 import org.binwang.bard.core.marker.After;
 
+import javax.ws.rs.Produces;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@BindTo(Produce.class)
-public class ProduceFilter extends Filter<Produce> {
+@BindTo(Produces.class)
+public class ProduceFilter extends Filter<Produces> {
     private static ObjectMapper objectMapper;
 
     public ProduceFilter() {

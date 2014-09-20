@@ -18,7 +18,7 @@ public class Api {
     public String method;
 
     @JsonProperty(value = "produces")
-    public String produces;
+    public String[] produces;
 
     @JsonProperty(value = "consumes")
     public String consumes;
