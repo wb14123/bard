@@ -39,5 +39,8 @@ public class FormParamInjector extends Injector<FormParam> {
     }
 
     @Override public void generateDoc() {
+        docParameter.name = annotation.value();
+        docParameter.type = injectorVariableType;
+        docParameter.belongs = "form";
     }
 }

@@ -21,6 +21,6 @@ public class QueryParamInjector extends Injector<QueryParam> {
     public void generateDoc() {
         docParameter.name = annotation.value();
         docParameter.type = injectorVariableType;
-        docParameter.belongs = "url-query";
+        docParameter.belongs = "url";
     }
 }

@@ -22,5 +22,8 @@ public class PathParamInjector extends Injector<PathParam> {
     }
 
     @Override public void generateDoc() {
+        docParameter.name = annotation.value();
+        docParameter.type = injectorVariableType;
+        docParameter.belongs = "path";
     }
 }
