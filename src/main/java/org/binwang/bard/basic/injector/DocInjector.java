@@ -1,4 +1,4 @@
-package org.binwang.bard.basic;
+package org.binwang.bard.basic.injector;
 
 import org.binwang.bard.basic.marker.Doc;
 import org.binwang.bard.core.BindTo;

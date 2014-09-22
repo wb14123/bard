@@ -1,4 +1,4 @@
-package org.binwang.bard.basic;
+package org.binwang.bard.basic.adapter;
 
 import org.binwang.bard.core.Adapter;
 import org.binwang.bard.core.BindTo;

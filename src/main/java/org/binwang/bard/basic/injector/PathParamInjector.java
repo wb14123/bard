@@ -1,4 +1,4 @@
-package org.binwang.bard.basic;
+package org.binwang.bard.basic.injector;
 
 import com.github.drapostolos.typeparser.TypeParser;
 import org.binwang.bard.core.BindTo;

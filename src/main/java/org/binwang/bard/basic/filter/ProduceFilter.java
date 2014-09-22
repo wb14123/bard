@@ -1,4 +1,4 @@
-package org.binwang.bard.basic;
+package org.binwang.bard.basic.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
