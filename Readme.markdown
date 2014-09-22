@@ -22,7 +22,8 @@ Features
 Basic Structures
 --------------
 
-In web development, we write handlers to handle HTTP request: read the request, and write response to client. But some more structures could make things easier:
+In web development, we write handlers to handle HTTP request: read the request,
+and write response to client. But some more structures could make things easier:
 
 ### Handler
 
@@ -44,3 +45,6 @@ How to run example:
 mvn compile
 mvn exec:java -Dexec.mainClass="org.binwang.bard.example.Main"
 ```
+
+This will start a server on port 8080. You can view [http://localhost:8080/api-doc](http://localhost:8080/api-dic)
+to get the auto generated documents in JSON format.
