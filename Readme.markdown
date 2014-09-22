@@ -3,7 +3,7 @@
 
 Bard is a wrapper of servlet. Makes it easier to write handlers.
 
-**It is not stabale now.**
+**It is not stable now.**
 
 Why Another Web Framework
 ---------------
