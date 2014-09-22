@@ -46,5 +46,5 @@ mvn compile
 mvn exec:java -Dexec.mainClass="org.binwang.bard.example.Main"
 ```
 
-This will start a server on port 8080. You can view [http://localhost:8080/api-doc](http://localhost:8080/api-dic)
+This will start a server on port 8080. You can view [http://localhost:8080/api-doc](http://localhost:8080/api-doc)
 to get the auto generated documents in JSON format.
