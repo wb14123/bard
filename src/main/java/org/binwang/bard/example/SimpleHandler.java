@@ -1,36 +1,32 @@
 package org.binwang.bard.example;
 
-import org.binwang.bard.basic.marker.Doc;
 import org.binwang.bard.basic.marker.Required;
 import org.binwang.bard.core.Handler;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import java.io.IOException;
+import javax.ws.rs.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Produces("application/json")
-@Path("/myapp")
+@Path("/user")
 public class SimpleHandler extends Handler {
 
-    @Path("/get/{id}/{name}")
-    @Doc("A simple handler just return what you give")
-    public User printParams(
-        @PathParam("id") Integer id,
-        @PathParam("name") String name
-    ) throws IOException {
+    public static Map<Integer, User> UserStorage = new HashMap<>();
+
+    @GET
+    @Path("/{id}")
+    public User getUser(@PathParam("id") @Required int id) {
+        return UserStorage.get(id);
+    }
+
+    @PUT
+    public User insertUser(
+        @FormParam("id") @Required int id,
+        @FormParam("name") String name) {
         User user = new User();
         user.id = id;
         user.name = name;
+        UserStorage.put(id, user);
         return user;
-    }
-
-    @Path("/add")
-    @Doc("Add two numbers")
-    public Integer add(
-        @QueryParam("a") @Required @Doc("first number") Integer a,
-        @QueryParam("b") @Required @Doc("second number") Integer b) throws IOException {
-        return a + b;
     }
 }
