@@ -42,6 +42,8 @@ public class SimpleHandler extends Handler {
         return a + b;
     }
     
+}
+    
 ```
 
 It will auto get params from url query. You can see more examples later.
