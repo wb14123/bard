@@ -19,25 +19,51 @@ Features
 * Small code base, easy to understand.
 * Auto generate API documents.
 
-Basic Structures
+Working with Annotations
+----------------
+
+You can just write handler class and methods with annotations on it. It will run filters, injectors
+and adapters with it.
+
+For example, this is a handler that add two numbers:
+
+```
+
+@Produces("application/json")
+@Path("/myapp")
+public class SimpleHandler extends Handler {
+
+    @GET
+    @Path("/add")
+    @Doc("Add two numbers")
+    public int add(
+        @QueryParam("a") @Required int a,
+        @QueryParam("b") @Required int b) {
+        return a + b;
+    }
+    
+```
+
+It will auto get params from url query. You can see more examples later.
+
+The annotations that just used is defined in basic package. You can define your own
+annotations easily.
+
+Define Your Own Annotations
 --------------
 
-In web development, we write handlers to handle HTTP request: read the request,
-and write response to client. But some more structures could make things easier:
+There are there kinds of annotations that could be defined:
 
-### Handler
+* Filter: Filter HTTP request and response.
+* Injector: Inject variables into handler method params.
+* Adapter: Define which handler should be used to handle this HTTP request.
 
-### Filter
-
-### Injector
-
-### Adapter
-
+You can see the annotations defined in `src/main/java/org/binwang/bard/basic` for examples.
 
 Examples
 --------------
 
-See `src/main/java/org/binwang/bard/example` for examples.
+See `src/main/java/org/binwang/bard/example` for the whole example.
 
 How to run example:
 
