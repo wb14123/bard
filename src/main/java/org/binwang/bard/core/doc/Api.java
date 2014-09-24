@@ -2,10 +2,7 @@ package org.binwang.bard.core.doc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Api {
     @JsonProperty(value = "description")
@@ -27,7 +24,7 @@ public class Api {
     public List<DocParameter> parameters = new LinkedList<>();
 
     @JsonProperty(value = "responses")
-    public List<Response> responses = new LinkedList<>();
+    public Set<Response> responses = new TreeSet<>();
 
     @JsonProperty(value = "extensions")
     public Map<String, Object> extensions = new HashMap<>();

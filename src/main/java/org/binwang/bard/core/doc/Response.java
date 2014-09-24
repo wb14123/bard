@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
-public class Response {
+public class Response implements Comparable<Response> {
     @JsonProperty(value = "code")
     public int code;
 
@@ -18,5 +18,12 @@ public class Response {
     @JsonProperty(value = "schema")
     public JsonSchema getReturn() throws JsonMappingException {
         return Document.toJsonSchema(returnType);
+    }
+
+    @Override public int compareTo(Response o) {
+        if (o.description == null || description == null) {
+            return 1;
+        }
+        return o.description.compareTo(description);
     }
 }
