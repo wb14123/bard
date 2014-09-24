@@ -1,4 +1,4 @@
-package org.binwang.bard.example;
+package org.binwang.bard.example.crud;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -9,7 +9,7 @@ public class Main {
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
 
-        handler.addServletWithMapping(SimpleServlet.class, "/*");
+        handler.addServletWithMapping(CrudServlet.class, "/*");
         try {
             server.start();
             server.join();

@@ -29,7 +29,6 @@ For example, this is a handler that add two numbers:
 ```
 
 @Produces("application/json")
-@Path("/myapp")
 public class SimpleHandler extends Handler {
 
     @GET
@@ -45,13 +44,13 @@ public class SimpleHandler extends Handler {
     
 ```
 
-It will auto get params from url query. You can see more examples later.
-
-The annotations that just used is defined in basic package. You can define your own
-annotations easily.
+It will auto get params from url query. You can see the whole source under
+`src/main/java/org/binwang/bard/example/simple`.
 
 Define Your Own Annotations
 --------------
+
+You can define your own annotations easily.
 
 There are there kinds of annotations that could be defined:
 
@@ -64,14 +63,21 @@ You can see the annotations defined in `src/main/java/org/binwang/bard/basic` fo
 Examples
 --------------
 
-See `src/main/java/org/binwang/bard/example` for the whole example.
+There are some examples under `src/main/java/org/binwang/bard/example`:
 
-How to run example:
+* simple: a simple example that adds two numbers.
+* crud: a restful service that could create, read, update and delete user.
+
+You could use maven to run the examples, run `simple` for example:
 
 ```
 mvn compile
-mvn exec:java -Dexec.mainClass="org.binwang.bard.example.Main"
+mvn exec:java -Dexec.mainClass="org.binwang.bard.example.simple.Main"
 ```
 
-This will start a server on port 8080. You can view [http://localhost:8080/api-doc](http://localhost:8080/api-doc)
+This will start a server on port 8080.
+
+`curl http://localhost:8080/add?a=1&b=2` will get `3` as a result.
+
+You can view [http://localhost:8080/api-doc](http://localhost:8080/api-doc)
 to get the auto generated documents in JSON format.

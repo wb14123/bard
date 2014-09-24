@@ -1,4 +1,4 @@
-package org.binwang.bard.example;
+package org.binwang.bard.example.crud;
 
 import org.binwang.bard.basic.marker.Doc;
 import org.binwang.bard.basic.marker.Required;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Produces("application/json")
 @Path("/user")
-public class SimpleHandler extends Handler {
+public class CrudHandler extends Handler {
 
     public static Map<Integer, User> UserStorage = new HashMap<>();
 

@@ -1,4 +1,4 @@
-package org.binwang.bard.example;
+package org.binwang.bard.example.crud;
 
 import org.binwang.bard.core.marker.Model;
 
