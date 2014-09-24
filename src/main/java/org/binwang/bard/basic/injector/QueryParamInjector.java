@@ -13,6 +13,10 @@ public class QueryParamInjector extends Injector<QueryParam> {
     @Before
     public void getParams() {
         String param = context.request.getParameter(annotation.value());
+        if (param == null) {
+            injectorVariable = null;
+            return;
+        }
         TypeParser parser = TypeParser.newBuilder().build();
         injectorVariable = parser.parse(param, injectorVariableType);
     }

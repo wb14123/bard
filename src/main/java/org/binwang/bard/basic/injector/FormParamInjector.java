@@ -44,8 +44,12 @@ public class FormParamInjector extends Injector<FormParam> {
             context.custom.put("form", formParams);
         }
 
-        TypeParser parser = TypeParser.newBuilder().build();
         String param = formParams.get(annotation.value());
+        if (param == null) {
+            injectorVariable = null;
+            return;
+        }
+        TypeParser parser = TypeParser.newBuilder().build();
         injectorVariable = parser.parse(param, injectorVariableType);
     }
 
