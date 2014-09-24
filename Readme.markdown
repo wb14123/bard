@@ -4,11 +4,11 @@ Bard is a wrapper of servlet. Makes it easier to write handlers.
 
 **It is not stable now.**
 
-Why Another Web Framework
+Pre-requirements
 ---------------
 
-* Annotations in Java could makes code much cleaner.
-* Current frameworks is not easy to extend.
+* Java 8
+* Maven 3
 
 Features
 ---------------
@@ -58,7 +58,13 @@ There are there kinds of annotations that could be defined:
 * Injector: Inject variables into handler method params.
 * Adapter: Define which handler should be used to handle this HTTP request.
 
-You can see the annotations defined in `src/main/java/org/binwang/bard/basic` for examples.
+You should choose to extends one of the three classes above.
+
+If you want the servlet auto find the annotations you just defined, use `@BindTo` on the implement
+class. And create the servlet with `new Servlet(pkg1, pkg2`), which `pkg1` and `pkg2` are the package
+names that contain the implementations.
+
+**You can see the annotations defined in `src/main/java/org/binwang/bard/basic` for examples.**
 
 Examples
 --------------
