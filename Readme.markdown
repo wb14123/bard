@@ -1,4 +1,3 @@
-
 [![Build Status](https://travis-ci.org/wb14123/bard.svg)](https://travis-ci.org/wb14123/bard)
 
 Bard is a wrapper of servlet. Makes it easier to write handlers.
@@ -59,10 +58,6 @@ There are there kinds of annotations that could be defined:
 * Filter: Filter HTTP request and response.
 * Injector: Inject variables into handler method params.
 * Adapter: Define which handler should be used to handle this HTTP request.
-
-### Basic
-
-### Filter
 
 You can see the annotations defined in `src/main/java/org/binwang/bard/basic` for examples.
 
