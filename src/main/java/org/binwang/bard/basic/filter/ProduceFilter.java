@@ -25,12 +25,6 @@ public class ProduceFilter extends Filter<Produces> {
     @After public void filterResult() throws IOException {
         context.response.addHeader("Content-Type", annotation.value()[0]);
         PrintWriter writer = context.response.getWriter();
-        if (context.exception != null) {
-            context.exception.printStackTrace();
-            writer.print(context.exception);
-            writer.close();
-            return;
-        }
         try {
             String v = objectMapper.writeValueAsString(context.result);
             writer.print(v);

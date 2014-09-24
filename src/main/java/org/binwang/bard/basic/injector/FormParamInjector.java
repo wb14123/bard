@@ -1,9 +1,10 @@
 package org.binwang.bard.basic.injector;
 
 import com.github.drapostolos.typeparser.TypeParser;
+import org.binwang.bard.basic.marker.ErrorCase;
+import org.binwang.bard.basic.marker.HandleErrors;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Injector;
-import org.binwang.bard.core.marker.After;
 import org.binwang.bard.core.marker.Before;
 
 import javax.ws.rs.FormParam;
@@ -15,7 +16,12 @@ import java.util.Map;
 
 @BindTo(FormParam.class)
 public class FormParamInjector extends Injector<FormParam> {
-    @Before public void getParam() throws IOException, InvalidateFormException {
+    @Before
+    @HandleErrors({
+        @ErrorCase(description = "read from data error",
+            code = 10000, exception = InvalidateFormException.class, logLevel = "DEBUG")
+    })
+    public void getParam() throws IOException, InvalidateFormException {
         // get from cache first
         Map<String, String> formParams = (Map<String, String>) context.custom.get("form");
         if (formParams == null) {
@@ -41,14 +47,6 @@ public class FormParamInjector extends Injector<FormParam> {
         TypeParser parser = TypeParser.newBuilder().build();
         String param = formParams.get(annotation.value());
         injectorVariable = parser.parse(param, injectorVariableType);
-    }
-
-    @After public void cleanUp() {
-        if (context.exception != null &&
-            context.exception instanceof InvalidateFormException) {
-            context.result = "invalidate form format";
-            context.exception = null;
-        }
     }
 
     @Override public void generateDoc() {

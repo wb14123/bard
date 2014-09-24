@@ -60,6 +60,10 @@ There are there kinds of annotations that could be defined:
 * Injector: Inject variables into handler method params.
 * Adapter: Define which handler should be used to handle this HTTP request.
 
+### Basic
+
+### Filter
+
 You can see the annotations defined in `src/main/java/org/binwang/bard/basic` for examples.
 
 Examples
