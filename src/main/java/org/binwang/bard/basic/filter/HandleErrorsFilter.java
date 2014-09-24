@@ -14,7 +14,7 @@ public class HandleErrorsFilter extends Filter<HandleErrors> {
             if (context.exception != null && context.exception.getClass() == errorCase
                 .exception()) {
                 context.response.setStatus(errorCase.code());
-                context.result = context.exception.getMessage();
+                context.result = context.exception.toString();
                 if (errorCase.logLevel().equals("ERROR")) {
                     context.exception.printStackTrace();
                 }
