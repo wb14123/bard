@@ -4,7 +4,7 @@ Bard is a wrapper of servlet. Makes it easier to write handlers.
 
 **It is not stable now.**
 
-Pre-requirements
+Requirements
 ---------------
 
 * Java 8
