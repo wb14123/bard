@@ -66,6 +66,18 @@ names that contain the implementations.
 
 **You can see the annotations defined in `src/main/java/org/binwang/bard/basic` for examples.**
 
+Handle Errors
+--------------
+
+When there are exceptions occurs in the middleware or handler, the framework will put the exception into
+`context.exception`, so that you can handle it and do clean up in the `After` actions of middleware.
+
+In the basic package, we provide the filter `HandleErrors` combined with `ErrorCase` to handle the
+exceptions that could be thrown by your handler or custom middleware. It will put the exception string
+into the result, and auto add documents for you. See how to use it in
+`src/main/java/org/binwang/bard/basic/injector/RequiredInjector` for example.
+
+
 Examples
 --------------
 
