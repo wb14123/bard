@@ -95,6 +95,7 @@ public class Servlet extends HttpServlet {
         String path = request.getPathInfo();
         if (path != null && path.equals("/api-doc")) {
             try {
+                response.setHeader("Access-Control-Allow-Origin", "*");
                 response.getWriter().write(getDocument().toJson());
                 response.getWriter().close();
                 return;
