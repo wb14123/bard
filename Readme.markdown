@@ -78,6 +78,14 @@ into the result, and auto add documents for you. See how to use it in
 `src/main/java/org/binwang/bard/basic/injector/RequiredInjector` for example.
 
 
+Auto Generate Document
+---------------
+
+When the server is started, you can request `/api-doc` to get the document as JSON format. You could use
+[bard-doc-ui](https://github.com/wb14123/bard-doc-ui) as a beautiful UI interface to display the document
+on a web page.
+
+
 Examples
 --------------
 
