@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.binwang.bard</groupId>
+        <artifactId>bard</artifactId>
+        <version>0.0.1</version>
+    </parent>
+
+    <groupId>org.binwang.bard</groupId>
+    <artifactId>bard-basic</artifactId>
+    <version>0.0.1</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.binwang.bard</groupId>
+            <artifactId>bard-core</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <!-- used in basic util -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>2.12</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.drapostolos</groupId>
+            <artifactId>type-parser</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+    </dependencies>
+
+    
+</project>
