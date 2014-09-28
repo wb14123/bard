@@ -62,6 +62,7 @@ public class FormParamInjector extends Injector<FormParam> {
 
     public static class InvalidateFormException extends Exception {
         public static final long serialVersionUID = 1L;
+
         public InvalidateFormException(String msg, Exception e) {
             super(msg, e);
         }

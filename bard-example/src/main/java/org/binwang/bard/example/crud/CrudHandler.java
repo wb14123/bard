@@ -68,6 +68,7 @@ public class CrudHandler extends Handler {
 
     public static class UserNotFoundException extends Exception {
         public static final long serialVersionUID = 1L;
+
         public UserNotFoundException(Integer userId) {
             super("user " + userId.toString() + " not found.");
         }
