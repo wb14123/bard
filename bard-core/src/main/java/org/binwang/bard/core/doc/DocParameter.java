@@ -19,7 +19,7 @@ public class DocParameter {
     public String belongs;
 
     @JsonIgnore
-    public Class type;
+    public Class<?> type;
 
     @JsonProperty(value = "limitations")
     public Map<String, Object> limitations = new HashMap<>();

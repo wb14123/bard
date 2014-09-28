@@ -13,7 +13,7 @@ public class Response implements Comparable<Response> {
     public String description;
 
     @JsonIgnore
-    public Class returnType;
+    public Class<?> returnType;
 
     @JsonProperty(value = "schema")
     public JsonSchema getReturn() throws JsonMappingException {

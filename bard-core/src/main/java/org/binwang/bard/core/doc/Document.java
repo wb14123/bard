@@ -19,7 +19,7 @@ public class Document {
     @JsonProperty(value = "models")
     public Map<String, JsonSchema> models = new HashMap<>();
 
-    public static JsonSchema toJsonSchema(Class c) throws JsonMappingException {
+    public static JsonSchema toJsonSchema(Class<?> c) throws JsonMappingException {
         if (c == null) {
             return null;
         }

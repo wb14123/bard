@@ -37,7 +37,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     /**
      * Only used by {@link org.binwang.bard.core.Injector}, the type of inject injectorVariable.
      */
-    protected Class injectorVariableType = Object.class;
+    protected Class<?> injectorVariableType = Object.class;
 
     /**
      * Used by {@link org.binwang.bard.core.Filter}, {@link org.binwang.bard.core.Injector} and
@@ -68,7 +68,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     /**
      * Handler return type, used for generate API. Used in {@link org.binwang.bard.core.Filter}
      */
-    protected Class returnType;
+    protected Class<?> returnType;
 
     public GenericHandler() {
     }
@@ -320,7 +320,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             for (injectorI = 0; injectorI < parameters.length; injectorI++) {
                 // run injectors on one param, to get what should it be
                 Annotation[] annotations = parameters[injectorI].getAnnotations();
-                Class parameterClass = parameters[injectorI].getType();
+                Class<?> parameterClass = parameters[injectorI].getType();
                 LinkedList<Injector> paramInjectors = new LinkedList<>();
                 injectors.addFirst(paramInjectors);
                 Object var = null;
