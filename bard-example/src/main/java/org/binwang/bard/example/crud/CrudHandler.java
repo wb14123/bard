@@ -1,6 +1,8 @@
 package org.binwang.bard.example.crud;
 
 import org.binwang.bard.basic.marker.Doc;
+import org.binwang.bard.basic.marker.ErrorCase;
+import org.binwang.bard.basic.marker.HandleErrors;
 import org.binwang.bard.basic.marker.Required;
 import org.binwang.bard.core.Handler;
 
@@ -36,9 +38,16 @@ public class CrudHandler extends Handler {
     @DELETE
     @Path("/{id}")
     @Doc("Delete a user")
-    public String deleteUser(@PathParam("id") @Required int id) {
-        UserStorage.remove(id);
-        return "ok";
+    @HandleErrors({
+        @ErrorCase(code = 20000, logLevel = "DEBUG", exception = UserNotFoundException.class,
+            description = "user not found")
+    })
+    public User deleteUser(@PathParam("id") @Required int id) throws UserNotFoundException {
+        User user = UserStorage.remove(id);
+        if (user == null) {
+            throw new UserNotFoundException(id);
+        }
+        return user;
     }
 
     @POST
@@ -55,5 +64,11 @@ public class CrudHandler extends Handler {
         }
         UserStorage.put(id, user);
         return user;
+    }
+
+    public static class UserNotFoundException extends Exception {
+        public UserNotFoundException(Integer userId) {
+            super("user " + userId.toString() + " not found.");
+        }
     }
 }
