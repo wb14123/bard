@@ -45,7 +45,7 @@ public class SimpleHandler extends Handler {
 ```
 
 It will auto get params from url query. You can see the whole source under
-`src/main/java/org/binwang/bard/example/simple`.
+`bard-example/src/main/java/org/binwang/bard/example/simple`.
 
 Define Your Own Annotations
 --------------
@@ -74,8 +74,8 @@ When there are exceptions occurs in the middleware or handler, the framework wil
 
 In the basic package, we provide the filter `HandleErrors` combined with `ErrorCase` to handle the
 exceptions that could be thrown by your handler or custom middleware. It will put the exception string
-into the result, and auto add documents for you. See how to use it in
-`src/main/java/org/binwang/bard/basic/injector/RequiredInjector` for example.
+into the result, and auto add documents for you. You can see the usage in `bard-example`, with the
+example `crud`.
 
 
 Auto Generate Document
