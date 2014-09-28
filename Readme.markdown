@@ -64,7 +64,7 @@ If you want the servlet auto find the annotations you just defined, use `@BindTo
 class. And create the servlet with `new Servlet(pkg1, pkg2`), which `pkg1` and `pkg2` are the package
 names that contain the implementations.
 
-**You can see the annotations defined in `src/main/java/org/binwang/bard/basic` for examples.**
+**You can see the annotations defined in `bard-basic` for examples.**
 
 Handle Errors
 --------------
@@ -89,7 +89,7 @@ on a web page.
 Examples
 --------------
 
-There are some examples under `src/main/java/org/binwang/bard/example`:
+There are some examples under `bard-example`:
 
 * simple: a simple example that adds two numbers.
 * crud: a restful service that could create, read, update and delete user.
@@ -97,7 +97,8 @@ There are some examples under `src/main/java/org/binwang/bard/example`:
 You could use maven to run the examples, run `simple` for example:
 
 ```
-mvn compile
+mvn install
+cd bard-example
 mvn exec:java -Dexec.mainClass="org.binwang.bard.example.simple.Main"
 ```
 
