@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class SimpleServlet extends Servlet {
+    public static final long serialVersionUID = 1L;
 
     public SimpleServlet()
         throws NoSuchFieldException, InstantiationException, IllegalAccessException,

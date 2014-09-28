@@ -26,5 +26,6 @@ public class RequiredInjector extends Injector<Required> {
 
 
     public static class RequiredNullException extends Exception {
+        public static final long serialVersionUID = 1L;
     }
 }
