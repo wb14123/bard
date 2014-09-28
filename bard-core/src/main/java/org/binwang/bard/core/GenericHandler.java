@@ -84,6 +84,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
+    @SuppressWarnings("unchecked")
     public <HandlerType extends GenericHandler> HandlerType newFromThis(
         Class<? extends HandlerType> handlerClass,
         Class<?> injectorVariableType,
@@ -142,7 +143,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 Class<? extends Annotation> annotationClass = annotation.annotationType();
                 Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
                 if (filterClass != null) {
-                    Filter filter = newFromThis(filterClass, Object.class, annotation);
+                    Filter<?> filter = newFromThis(filterClass, Object.class, annotation);
                     filter.returnType = m.getReturnType();
                     filter.generateApi();
                     filter.generateDoc();
