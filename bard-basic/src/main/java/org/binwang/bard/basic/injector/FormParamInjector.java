@@ -23,6 +23,7 @@ public class FormParamInjector extends Injector<FormParam> {
     })
     public void getParam() throws IOException, InvalidateFormException {
         // get from cache first
+        @SuppressWarnings("unchecked")
         Map<String, String> formParams = (Map<String, String>) context.custom.get("form");
         if (formParams == null) {
             formParams = new HashMap<>();
