@@ -16,6 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Servlet extends HttpServlet {
+    static final long serialVersionUID = 1L;
+
     public Map<String, JsonSchema> models = new HashMap<>();
     private AnnotationMapper mapper = new AnnotationMapper();
     private List<Class<? extends Handler>> handlers = new LinkedList<>();
