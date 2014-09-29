@@ -47,21 +47,103 @@ public class SimpleHandler extends Handler {
 It will auto get params from url query. You can see the whole source under
 `bard-example/src/main/java/org/binwang/bard/example/simple`.
 
+Some basic annotations are already defined under `bard-basic`. It defines some annotations in JAX-RS.
+But it is not compatible with JAX-RS completely, since **the order of annotations matter**.
+
+
+How the Annotations work
+-------------------
+
+There are three kinds of annotations in Bard:
+
+* Adapter: Define which handler should be used to handle this HTTP request.
+* Filter: Filter HTTP request and response.
+* Injector: Inject variables into handler method params.
+
+Here is how the annotations are run when a HTTP request comes:
+
+### Run Adapters
+
+Adapters specify which handler should handle the income request. Such as `@Path`, `@GET`, `@POST` are
+adapters.
+
+The framework will run adapters on the handler methods first, decide whether to use this method to
+handle the request.
+
+Adapters could be used both on class and method.
+
+Adapters has match actions (methods annotated with `@Match`). The match actions will return `true` or
+`false`. If one of the adapters' match actions returns `false`, the framework will skip this handler
+and start to check whether the next handler should be used to handle the request.
+
+If the adapter returns true,  after actions (methods annotated `@After`) will run in order to clean up
+things.
+
+If a class and a method in it both annotated with the same adapter, things will be different. I will
+write documents about this later.
+
+### Run Before Actions of Filters
+
+Filters could filter the HTTP request or the response. Such as `@Produces` is filter.
+
+The filter could be used both on class and method.
+
+The filters will be run after all the adapters on the method returns true. Then filters' before actions
+(methods annotated with @Before) will be run. The filter could do want it wants, such as write something
+in `Context` and so on.
+
+
+### Run Before Actions of Injectors
+
+Injectors inject variables into handler method params. Such as `@PathParam`, `@PathParam` are injectors.
+
+Injectors could only be used on handler method's params. (I'm going to support it on class fields).
+
+Injectors could get something from `context` in there before actions (methods defined with `@Before`),
+and write them to `context.injectoVariable`. Then the framework will take the variable, use them as the
+params and the invoke the handler method.
+
+### Run the Handler Method
+
+The here comes the handler method. Only the methods in Handler class with at least one adapter annotation
+are considered as handler method. You can just return the result. Filters could handle the result for you.
+
+### Run After Actions of Injectors
+
+After run the handler method, injectors' after actions (methods annotated with `@After`) will be run, in order
+to cleanup things. If there are any exceptions thrown by handler, `context.exception` will store it.
+
+### Run After Actions of Filters
+
+Filters' after actions will be run in order to clean up things. `context.exception` will store the exception
+thrown in previous steps. `context.result` will store the result returned by the handler. You can do something
+with it, such as write them into the response.
+
+Things are done for now.
+
+### Break the Chain
+
+You may want the chain break if there are something you don't except. Such as if you are writing an injector
+`@Requried` that checks whether the param is null, you may want to break the chain and return an error immediate while
+the param is null.
+
+When you want this, just throw an exception, then the chain will not go on. But the after actions of
+already run filters and injectors,  will still run, in order to cleanup things. But `context.exception` will
+be the exception that you just thrown.
+
+You can use `@HandleErrors` as a helper filter to handle the exception you thrown. See the sections
+below for details.
+
 Define Your Own Annotations
 --------------
 
-You can define your own annotations easily.
+You can define your own annotations easily. 
 
-There are there kinds of annotations that could be defined:
-
-* Filter: Filter HTTP request and response.
-* Injector: Inject variables into handler method params.
-* Adapter: Define which handler should be used to handle this HTTP request.
-
-You should choose to extends one of the three classes above.
-
-If you want the servlet auto find the annotations you just defined, use `@BindTo` on the implement
-class. And create the servlet with `new Servlet(pkg1, pkg2`), which `pkg1` and `pkg2` are the package
+1. Define an annotation. `@DefinedAnnotation` for example.
+2. Define an implement class. Extend one of these classes: `Adapter`, `Filter`, `Injector`.
+Write match actions, before actions or after actions for it.
+3. Bind them together. Use `@BindTo(DefinedAnnotation.class)` on the implement class.
+4. Use the annotations. Create the servlet with `new Servlet(pkg1, pkg2`), which `pkg1` and `pkg2` are the package
 names that contain the implementations.
 
 **You can see the annotations defined in `bard-basic` for examples.**
@@ -85,6 +167,7 @@ When the server is started, you can request `/api-doc` to get the document as JS
 [bard-doc-ui](https://github.com/wb14123/bard-doc-ui) as a beautiful UI interface to display the document
 on a web page.
 
+`generateDoc` method in Adapter, Filter and Injector are used to auto generate documents.
 
 Examples
 --------------
