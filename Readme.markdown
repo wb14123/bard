@@ -48,7 +48,7 @@ It will auto get params from url query. You can see the whole source under
 `bard-example/src/main/java/org/binwang/bard/example/simple`.
 
 Some basic annotations are already defined under `bard-basic`. It defines some annotations in JAX-RS.
-But it is not compatible with JAX-RS completely, since **the order of annotations matter**.
+But it is not compatible with JAX-RS completely, since **the order of annotations matters**.
 
 
 How the Annotations work
