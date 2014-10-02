@@ -322,7 +322,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 Annotation[] annotations = field.getAnnotations();
                 Class<?> fieldClass = field.getType();
                 Object var = runInjectors(annotations, fieldClass, injectors);
-                field.set(this, var);
+                if (var != null) {
+                    field.set(this, var);
+                }
             }
 
             // run injectors before to get params
