@@ -108,16 +108,16 @@ params and the invoke the handler method.
 The here comes the handler method. Only the methods in Handler class with at least one adapter annotation
 are considered as handler method. You can just return the result. Filters could handle the result for you.
 
-### Run After Actions of Injectors
-
-After run the handler method, injectors' after actions (methods annotated with `@After`) will be run, in order
-to cleanup things. If there are any exceptions thrown by handler, `context.exception` will store it.
-
 ### Run After Actions of Filters
 
 Filters' after actions will be run in order to clean up things. `context.exception` will store the exception
 thrown in previous steps. `context.result` will store the result returned by the handler. You can do something
 with it, such as write them into the response.
+
+### Run After Actions of Injectors
+
+After run the handler method, injectors' after actions (methods annotated with `@After`) will be run, in order
+to cleanup things. If there are any exceptions thrown by handler, `context.exception` will store it.
 
 Things are done for now.
 
