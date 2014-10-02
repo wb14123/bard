@@ -97,7 +97,7 @@ in `Context` and so on.
 
 Injectors inject variables into handler method params. Such as `@PathParam`, `@PathParam` are injectors.
 
-Injectors could only be used on handler method's params. (I'm going to support it on class fields).
+Injectors could be used on handler method's params and class public fields.
 
 Injectors could get something from `context` in there before actions (methods defined with `@Before`),
 and write them to `context.injectoVariable`. Then the framework will take the variable, use them as the

@@ -4,6 +4,7 @@ import org.binwang.bard.core.doc.Api;
 import org.binwang.bard.core.doc.DocParameter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -314,6 +315,16 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 }
             }
 
+            // run injectors to init class fields
+            Field[] fields = this.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                field.getAnnotations();
+                Annotation[] annotations = field.getAnnotations();
+                Class<?> fieldClass = field.getType();
+                Object var = runInjectors(annotations, fieldClass, injectors);
+                field.set(this, var);
+            }
+
             // run injectors before to get params
             Parameter[] parameters = m.getParameters();
             Object args[] = new Object[parameters.length];
@@ -322,28 +333,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 // run injectors on one param, to get what should it be
                 Annotation[] annotations = parameters[injectorI].getAnnotations();
                 Class<?> parameterClass = parameters[injectorI].getType();
-                LinkedList<Injector> paramInjectors = new LinkedList<>();
-                injectors.addFirst(paramInjectors);
-                Object var = null;
-                for (Annotation annotation : annotations) {
-                    Class<? extends Annotation> annotationClass = annotation.annotationType();
-                    Class<? extends Injector> injectorClass =
-                        mapper.injectorMap.get(annotationClass);
-                    if (injectorClass == null) {
-                        continue;
-                    }
-                    Injector injector = newFromThis(injectorClass, parameterClass, annotation);
-                    injector.context = context;
-                    injector.injectorVariable = var;
-                    // add injector, in order to run after actions
-                    paramInjectors.addFirst(injector);
-                    injector.before();
-                    var = injector.injectorVariable;
-                    context = injector.context;
-                    if (context.exception != null) {
-                        throw context.exception;
-                    }
-                }
+                Object var = runInjectors(annotations, parameterClass, injectors);
                 args[injectorI] = var;
             }
 
@@ -383,5 +373,33 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         }
 
         return result;
+    }
+
+    private Object runInjectors(Annotation[] annotations, Class<?> parameterClass,
+        LinkedList<LinkedList<Injector>> injectors)
+        throws Exception {
+        Object var = null;
+        LinkedList<Injector> paramInjectors = new LinkedList<>();
+        injectors.addFirst(paramInjectors);
+        for (Annotation annotation : annotations) {
+            Class<? extends Annotation> annotationClass = annotation.annotationType();
+            Class<? extends Injector> injectorClass =
+                mapper.injectorMap.get(annotationClass);
+            if (injectorClass == null) {
+                continue;
+            }
+            Injector injector = newFromThis(injectorClass, parameterClass, annotation);
+            injector.context = context;
+            injector.injectorVariable = var;
+            // add injector, in order to run after actions
+            paramInjectors.addFirst(injector);
+            injector.before();
+            var = injector.injectorVariable;
+            context = injector.context;
+            if (context.exception != null) {
+                throw context.exception;
+            }
+        }
+        return var;
     }
 }

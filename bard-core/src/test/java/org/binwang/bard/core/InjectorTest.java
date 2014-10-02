@@ -33,8 +33,22 @@ public class InjectorTest {
     }
 
     @Test
+    public void fieldInjectorTest() {
+        servlet.addHandler(FieldInjectorHandler.class);
+        servlet.service(request, response);
+        assertEquals("0", response.getHeader("handler_header"));
+    }
+
+    @Test
     public void exceptionInjectorTest() {
         servlet.addHandler(ExceptionInjectorHandler.class);
+        servlet.service(request, response);
+        assertEquals("true", response.getHeader("get_exception"));
+    }
+
+    @Test
+    public void filedExceptionInjectorTest() {
+        servlet.addHandler(FieldExceptionInjectorHandler.class);
         servlet.service(request, response);
         assertEquals("true", response.getHeader("get_exception"));
     }
@@ -47,9 +61,30 @@ public class InjectorTest {
     }
 
 
+    public static class FieldInjectorHandler extends Handler {
+        @IntegerZeroInjector
+        public Integer zero;
+
+        @TrueAdapter1
+        public void addHeader() {
+            context.response.setHeader("handler_header", zero.toString());
+        }
+    }
+
+
     public static class ExceptionInjectorHandler extends Handler {
         @TrueAdapter1
         public void exceptionHandler(@ExceptionInjector Object whatever) {
+        }
+    }
+
+
+    public static class FieldExceptionInjectorHandler extends Handler {
+        @ExceptionInjector
+        public Object whatever;
+
+        @TrueAdapter1
+        public void exceptionHandler() {
         }
     }
 
