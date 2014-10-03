@@ -13,6 +13,7 @@
     <modules>
         <module>bard-core</module>
         <module>bard-basic</module>
+        <module>bard-util</module>
         <module>bard-example</module>
     </modules>
 
