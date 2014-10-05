@@ -5,13 +5,13 @@ public interface UserDao<UserType> {
 
     public long getUserIdFromName(String username, String password) throws UserNotFoundException;
 
-    public void saveToken(String token, long userId);
+    public void saveToken(String token, long userId, long expire);
 
     public Long getUserIdFromToken(String token) throws TokenNotFoundException;
 
     public void saveSalt(long userId, String salt);
 
-    public String getSalt(long userId);
+    public String getSalt(String username) throws SaltNotFoundException;
 
     public static class UserNotFoundException extends Exception {
         public UserNotFoundException(Long userId) {
@@ -23,6 +23,13 @@ public interface UserDao<UserType> {
     public static class TokenNotFoundException extends Exception {
         public TokenNotFoundException(String token) {
             super("Token not found: " + token);
+        }
+    }
+
+
+    public static class SaltNotFoundException extends Exception {
+        public SaltNotFoundException(String username) {
+            super("Salt not found for user: " + username);
         }
     }
 }
