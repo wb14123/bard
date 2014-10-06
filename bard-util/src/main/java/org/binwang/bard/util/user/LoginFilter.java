@@ -3,6 +3,7 @@ package org.binwang.bard.util.user;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.binwang.bard.basic.marker.ErrorCase;
 import org.binwang.bard.basic.marker.HandleErrors;
+import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Filter;
 import org.binwang.bard.core.marker.Before;
 import org.binwang.bard.util.user.marker.Login;
@@ -11,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
+@BindTo(Login.class)
 public class LoginFilter extends Filter<Login> {
     @HandleErrors({
         @ErrorCase(code = 403, logLevel = "DEBUG", description = "Username or password error",

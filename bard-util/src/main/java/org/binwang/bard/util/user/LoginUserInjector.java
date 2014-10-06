@@ -3,12 +3,14 @@ package org.binwang.bard.util.user;
 import org.binwang.bard.basic.marker.ErrorCase;
 import org.binwang.bard.basic.marker.HandleErrors;
 import org.binwang.bard.basic.marker.Required;
+import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Injector;
 import org.binwang.bard.core.marker.Before;
 import org.binwang.bard.util.user.marker.LoginUser;
 
 import javax.ws.rs.HeaderParam;
 
+@BindTo(LoginUser.class)
 public class LoginUserInjector extends Injector<LoginUser> {
     @Before
     @HandleErrors({
