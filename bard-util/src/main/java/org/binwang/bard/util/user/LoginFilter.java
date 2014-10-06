@@ -3,6 +3,7 @@ package org.binwang.bard.util.user;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.binwang.bard.basic.marker.ErrorCase;
 import org.binwang.bard.basic.marker.HandleErrors;
+import org.binwang.bard.basic.marker.Required;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Filter;
 import org.binwang.bard.core.marker.Before;
@@ -23,8 +24,8 @@ public class LoginFilter extends Filter<Login> {
             exception = NoSuchAlgorithmException.class)
     })
     @Before public void login(
-        @QueryParam("username") String username,
-        @QueryParam("password") String password)
+        @QueryParam("username") @Required String username,
+        @QueryParam("password") @Required String password)
         throws UserDao.UserNotFoundException, UserDao.SaltNotFoundException,
         NoSuchAlgorithmException, InstantiationException, IllegalAccessException {
         String salt = getUserDao().getSalt(username);
