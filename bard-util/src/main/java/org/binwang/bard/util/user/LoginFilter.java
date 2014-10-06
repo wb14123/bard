@@ -11,9 +11,7 @@ import javax.ws.rs.QueryParam;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
-public abstract class LoginFilter extends Filter<Login> {
-    protected abstract UserDao getUserDao();
-
+public class LoginFilter extends Filter<Login> {
     @HandleErrors({
         @ErrorCase(code = 403, logLevel = "DEBUG", description = "Username or password error",
             exception = UserDao.UserNotFoundException.class),
@@ -26,7 +24,7 @@ public abstract class LoginFilter extends Filter<Login> {
         @QueryParam("username") String username,
         @QueryParam("password") String password)
         throws UserDao.UserNotFoundException, UserDao.SaltNotFoundException,
-        NoSuchAlgorithmException {
+        NoSuchAlgorithmException, InstantiationException, IllegalAccessException {
         String salt = getUserDao().getSalt(username);
         String saltPassword = password + salt;
         String encryptPassword = DigestUtils.sha256Hex(saltPassword.getBytes());
@@ -36,5 +34,10 @@ public abstract class LoginFilter extends Filter<Login> {
     }
 
     @Override public void generateDoc() {
+    }
+
+    private UserDao getUserDao() throws IllegalAccessException, InstantiationException {
+        UserDao dao = annotation.value().newInstance();
+        return dao.getInstance();
     }
 }

@@ -1,6 +1,8 @@
 package org.binwang.bard.util.user;
 
 public interface UserDao<UserType> {
+    public UserDao getInstance();
+
     public UserType getUser(long userId) throws UserNotFoundException;
 
     public long getUserIdFromName(String username, String password) throws UserNotFoundException;
