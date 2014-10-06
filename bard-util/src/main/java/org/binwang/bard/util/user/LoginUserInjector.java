@@ -22,8 +22,8 @@ public class LoginUserInjector extends Injector<LoginUser> {
     public void getUser(@HeaderParam("auth-token") @Required String token)
         throws UserDao.TokenNotFoundException, UserDao.UserNotFoundException,
         InstantiationException, IllegalAccessException {
-        Long userId = getUserDao().getUserIdFromToken(token);
-        injectorVariable = getUserDao().getUser(userId);
+        String username = getUserDao().getUsernameFromToken(token);
+        injectorVariable = getUserDao().getUser(username);
     }
 
     @Override public void generateDoc() {

@@ -5,16 +5,16 @@ import org.binwang.bard.basic.marker.ErrorCase;
 import org.binwang.bard.basic.marker.HandleErrors;
 import org.binwang.bard.basic.marker.Required;
 import org.binwang.bard.core.BindTo;
-import org.binwang.bard.core.Filter;
+import org.binwang.bard.core.Injector;
 import org.binwang.bard.core.marker.Before;
-import org.binwang.bard.util.user.marker.Login;
+import org.binwang.bard.util.user.marker.LoginToken;
 
 import javax.ws.rs.QueryParam;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
-@BindTo(Login.class)
-public class LoginFilter extends Filter<Login> {
+@BindTo(LoginToken.class)
+public class LoginTokenInjector extends Injector<LoginToken> {
     @HandleErrors({
         @ErrorCase(code = 403, logLevel = "DEBUG", description = "Username or password error",
             exception = UserDao.UserNotFoundException.class),
@@ -31,9 +31,10 @@ public class LoginFilter extends Filter<Login> {
         String salt = getUserDao().getSalt(username);
         String saltPassword = password + salt;
         String encryptPassword = DigestUtils.sha256Hex(saltPassword.getBytes());
-        Long userId = getUserDao().getUserIdFromName(username, encryptPassword);
+        getUserDao().checkPassword(username, encryptPassword);
         String token = UUID.randomUUID().toString();
-        getUserDao().saveToken(token, userId, 1000 * 60 * 24 * 7);
+        getUserDao().saveToken(token, username, 1000 * 60 * 24 * 7);
+        injectorVariable = token;
     }
 
     @Override public void generateDoc() {

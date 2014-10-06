@@ -1,11 +1,11 @@
 package org.binwang.bard.core;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import junit.framework.Assert;
 import org.binwang.bard.core.defines.FalseAdapter1;
 import org.binwang.bard.core.defines.FalseAdapter2;
 import org.binwang.bard.core.defines.TrueAdapter1;
 import org.binwang.bard.core.defines.TrueAdapter2;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
