@@ -18,6 +18,14 @@ public interface UserDao<UserType> {
     public UserType getUser(long userId) throws UserNotFoundException;
 
     /**
+     * Save a user's password
+     *
+     * @param username The username.
+     * @param password The encrypted password.
+     */
+    public void savePassword(String username, String password);
+
+    /**
      * Get user from username and password.
      *
      * @param username The username.
@@ -48,10 +56,10 @@ public interface UserDao<UserType> {
     /**
      * Save a user's password salt.
      *
-     * @param userId The id of user.
-     * @param salt   The salt.
+     * @param username The username.
+     * @param salt     The salt.
      */
-    public void saveSalt(long userId, String salt);
+    public void saveSalt(String username, String salt);
 
     /**
      * Get the salt from username.
