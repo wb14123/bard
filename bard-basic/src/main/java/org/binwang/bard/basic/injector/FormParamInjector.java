@@ -1,6 +1,7 @@
 package org.binwang.bard.basic.injector;
 
 import com.github.drapostolos.typeparser.TypeParser;
+import org.binwang.bard.basic.BardBasicError;
 import org.binwang.bard.basic.marker.ErrorCase;
 import org.binwang.bard.basic.marker.HandleErrors;
 import org.binwang.bard.core.BindTo;
@@ -18,8 +19,9 @@ import java.util.Map;
 public class FormParamInjector extends Injector<FormParam> {
     @Before
     @HandleErrors({
-        @ErrorCase(description = "read from data error",
-            code = 10000, exception = InvalidateFormException.class, logLevel = "DEBUG")
+        @ErrorCase(description = "read form data error",
+            code = BardBasicError.READ_FORM_ERROR,
+            exception = InvalidateFormException.class, logLevel = "DEBUG")
     })
     public void getParam() throws IOException, InvalidateFormException {
         // get from cache first
