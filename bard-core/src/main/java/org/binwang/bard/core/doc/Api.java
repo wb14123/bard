@@ -18,7 +18,7 @@ public class Api {
     public String[] produces;
 
     @JsonProperty(value = "consumes")
-    public String consumes;
+    public String[] consumes;
 
     @JsonProperty(value = "parameters")
     public List<DocParameter> parameters = new LinkedList<>();
