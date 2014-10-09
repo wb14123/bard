@@ -21,8 +21,9 @@ public interface UserDao<UserDaoType extends UserDao, UserType> {
      * Save a user.
      *
      * @param user The user.
+     * @throws DuplicateUsernameException
      */
-    public void saveUser(UserType user);
+    public void saveUser(UserType user) throws DuplicateUsernameException;
 
     /**
      * Check if there is a user with specified username and password. It will thrown an
@@ -103,6 +104,13 @@ public interface UserDao<UserDaoType extends UserDao, UserType> {
     public static class SaltNotFoundException extends Exception {
         public SaltNotFoundException(String username) {
             super("Salt not found for user: " + username);
+        }
+    }
+
+
+    public static class DuplicateUsernameException extends Exception {
+        public DuplicateUsernameException(String username) {
+            super("User duplicate: " + username);
         }
     }
 }

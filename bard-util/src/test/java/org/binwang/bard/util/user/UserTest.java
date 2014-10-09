@@ -80,10 +80,21 @@ public class UserTest {
     }
 
 
+    @Test
+    public void fSingUpDuplicateTest() throws ServletException, IOException {
+        request.setPathInfo("/signup");
+        request.setParameter("username", "user");
+        request.setParameter("password", "pass");
+        servlet.service(request, response);
+        assertNull(response.getHeader("username"));
+    }
+
+
     public static class UserTestHandler extends Handler {
         @Path("/signup")
         @SignUp(TestUserDao.class)
-        public void signUp(@QueryParam("username") String username) {
+        public void signUp(@QueryParam("username") String username)
+            throws UserDao.DuplicateUsernameException {
             User user = new User();
             user.username = username;
             new TestUserDao().getInstance().saveUser(user);

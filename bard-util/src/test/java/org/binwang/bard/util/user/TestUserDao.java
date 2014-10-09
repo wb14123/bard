@@ -23,7 +23,11 @@ public class TestUserDao implements UserDao<TestUserDao, User> {
         return user;
     }
 
-    @Override public void saveUser(User user) {
+    @Override public void saveUser(User user) throws DuplicateUsernameException {
+        User oldU = userMap.get(user.username);
+        if (oldU != null) {
+            throw new DuplicateUsernameException(user.username);
+        }
         userMap.put(user.username, user);
     }
 
