@@ -14,9 +14,11 @@ import javax.ws.rs.HeaderParam;
 public class LoginUserInjector extends Injector<LoginUser> {
     @Before
     @HandleErrors({
-        @ErrorCase(code = 403, logLevel = "DEBUG", description = "token not found",
+        @ErrorCase(code = BardUtilError.TOKEN_NOT_FOUND,
+            logLevel = "DEBUG", description = "token not found",
             exception = UserDao.TokenNotFoundException.class),
-        @ErrorCase(code = 500, logLevel = "DEBUG", description = "user not found",
+        @ErrorCase(code = BardUtilError.USER_NOT_FOUND,
+            logLevel = "DEBUG", description = "user not found",
             exception = UserDao.UserNotFoundException.class)
     })
     public void getUser(@HeaderParam("auth-token") @Required String token)

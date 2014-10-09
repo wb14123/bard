@@ -16,11 +16,14 @@ import java.util.UUID;
 @BindTo(LoginToken.class)
 public class LoginTokenInjector extends Injector<LoginToken> {
     @HandleErrors({
-        @ErrorCase(code = 403, logLevel = "DEBUG", description = "Username or password error",
+        @ErrorCase(code = BardUtilError.USERNAME_PASSWORD_ERROR,
+            logLevel = "DEBUG", description = "Username or password error",
             exception = UserDao.UserNotFoundException.class),
-        @ErrorCase(code = 500, logLevel = "DEBUG", description = "Salt not found for user",
+        @ErrorCase(code = BardUtilError.SALT_NOT_FOUND,
+            logLevel = "DEBUG", description = "Salt not found for user",
             exception = UserDao.SaltNotFoundException.class),
-        @ErrorCase(code = 500, logLevel = "DEBUG", description = "Encrypt password error",
+        @ErrorCase(code = BardUtilError.ENCRYPT_ERROR,
+            logLevel = "DEBUG", description = "Encrypt password error",
             exception = NoSuchAlgorithmException.class)
     })
     @Before public void login(
