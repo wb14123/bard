@@ -1,5 +1,7 @@
 package org.binwang.bard.core;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.binwang.bard.core.doc.Api;
 import org.binwang.bard.core.doc.DocParameter;
 
@@ -24,6 +26,8 @@ import java.util.Map;
  * @see org.binwang.bard.core.Handler
  */
 public abstract class GenericHandler<AnnotationType extends Annotation> {
+    protected static final Logger logger = LogManager.getLogger("org.binwang.bard");
+
     /**
      * The context in this handler.
      */

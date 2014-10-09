@@ -1,15 +1,13 @@
 package org.binwang.bard.example.crud;
 
-import org.binwang.bard.basic.marker.Doc;
-import org.binwang.bard.basic.marker.ErrorCase;
-import org.binwang.bard.basic.marker.HandleErrors;
-import org.binwang.bard.basic.marker.Required;
+import org.binwang.bard.basic.marker.*;
 import org.binwang.bard.core.Handler;
 
 import javax.ws.rs.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@LogRequest
 @Produces("application/json")
 @Path("/user")
 public class CrudHandler extends Handler {
