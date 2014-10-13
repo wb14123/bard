@@ -15,7 +15,7 @@ public class SimpleHandler extends Handler {
     @GET
     @Path("/add")
     @Doc("Add two numbers")
-    public int getUser(
+    public int add(
         @Doc("The first number") @QueryParam("a") @Required int a,
         @Doc("The second number") @QueryParam("b") @Required int b) {
         return a + b;
