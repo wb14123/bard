@@ -19,7 +19,7 @@ public class DBSessionInjector extends Injector<DBSession> {
     }
 
     @After public void closeSession() {
-        if (context.exception != null) {
+        if (context.exception != null && !context.exceptionHandled) {
             tx.rollback();
         } else {
             tx.commit();
