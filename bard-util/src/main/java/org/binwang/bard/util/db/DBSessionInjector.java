@@ -10,11 +10,10 @@ import org.hibernate.Transaction;
 
 @BindTo(DBSession.class)
 public class DBSessionInjector extends Injector<DBSession> {
-    private Session session;
     private Transaction tx;
 
     @Before public void getSession() {
-        session = DBManager.getSessionFactory().getCurrentSession();
+        Session session = DBManager.getSessionFactory().getCurrentSession();
         tx = session.beginTransaction();
         injectorVariable = session;
     }
