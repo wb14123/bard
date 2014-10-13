@@ -12,6 +12,7 @@ public class Context {
     // store result returned by handler
     public Object result;
     public Exception exception;
+    public boolean exceptionHandled = false;
 
     // custom context
     public Map<String, Object> custom = new HashMap<>();

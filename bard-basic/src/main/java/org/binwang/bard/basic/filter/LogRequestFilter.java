@@ -30,6 +30,9 @@ public class LogRequestFilter extends Filter<LogRequest> {
             context.request.getRequestURI(),
             queryString,
             timeDiff);
+        if (context.exception != null && !context.exceptionHandled) {
+            logger.warn("Exception found after request: {}", context.exception);
+        }
     }
 
     @Override public void generateDoc() {

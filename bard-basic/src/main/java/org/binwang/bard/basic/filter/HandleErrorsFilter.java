@@ -12,7 +12,8 @@ public class HandleErrorsFilter extends Filter<HandleErrors> {
     @After public void handleError() {
         for (ErrorCase errorCase : annotation.value()) {
             if (context.exception != null && context.exception.getClass() == errorCase
-                .exception()) {
+                .exception() && !context.exceptionHandled) {
+                context.exceptionHandled = true;
                 context.response.setStatus(errorCase.code());
                 context.result = context.exception.toString();
                 if (errorCase.logLevel().equals("ERROR")) {

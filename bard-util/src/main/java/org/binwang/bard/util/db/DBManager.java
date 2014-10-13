@@ -6,12 +6,19 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 public class DBManager {
-    private static final SessionFactory sessionFactory = buildSessionFactory();
+    private static SessionFactory sessionFactory = null;
 
-    private static SessionFactory buildSessionFactory() {
+    public static void init(String[] pkgs, Class<?>[] classes) {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
-            return new Configuration().configure().buildSessionFactory(
+            Configuration cfg = new Configuration().configure();
+            for (String pkg : pkgs) {
+                cfg = cfg.addPackage(pkg);
+            }
+            for (Class<?> c : classes) {
+                cfg = cfg.addAnnotatedClass(c);
+            }
+            sessionFactory = cfg.buildSessionFactory(
                 new StandardServiceRegistryBuilder().build());
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
