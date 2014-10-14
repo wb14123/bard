@@ -1,5 +1,6 @@
 package org.binwang.bard.basic.filter;
 
+import org.binwang.bard.basic.ErrorResult;
 import org.binwang.bard.basic.marker.ErrorCase;
 import org.binwang.bard.basic.marker.HandleErrors;
 import org.binwang.bard.core.BindTo;
@@ -13,9 +14,17 @@ public class HandleErrorsFilter extends Filter<HandleErrors> {
         for (ErrorCase errorCase : annotation.value()) {
             if (context.exception != null && context.exception.getClass() == errorCase
                 .exception() && !context.exceptionHandled) {
+                ErrorResult err = new ErrorResult();
+
                 context.exceptionHandled = true;
                 context.response.setStatus(errorCase.code());
-                context.result = context.exception.toString();
+                err.code = errorCase.code();
+                String msg = context.exception.getMessage();
+                if (msg == null) {
+                    msg = context.exception.toString();
+                }
+                err.message = msg;
+                context.result = err;
                 if (errorCase.logLevel().equals("ERROR")) {
                     context.exception.printStackTrace();
                 }
