@@ -8,7 +8,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DocParameter {
+public class DocParameter implements Comparable<DocParameter> {
     @JsonProperty(value = "name")
     public String name;
 
@@ -27,5 +27,15 @@ public class DocParameter {
     @JsonProperty(value = "schema")
     public JsonSchema getType() throws JsonMappingException {
         return Document.toJsonSchema(type);
+    }
+
+    @Override public int compareTo(DocParameter o) {
+        boolean equal = o.name.equals(name) &&
+            o.belongs.equals(belongs) &&
+            o.description.equals(description);
+        if (equal) {
+            return 0;
+        }
+        return 1;
     }
 }
