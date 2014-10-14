@@ -18,7 +18,11 @@ public class RequiredInjector extends Injector<Required> {
     })
     public void validateParam() throws RequiredNullException {
         if (injectorVariable == null) {
-            throw new RequiredNullException();
+            String param = (String) injectContext.get("param");
+            if (param == null) {
+                param = "";
+            }
+            throw new RequiredNullException(param);
         }
     }
 
@@ -29,5 +33,9 @@ public class RequiredInjector extends Injector<Required> {
 
     public static class RequiredNullException extends Exception {
         public static final long serialVersionUID = 1L;
+
+        public RequiredNullException(String param) {
+            super("Required param not found for " + param);
+        }
     }
 }
