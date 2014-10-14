@@ -3,6 +3,7 @@ package org.binwang.bard.basic.filter;
 import org.binwang.bard.basic.marker.LogRequest;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Filter;
+import org.binwang.bard.core.Util;
 import org.binwang.bard.core.marker.After;
 import org.binwang.bard.core.marker.Before;
 
@@ -25,13 +26,13 @@ public class LogRequestFilter extends Filter<LogRequest> {
         } else {
             queryString = "?" + queryString;
         }
-        logger.info("Request complete, method: {}, URI: {}{}, time: {}ms",
+        Util.getLogger().info("Request complete, method: {}, URI: {}{}, time: {}ms",
             context.request.getMethod(),
             context.request.getRequestURI(),
             queryString,
             timeDiff);
         if (context.exception != null && !context.exceptionHandled) {
-            logger.warn("Exception found after request: {}", context.exception);
+            Util.getLogger().warn("Exception found after request: {}", context.exception);
         }
     }
 

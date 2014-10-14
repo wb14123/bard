@@ -1,10 +1,5 @@
 package org.binwang.bard.core;
 
-import org.apache.commons.configuration.CompositeConfiguration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.binwang.bard.core.doc.Api;
 import org.binwang.bard.core.doc.DocParameter;
 
@@ -29,9 +24,6 @@ import java.util.Map;
  * @see org.binwang.bard.core.Handler
  */
 public abstract class GenericHandler<AnnotationType extends Annotation> {
-    protected static final Logger logger = LogManager.getLogger("org.binwang.bard");
-    protected static CompositeConfiguration config = null;
-
     /**
      * The context in this handler.
      */
@@ -80,20 +72,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     protected Class<?> returnType;
 
     public GenericHandler() {
-        if (config == null) {
-            config = new CompositeConfiguration();
-            String configFile = "bard.properties";
-
-            if (this.getClass().getClassLoader().getResource(configFile) == null) {
-                return;
-            }
-
-            try {
-                config.addConfiguration(new PropertiesConfiguration("bard.properties"));
-            } catch (ConfigurationException e) {
-                logger.error("Load Bard configuration \"bard.properties\" error: {}", e);
-            }
-        }
     }
 
     /**

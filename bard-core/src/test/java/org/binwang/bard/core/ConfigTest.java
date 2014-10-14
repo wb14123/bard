@@ -36,8 +36,8 @@ public class ConfigTest {
     public static class ConfigHandler extends Handler {
         @TrueAdapter1
         public void getConfig() {
-            context.response.addHeader("test.int", config.getString("test.int"));
-            context.response.addHeader("test.string", config.getString("test.string"));
+            context.response.addHeader("test.int", Util.getConfig().getString("test.int"));
+            context.response.addHeader("test.string", Util.getConfig().getString("test.string"));
         }
     }
 }
