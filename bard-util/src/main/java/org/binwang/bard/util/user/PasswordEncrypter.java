@@ -16,7 +16,7 @@ public class PasswordEncrypter {
         SecureRandom random = new SecureRandom();
         String salt = new BigInteger(130, random).toString(32);
         String encryptPassword = encrypt(password, salt);
-        return new String[]{salt, encryptPassword};
+        return new String[] {encryptPassword, salt};
     }
 
     /**
