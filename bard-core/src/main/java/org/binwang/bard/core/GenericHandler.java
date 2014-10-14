@@ -181,7 +181,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                         docParameter = injector.docParameter;
                     }
                 }
-                if (hasInjector) {
+                if (hasInjector && !docParameter.isNull()) {
                     api.parameters.add(docParameter);
                 }
             }
