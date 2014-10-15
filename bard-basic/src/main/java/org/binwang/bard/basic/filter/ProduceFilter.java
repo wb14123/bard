@@ -25,6 +25,7 @@ public class ProduceFilter extends Filter<Produces> {
     @After public void filterResult() throws IOException {
         context.response.addHeader("Content-Type", annotation.value()[0]);
         PrintWriter writer = context.response.getWriter();
+        context.response.addHeader("Access-Control-Allow-Origin", "*");
         try {
             String v = objectMapper.writeValueAsString(context.result);
             writer.print(v);
