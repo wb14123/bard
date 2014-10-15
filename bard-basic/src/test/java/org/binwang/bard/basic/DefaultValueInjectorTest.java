@@ -30,16 +30,14 @@ public class DefaultValueInjectorTest {
 
     @Test
     public void defaultTest() throws ServletException, IOException {
-        servlet.addHandler(DefaultHandler.class);
-        request.setPathInfo("/default");
+        request.setPathInfo("/default-test");
         servlet.service(request, response);
         assertEquals("a", response.getHeader("a"));
     }
 
     @Test
     public void defaultHasValueTest() throws ServletException, IOException {
-        servlet.addHandler(DefaultHasValueHandler.class);
-        request.setPathInfo("/default");
+        request.setPathInfo("/default-has-value-test");
         request.setParameter("a", "b");
         servlet.service(request, response);
         assertEquals("b", response.getHeader("a"));
@@ -47,7 +45,7 @@ public class DefaultValueInjectorTest {
 
 
     public static class DefaultHandler extends Handler {
-        @Path("/default")
+        @Path("/default-test")
         public void handle(@DefaultValue("a") String a) {
             context.response.addHeader("a", a);
         }
@@ -55,7 +53,7 @@ public class DefaultValueInjectorTest {
 
 
     public static class DefaultHasValueHandler extends Handler {
-        @Path("/default")
+        @Path("/default-has-value-test")
         public void handle(@QueryParam("a") @DefaultValue("a") String a) {
             context.response.addHeader("a", a);
         }
