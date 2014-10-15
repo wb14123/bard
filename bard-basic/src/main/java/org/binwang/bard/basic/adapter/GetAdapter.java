@@ -9,7 +9,8 @@ import javax.ws.rs.GET;
 @BindTo(GET.class)
 public class GetAdapter extends Adapter<GET> {
     @Match public boolean isGet() {
-        return context.request.getMethod().equals("GET");
+        String method = context.request.getMethod();
+        return method.equals("GET") || method.equals("HEAD") || method.equals("OPTIONS");
     }
 
     @Override public void generateDoc() {

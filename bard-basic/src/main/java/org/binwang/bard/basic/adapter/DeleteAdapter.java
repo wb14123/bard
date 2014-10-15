@@ -9,7 +9,8 @@ import javax.ws.rs.DELETE;
 @BindTo(DELETE.class)
 public class DeleteAdapter extends Adapter<DELETE> {
     @Match public boolean isGet() {
-        return context.request.getMethod().equals("DELETE");
+        String method = context.request.getMethod();
+        return method.equals("DELETE") || method.equals("HEAD") || method.equals("OPTIONS");
     }
 
     @Override public void generateDoc() {
