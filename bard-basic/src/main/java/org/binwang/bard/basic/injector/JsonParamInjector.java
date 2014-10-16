@@ -2,8 +2,12 @@ package org.binwang.bard.basic.injector;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.drapostolos.typeparser.TypeParser;
+import org.binwang.bard.basic.BardBasicError;
+import org.binwang.bard.basic.marker.ErrorCase;
+import org.binwang.bard.basic.marker.HandleErrors;
 import org.binwang.bard.basic.marker.JsonParam;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Injector;
@@ -14,6 +18,11 @@ import java.util.HashMap;
 
 @BindTo(JsonParam.class)
 public class JsonParamInjector extends Injector<JsonParam> {
+    @HandleErrors({
+        @ErrorCase(code = BardBasicError.READ_JSON_ERROR, logLevel = "DEBUG",
+            exception = JsonMappingException.class,
+            description = "Read JSON data error")
+    })
     @Before public void getJsonParam() throws IOException {
         HashMap<String, Object> jsonMap = (HashMap<String, Object>) context.custom.get("jsonParam");
         if (jsonMap == null) {
