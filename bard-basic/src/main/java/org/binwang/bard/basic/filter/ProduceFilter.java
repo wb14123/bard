@@ -25,12 +25,6 @@ public class ProduceFilter extends Filter<Produces> {
     @After public void filterResult() throws IOException {
         context.response.addHeader("Content-Type", annotation.value()[0]);
         PrintWriter writer = context.response.getWriter();
-        // TODO: Should not add headers here. Should be able to add filter to all the handlers.
-        context.response.addHeader("Access-Control-Allow-Origin", "*");
-        context.response
-            .addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        context.response
-            .addHeader("Access-Control-Allow-Headers", "accept, auth-token, Content-Type");
         try {
             String v = objectMapper.writeValueAsString(context.result);
             writer.print(v);
