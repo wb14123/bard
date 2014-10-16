@@ -28,6 +28,9 @@ public class JsonParamInjector extends Injector<JsonParam> {
 
         TypeParser parser = TypeParser.newBuilder().build();
         Object v = jsonMap.get(annotation.value());
+        if (v == null) {
+            return;
+        }
         injectorVariable = parser.parse(v.toString(), injectorVariableType);
     }
 
