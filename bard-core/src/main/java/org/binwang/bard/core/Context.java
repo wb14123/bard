@@ -11,7 +11,7 @@ public class Context {
 
     // store result returned by handler
     public Object result;
-    public Exception exception;
+    public Throwable exception;
     public boolean exceptionHandled = false;
 
     // custom context

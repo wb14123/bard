@@ -348,11 +348,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
         } catch (final InvocationTargetException e) {
             // throw by m.invoke, the cause is the true exception
-            context.exception = (Exception) e.getCause();
+            context.exception = e.getCause();
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException e) {
             // these exceptions are caused by framework, so print them
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             // it is the exception throw by filters or injectors
             context.exception = e;
         } finally {
@@ -378,7 +378,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
     private Object runInjectors(Annotation[] annotations, Class<?> parameterClass,
         LinkedList<LinkedList<Injector>> injectors)
-        throws Exception {
+        throws Throwable {
         Object var = null;
         injectContext = new HashMap<>();
         LinkedList<Injector> paramInjectors = new LinkedList<>();
