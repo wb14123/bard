@@ -15,17 +15,15 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class Servlet extends HttpServlet {
+public abstract class Servlet extends HttpServlet {
     public static final long serialVersionUID = 1L;
 
     public Map<String, JsonSchema> models = new HashMap<>();
     private AnnotationMapper mapper = new AnnotationMapper();
     private List<Class<? extends Handler>> handlers = new LinkedList<>();
 
-    public Servlet(String... pkgs)
-        throws NoSuchFieldException, IllegalAccessException, InstantiationException,
-        NoSuchMethodException, JsonMappingException {
-        for (String pkg : pkgs) {
+    public Servlet() {
+        for (String pkg : getPackageNames()) {
             Reflections reflections = new Reflections(pkg);
 
             Set<Class<? extends Filter>> filters = reflections.getSubTypesOf(Filter.class);
@@ -40,7 +38,8 @@ public class Servlet extends HttpServlet {
                 addAdapter(bindTo.value(), adapterClass);
             }
 
-            Set<Class<? extends Injector>> injectors = reflections.getSubTypesOf(Injector.class);
+            Set<Class<? extends Injector>> injectors =
+                reflections.getSubTypesOf(Injector.class);
             for (Class<? extends Injector> injectorClass : injectors) {
                 BindTo bindTo = injectorClass.getAnnotation(BindTo.class);
                 addInjector(bindTo.value(), injectorClass);
@@ -48,15 +47,10 @@ public class Servlet extends HttpServlet {
 
             Set<Class<? extends Handler>> handlers = reflections.getSubTypesOf(Handler.class);
             handlers.forEach(this::addHandler);
-
-            // get models
-            Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Model.class);
-            for (Class<?> c : classes) {
-                JsonSchema schema = Document.toJsonSchema(c);
-                models.put(schema.getId(), schema);
-            }
         }
     }
+
+    protected abstract String[] getPackageNames();
 
     public void addFilter(final Class<? extends Annotation> annotationClass,
         final Class<? extends Filter> filterClass) {
@@ -79,7 +73,16 @@ public class Servlet extends HttpServlet {
 
     public Document getDocument()
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,
-        IllegalAccessException {
+        IllegalAccessException, JsonMappingException {
+        // get models
+        for (String pkg : getPackageNames()) {
+            Reflections reflections = new Reflections(pkg);
+            Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Model.class);
+            for (Class<?> c : classes) {
+                JsonSchema schema = Document.toJsonSchema(c);
+                models.put(schema.getId(), schema);
+            }
+        }
         List<Api> apis = new LinkedList<>();
         for (Class<? extends Handler> handlerClass : handlers) {
             Handler handler = Handler.newInstance(handlerClass, null, mapper);

@@ -23,7 +23,11 @@ public class AdapterTest {
     public void setUp()
         throws NoSuchMethodException, InstantiationException, IllegalAccessException,
         NoSuchFieldException, JsonMappingException {
-        servlet = new Servlet("org.binwang.bard.core.defines");
+        servlet = new Servlet() {
+            @Override protected String[] getPackageNames() {
+                return new String[] {"org.binwang.bard.core.defines"};
+            }
+        };
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
     }

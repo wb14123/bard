@@ -23,7 +23,11 @@ public class DefaultValueInjectorTest {
 
     @Before
     public void setUp() throws Exception {
-        servlet = new Servlet("org.binwang.bard.basic");
+        servlet = new Servlet() {
+            @Override protected String[] getPackageNames() {
+                return new String[] {"org.binwang.bard.basic"};
+            }
+        };
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
     }
