@@ -270,7 +270,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         /*
          Run adapter first, check if all the adapters return true.
          If some adapters has the same annotation type (this only happens both class and method has the same annotation),
-         run all the chain, if one get true then it is successful.
+         run all the chain, only the last one get true it is successful.
          It is very helpful to define adapter annotations that could be used both on class and method: such as Path.
         */
         for (Map.Entry<Class<? extends Annotation>, List<Adapter>> entry : adapterMap.entrySet()) {
@@ -282,7 +282,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             for (Adapter adapter : adapters) {
                 adapter.context = context;
                 runAdapters.addFirst(adapter);
-                matching = adapter.match() || matching;
+                matching = adapter.match();
                 context = adapter.context;
             }
 

@@ -14,6 +14,13 @@ import java.util.Map;
 public class PathAdapter extends Adapter<Path> {
     private String oldPath;
 
+    private String removeLastSlash(String str) {
+        if (str.length() > 0 && str.charAt(str.length() - 1) == '/') {
+            return str.substring(0, str.length() - 1);
+        }
+        return str;
+    }
+
     @Match
     public boolean match() {
         oldPath = (String) context.custom.get("path");
@@ -22,9 +29,9 @@ public class PathAdapter extends Adapter<Path> {
         }
         String currentPath = oldPath + annotation.value();
         context.custom.put("path", currentPath);
-        PathTemplate pathTemplate = new PathTemplate(currentPath);
+        PathTemplate pathTemplate = new PathTemplate(removeLastSlash(currentPath));
         Map<String, String> values = new HashMap<>();
-        String realPath = context.request.getPathInfo();
+        String realPath = removeLastSlash(context.request.getPathInfo());
         if (pathTemplate.match(realPath, values)) {
             context.custom.put("path-params", values);
             return true;

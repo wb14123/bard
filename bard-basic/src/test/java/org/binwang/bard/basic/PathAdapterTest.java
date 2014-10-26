@@ -53,6 +53,27 @@ public class PathAdapterTest {
         assertEquals("def", response.getHeader("param-b"));
     }
 
+    @Test
+    public void pathRootTest() throws ServletException, IOException {
+        request.setPathInfo("/path-root-test");
+        servlet.service(request, response);
+        assertEquals("true", response.getHeader("path-root"));
+    }
+
+    @Test
+    public void pathRootSlashTest() throws ServletException, IOException {
+        request.setPathInfo("/path-root-test/");
+        servlet.service(request, response);
+        assertEquals("true", response.getHeader("path-root"));
+    }
+
+    @Test
+    public void pathWithSubTest() throws ServletException, IOException {
+        request.setPathInfo("/path-root-test/sub");
+        servlet.service(request, response);
+        assertEquals("true", response.getHeader("with-sub"));
+    }
+
     public static class BasicPathHandler extends Handler {
         @Path("/basic-abc")
         public void handle() {
@@ -75,6 +96,20 @@ public class PathAdapterTest {
         public void handle(@PathParam("a") String a, @PathParam("b") String b) {
             context.response.addHeader("param-a", a);
             context.response.addHeader("param-b", b);
+        }
+    }
+
+
+    @Path("/path-root-test")
+    public static class PathTestRootHandler extends Handler {
+        @Path("/{a}")
+        public void withSub() {
+            context.response.addHeader("with-sub", "true");
+        }
+
+        @Path("/")
+        public void root() {
+            context.response.addHeader("path-root", "true");
         }
     }
 }
