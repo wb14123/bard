@@ -2,6 +2,7 @@ package org.binwang.bard.basic.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.binwang.bard.basic.ErrorResult;
 import org.binwang.bard.core.BindTo;
 import org.binwang.bard.core.Filter;
 import org.binwang.bard.core.doc.Response;
@@ -24,6 +25,11 @@ public class ProduceFilter extends Filter<Produces> {
 
     @After public void filterResult() throws IOException {
         context.response.addHeader("Content-Type", annotation.value()[0]);
+
+        if (context.exception != null && !context.exceptionHandled) {
+            context.result = new ErrorResult(500, "Unknown server error.");
+        }
+
         PrintWriter writer = context.response.getWriter();
         try {
             String v = objectMapper.writeValueAsString(context.result);
