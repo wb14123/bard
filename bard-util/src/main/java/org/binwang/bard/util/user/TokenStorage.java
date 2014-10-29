@@ -1,37 +1,35 @@
 package org.binwang.bard.util.user;
 
 import org.binwang.bard.core.Util;
-import redis.clients.jedis.Jedis;
+import org.binwang.bard.util.cache.Cache;
+import org.binwang.bard.util.cache.CacheManager;
 
 import java.util.UUID;
 
 public class TokenStorage {
-    private static final Jedis jedis =
-        new Jedis(Util.getConfig().getString("bard.util.redis.token.host"),
-            Util.getConfig().getInt("bard.util.redis.token.port"));
-
-    private static final String prefix = "bard_token.";
+    private static Cache cache = CacheManager.getCache(
+        Util.getConfig().getString("bard.util.user.cache.name"),
+        Util.getConfig().getString("bard.util.user.cache.class"));
 
     /**
-     * Store a string and return an UUID key.
-     *
-     * @param value The value to store.
-     * @return The generated key.
+     * Put username into the token storage with an expire time.
+     * @param username The username.
+     * @param seconds The expire time in second.
+     * @return Then generated token.
      */
-    public static String put(String value, int seconds) {
+    public static String put(String username, final int seconds) {
         String key = UUID.randomUUID().toString();
-        jedis.setex(prefix + key, seconds, value);
+        cache.setex(key, seconds, username);
         return key;
     }
 
     /**
-     * Get the value by key.
-     *
-     * @param key
-     * @return The value found by key.
+     * Get the username by token from token storage.
+     * @param token The token.
+     * @return The username got by token.
      */
-    public static String get(String key) {
-        return jedis.get(prefix + key);
+    public static String get(String token) {
+        return cache.get(token);
     }
 
 }
