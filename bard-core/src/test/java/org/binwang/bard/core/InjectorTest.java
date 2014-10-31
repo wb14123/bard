@@ -34,6 +34,7 @@ public class InjectorTest {
         servlet.addHandler(SimpleInjectorHandler.class);
         servlet.service(request, response);
         assertEquals("0", response.getHeader("handler_header"));
+        servlet.removeHandler(SimpleInjectorHandler.class);
     }
 
     @Test
@@ -41,6 +42,7 @@ public class InjectorTest {
         servlet.addHandler(FieldInjectorHandler.class);
         servlet.service(request, response);
         assertEquals("0", response.getHeader("handler_header"));
+        servlet.removeHandler(FieldInjectorHandler.class);
     }
 
     @Test
@@ -48,6 +50,7 @@ public class InjectorTest {
         servlet.addHandler(ExceptionInjectorHandler.class);
         servlet.service(request, response);
         assertEquals("true", response.getHeader("get_exception"));
+        servlet.removeHandler(ExceptionInjectorHandler.class);
     }
 
     @Test
@@ -55,6 +58,7 @@ public class InjectorTest {
         servlet.addHandler(FieldExceptionInjectorHandler.class);
         servlet.service(request, response);
         assertEquals("true", response.getHeader("get_exception"));
+        servlet.removeHandler(FieldExceptionInjectorHandler.class);
     }
 
     public static class SimpleInjectorHandler extends Handler {

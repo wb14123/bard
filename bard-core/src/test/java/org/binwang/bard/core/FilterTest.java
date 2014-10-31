@@ -35,6 +35,7 @@ public class FilterTest {
         servlet.service(request, response);
         assertEquals("test_value", response.getHeader("test_name"));
         assertEquals("handler_value", response.getHeader("handler_header"));
+        servlet.removeHandler(SimpleFilterHandler.class);
     }
 
     @Test
@@ -44,6 +45,7 @@ public class FilterTest {
         assertEquals("test_value", response.getHeader("test_name"));
         assertEquals(null, response.getHeader("handler_header"));
         assertEquals("true", response.getHeader("exception"));
+        servlet.removeHandler(SimpleFilterHandler.class);
     }
 
     public static class SimpleFilterHandler extends Handler {

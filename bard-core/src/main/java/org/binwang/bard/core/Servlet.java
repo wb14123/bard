@@ -18,11 +18,19 @@ import java.util.*;
 public abstract class Servlet extends HttpServlet {
     public static final long serialVersionUID = 1L;
 
-    public Map<String, JsonSchema> models = new HashMap<>();
-    private AnnotationMapper mapper = new AnnotationMapper();
-    private List<Class<? extends Handler>> handlers = new LinkedList<>();
+    private static Map<Class<? extends Servlet>, AnnotationMapper> mapperCache = new HashMap<>();
+    private Map<String, JsonSchema> models = new HashMap<>();
+    private AnnotationMapper mapper;
 
     public Servlet() {
+        Class<? extends Servlet> c = this.getClass();
+        mapper = mapperCache.get(c);
+        if (mapper != null) {
+            return;
+        }
+
+        mapper = new AnnotationMapper();
+
         for (String pkg : getPackageNames()) {
             Reflections reflections = new Reflections(pkg);
 
@@ -48,9 +56,17 @@ public abstract class Servlet extends HttpServlet {
             Set<Class<? extends Handler>> handlers = reflections.getSubTypesOf(Handler.class);
             handlers.forEach(this::addHandler);
         }
+        mapperCache.put(c, mapper);
     }
 
     protected abstract String[] getPackageNames();
+
+    /*
+    These methods that modified the filters, adapters, injectors and handlers, will not
+    only modify this object, but will modify the all the objects that of this class.
+
+    You may not want do it in production. I do it for the test, maybe I can find a better way.
+     */
 
     public void addFilter(final Class<? extends Annotation> annotationClass,
         final Class<? extends Filter> filterClass) {
@@ -68,7 +84,11 @@ public abstract class Servlet extends HttpServlet {
     }
 
     public void addHandler(final Class<? extends Handler> handlerClass) {
-        handlers.add(handlerClass);
+        mapper.handlers.add(handlerClass);
+    }
+
+    public void removeHandler(final Class<? extends Handler> handlerClass) {
+        mapper.handlers.remove(handlerClass);
     }
 
     public Document getDocument()
@@ -84,7 +104,7 @@ public abstract class Servlet extends HttpServlet {
             }
         }
         List<Api> apis = new LinkedList<>();
-        for (Class<? extends Handler> handlerClass : handlers) {
+        for (Class<? extends Handler> handlerClass : mapper.handlers) {
             Handler handler = Handler.newInstance(handlerClass, null, mapper);
             handler.generateApi();
             apis.addAll(handler.apis);
@@ -115,7 +135,7 @@ public abstract class Servlet extends HttpServlet {
 
         try {
             // TODO: performance for adapter? (instead of linear time)
-            for (Class<? extends Handler> handlerClass : handlers) {
+            for (Class<? extends Handler> handlerClass : mapper.handlers) {
                 Context context = new Context(request, response);
                 Handler handler = Handler.newInstance(handlerClass, context, mapper);
                 Object result = handler.run();

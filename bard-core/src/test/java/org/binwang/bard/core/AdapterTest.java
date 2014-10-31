@@ -25,7 +25,10 @@ public class AdapterTest {
         NoSuchFieldException, JsonMappingException {
         servlet = new Servlet() {
             @Override protected String[] getPackageNames() {
-                return new String[] {"org.binwang.bard.core.defines"};
+                return new String[] {
+                    "org.binwang.bard.core.defines",
+                    "org.binwang.bard.core.AdapterTest"
+                };
             }
         };
         request = new MockHttpServletRequest();
@@ -38,6 +41,7 @@ public class AdapterTest {
         servlet.service(request, response);
         Assert.assertEquals("all_true", response.getHeader("test"));
         Assert.assertEquals("true", response.getHeader("after"));
+        servlet.removeHandler(AllTrueAdapterHandler.class);
     }
 
     @Test
@@ -46,6 +50,7 @@ public class AdapterTest {
         servlet.service(request, response);
         Assert.assertEquals(null, response.getHeader("test"));
         Assert.assertEquals("true", response.getHeader("after"));
+        servlet.removeHandler(AllFalseAdapterHandler.class);
     }
 
     @Test
@@ -54,6 +59,7 @@ public class AdapterTest {
         servlet.service(request, response);
         Assert.assertEquals("added", response.getHeader("test_true"));
         Assert.assertEquals(null, response.getHeader("test_false"));
+        servlet.removeHandler(AdapterHandler.class);
     }
 
     @Test
@@ -62,6 +68,7 @@ public class AdapterTest {
         servlet.service(request, response);
         Assert.assertEquals("added", response.getHeader("test_adapter"));
         Assert.assertEquals(null, response.getHeader("test_no_adapter"));
+        servlet.removeHandler(ClassAdpaterHandler.class);
     }
 
 
