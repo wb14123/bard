@@ -1,36 +1,17 @@
 package org.binwang.bard.basic.injector;
 
+import org.binwang.bard.basic.GenericTester;
 import org.binwang.bard.core.Handler;
-import org.binwang.bard.core.Servlet;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-public class QueryParamInjectorTest {
-
-    public Servlet servlet = null;
-    public MockHttpServletRequest request;
-    public HttpServletResponse response;
-
-    @Before
-    public void setUp() throws Exception {
-        servlet = new Servlet() {
-            @Override protected String[] getPackageNames() {
-                return new String[] {"org.binwang.bard.basic"};
-            }
-        };
-        request = new MockHttpServletRequest();
-        response = new MockHttpServletResponse();
-    }
+public class QueryParamInjectorTest extends GenericTester {
 
     @Test
     public void simpleQueryTest() throws ServletException, IOException {
