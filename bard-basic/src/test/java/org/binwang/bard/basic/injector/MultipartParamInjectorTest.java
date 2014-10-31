@@ -1,4 +1,4 @@
-package org.binwang.bard.basic;
+package org.binwang.bard.basic.injector;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.httpclient.methods.PostMethod;

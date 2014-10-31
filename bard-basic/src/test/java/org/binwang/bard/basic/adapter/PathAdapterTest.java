@@ -1,4 +1,4 @@
-package org.binwang.bard.basic;
+package org.binwang.bard.basic.adapter;
 
 import org.binwang.bard.core.Handler;
 import org.binwang.bard.core.Servlet;
