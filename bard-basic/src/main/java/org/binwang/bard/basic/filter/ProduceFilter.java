@@ -12,9 +12,13 @@ import javax.ws.rs.Produces;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Only support produce "application/json" for now.
+ */
 @BindTo(Produces.class)
 public class ProduceFilter extends Filter<Produces> {
     private static ObjectMapper objectMapper;
+    private String contentType;
 
     public ProduceFilter() {
         super();
@@ -24,20 +28,32 @@ public class ProduceFilter extends Filter<Produces> {
     }
 
     @After public void filterResult() throws IOException {
-        context.response.addHeader("Content-Type", annotation.value()[0]);
-
-        if (context.exception != null && !context.exceptionHandled) {
-            context.result = new ErrorResult(500, "Unknown server error.");
+        if (contentType == null) {
+            contentType = annotation.value()[0];
         }
 
         PrintWriter writer = context.response.getWriter();
-        try {
-            String v = objectMapper.writeValueAsString(context.result);
-            writer.print(v);
-        } catch (JsonProcessingException e) {
-            writer.print(e);
-        } finally {
-            writer.close();
+
+        if (contentType.equals("application/json")) {
+            context.response.addHeader("Content-Type", contentType);
+            if (context.exception != null && !context.exceptionHandled) {
+                context.result = new ErrorResult(500, "Unknown server error.");
+            }
+
+            try {
+                String v = objectMapper.writeValueAsString(context.result);
+                writer.print(v);
+            } catch (JsonProcessingException e) {
+                writer.print(e);
+            } finally {
+                writer.close();
+            }
+        } else {
+            context.result = new ErrorResult(500, "Unknown server error.");
+            context.exception = new ContentTypeNotSupportException(contentType);
+            context.exceptionHandled = false;
+            contentType = "application/json";
+            filterResult();
         }
     }
 
@@ -47,5 +63,11 @@ public class ProduceFilter extends Filter<Produces> {
         response.code = 200;
         response.returnType = returnType;
         api.responses.add(response);
+    }
+
+    public static class ContentTypeNotSupportException extends Exception {
+        public ContentTypeNotSupportException(String contentType) {
+            super("Content type not support: " + contentType);
+        }
     }
 }
