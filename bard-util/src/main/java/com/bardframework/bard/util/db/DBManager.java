@@ -1,6 +1,7 @@
 package com.bardframework.bard.util.db;
 
 
+import com.bardframework.bard.core.Util;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -16,7 +17,7 @@ public class DBManager {
                 new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build());
         } catch (Throwable ex) {
             // Make sure you log the exception, as it might be swallowed
-            System.err.println("Initial SessionFactory creation failed." + ex);
+            Util.getLogger().error("Initial SessionFactory creation failed: {}", ex);
             throw new ExceptionInInitializerError(ex);
         }
     }

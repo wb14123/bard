@@ -129,7 +129,7 @@ public abstract class Servlet extends HttpServlet {
                 NoSuchMethodException |
                 InstantiationException |
                 IllegalAccessException e) {
-                e.printStackTrace();
+                Util.getLogger().error("Error found in /api-doc: {}", e);
             }
         }
 
@@ -150,7 +150,7 @@ public abstract class Servlet extends HttpServlet {
             InvocationTargetException |
             InstantiationException |
             IOException e) {
-            e.printStackTrace();
+            Util.getLogger().error("Error found in servlet: {}", e);
         }
     }
 }

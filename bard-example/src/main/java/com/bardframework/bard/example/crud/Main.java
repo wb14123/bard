@@ -1,5 +1,6 @@
 package com.bardframework.bard.example.crud;
 
+import com.bardframework.bard.core.Util;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 
@@ -14,7 +15,7 @@ public class Main {
             server.start();
             server.join();
         } catch (Exception e) {
-            e.printStackTrace();
+            Util.getLogger().error("Exception found in server: {}", e);
         }
     }
 }

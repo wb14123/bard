@@ -351,7 +351,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             context.exception = e.getCause();
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException e) {
             // these exceptions are caused by framework, so print them
-            e.printStackTrace();
+            Util.getLogger().error("Error found in generic handler: {}", e);
         } catch (Throwable e) {
             // it is the exception throw by filters or injectors
             context.exception = e;
