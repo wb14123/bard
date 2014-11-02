@@ -4,9 +4,9 @@ import com.bardframework.bard.basic.marker.Doc;
 import com.bardframework.bard.basic.marker.LogRequest;
 import com.bardframework.bard.basic.marker.Required;
 import com.bardframework.bard.core.Handler;
-import org.binwang.bard.util.user.PasswordEncrypter;
-import org.binwang.bard.util.user.TokenStorage;
-import org.binwang.bard.util.user.marker.LoginUser;
+import com.bardframework.bard.util.user.PasswordEncrypter;
+import com.bardframework.bard.util.user.TokenStorage;
+import com.bardframework.bard.util.user.marker.LoginUser;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

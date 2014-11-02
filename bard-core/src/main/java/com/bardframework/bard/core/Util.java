@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Util {
-    private static final Logger logger = LogManager.getLogger("org.binwang.bard");
+    private static final Logger logger = LogManager.getLogger("com.bardframework.bard");
     private static CompositeConfiguration config;
 
     public static CompositeConfiguration getConfig() {

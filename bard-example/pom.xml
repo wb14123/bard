@@ -21,7 +21,7 @@
             <version>0.0.1</version>
         </dependency>
         <dependency>
-            <groupId>org.binwang.bard</groupId>
+            <groupId>com.bardframework</groupId>
             <artifactId>bard-util</artifactId>
             <version>0.0.1</version>
         </dependency>

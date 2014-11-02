@@ -45,7 +45,7 @@ public class SimpleHandler extends Handler {
 ```
 
 It will auto get params from url query. You can see the whole source under
-`bard-example/src/main/java/org/binwang/bard/example/simple`.
+`bard-example/src/main/java/com/bardframework/bard/example/simple`.
 
 Some basic annotations are already defined under `bard-basic`. It defines some annotations in JAX-RS.
 But it is not compatible with JAX-RS completely, since **the order of annotations matters**.

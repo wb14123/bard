@@ -2,7 +2,7 @@ package com.bardframework.bard.example.db;
 
 import com.bardframework.bard.basic.marker.*;
 import com.bardframework.bard.core.Handler;
-import org.binwang.bard.util.db.marker.DBSession;
+import com.bardframework.bard.util.db.marker.DBSession;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 
