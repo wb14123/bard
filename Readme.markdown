@@ -182,7 +182,7 @@ You could use maven to run the examples, run `simple` for example:
 ```
 mvn install
 cd bard-example
-mvn exec:java -Dexec.mainClass="org.binwang.bard.example.simple.Main"
+mvn exec:java -Dexec.mainClass="com.bardframework.bard.example.simple.Main"
 ```
 
 This will start a server on port 8080.
