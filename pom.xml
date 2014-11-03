@@ -27,6 +27,7 @@
         <module>bard-basic</module>
         <module>bard-util</module>
         <module>bard-example</module>
+        <module>bard-archetype</module>
         <module>bard-maven-plugin</module>
     </modules>
 
