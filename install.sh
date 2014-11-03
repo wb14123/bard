@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Install JARs to local maven.
+
 # install all the regular projects
 mvn install
 
