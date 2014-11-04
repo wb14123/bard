@@ -3,7 +3,7 @@
 # Install JARs to local maven.
 
 # install all the regular projects
-mvn install
+mvn install || exit 1
 
 # install the generated archetype
 cd bard-archetype
