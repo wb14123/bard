@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>bard-archetype</artifactId>
+    <artifactId>bard-simple</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <build>
