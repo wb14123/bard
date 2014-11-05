@@ -7,7 +7,7 @@ import com.bardframework.bard.basic.marker.JsonParam;
 import com.bardframework.bard.basic.marker.LogRequest;
 import com.bardframework.bard.core.Handler;
 import com.bardframework.bard.util.db.marker.DBSession;
-import org.apache.saltedpeanuts.Util;
+import org.apache.saltedpeanuts.NumberString;
 import org.apache.saltedpeanuts.model.Section;
 import org.apache.saltedpeanuts.model.User;
 import org.hibernate.Query;
@@ -28,7 +28,7 @@ public class SectionHandler extends Handler {
     public String userId = "1";
     @DBSession public Session dbSession;
     @HeaderParam("range-start") @DefaultValue("0") @Min(0) public long rangeStart;
-    @HeaderParam("range-end") @DefaultValue(Util.MAX_LONG_STRING) public long rangeEnd;
+    @HeaderParam("range-end") @DefaultValue(NumberString.MAX_LONG_STRING) public long rangeEnd;
     @HeaderParam("range-count") @DefaultValue("20") @Max(500) public int rangeCount;
 
     @Path("/")
