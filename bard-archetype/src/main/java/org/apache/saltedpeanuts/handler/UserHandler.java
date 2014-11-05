@@ -2,6 +2,7 @@ package org.apache.saltedpeanuts.handler;
 
 import com.bardframework.bard.basic.marker.*;
 import com.bardframework.bard.core.Handler;
+import com.bardframework.bard.core.marker.Model;
 import com.bardframework.bard.util.db.marker.DBSession;
 import com.bardframework.bard.util.user.PasswordEncrypter;
 import com.bardframework.bard.util.user.TokenStorage;
@@ -81,6 +82,7 @@ public class UserHandler extends Handler {
         return user;
     }
 
+    @Model
     public static class TokenResult {
         public String token;
     }
