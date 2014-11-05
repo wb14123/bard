@@ -49,33 +49,6 @@ public class UserHandlerTest extends GenericTester {
         assertEquals("user5", user.username);
     }
 
-    private <T> T signUp(String username, String password, Class<T> t)
-        throws ServletException, IOException {
-        newRequest();
-        request.setPathInfo("/user/signup");
-        request.setParameter("username", username);
-        request.setParameter("password", password);
-        request.setMethod("GET");
-        return getResult(t);
-    }
-
-    private <T> T login(String username, String password, Class<T> t)
-        throws ServletException, IOException {
-        newRequest();
-        request.setPathInfo("/user/login");
-        request.setParameter("username", username);
-        request.setParameter("password", password);
-        request.setMethod("GET");
-        return getResult(t);
-    }
-
-    private <T> T info(String token, Class<T> t) throws ServletException, IOException {
-        newRequest();
-        request.setPathInfo("/user/info");
-        request.addHeader("auth-token", token);
-        request.setMethod("GET");
-        return getResult(t);
-    }
 
 
 }

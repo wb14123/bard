@@ -30,8 +30,7 @@
         <property name="hbm2ddl.auto">update</property>
 
         <mapping class="org.apache.saltedpeanuts.model.User"/>
-        <mapping class="org.apache.saltedpeanuts.model.Story"/>
-        <mapping class="org.apache.saltedpeanuts.model.Section"/>
+        <mapping class="org.apache.saltedpeanuts.model.Article"/>
 
     </session-factory>
 

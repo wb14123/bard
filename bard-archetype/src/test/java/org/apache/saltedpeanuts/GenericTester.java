@@ -20,6 +20,57 @@ public class GenericTester {
         newRequest();
     }
 
+
+    // user handler
+    protected <T> T signUp(String username, String password, Class<T> t)
+        throws ServletException, IOException {
+        newRequest();
+        request.setPathInfo("/user/signup");
+        request.setParameter("username", username);
+        request.setParameter("password", password);
+        request.setMethod("GET");
+        return getResult(t);
+    }
+
+    protected <T> T login(String username, String password, Class<T> t)
+        throws ServletException, IOException {
+        newRequest();
+        request.setPathInfo("/user/login");
+        request.setParameter("username", username);
+        request.setParameter("password", password);
+        request.setMethod("GET");
+        return getResult(t);
+    }
+
+    protected <T> T info(String token, Class<T> t) throws ServletException, IOException {
+        newRequest();
+        request.setPathInfo("/user/info");
+        request.addHeader("auth-token", token);
+        request.setMethod("GET");
+        return getResult(t);
+    }
+
+    // article handler
+    protected <T> T createArticle(String token, String title, String content, Class<T> t)
+        throws ServletException, IOException {
+        newRequest();
+        String requestContent = "title=" + title + "&content=" + content;
+        request.setPathInfo("/article");
+        request.setContent(requestContent.getBytes());
+        request.addHeader("auth-token", token);
+        request.setMethod("PUT");
+        return getResult(t);
+    }
+
+    protected <T> T getArticle(String token, String id, Class<T> t)
+        throws ServletException, IOException {
+        newRequest();
+        request.setPathInfo("/article/" + id);
+        request.setMethod("GET");
+        request.addHeader("auth-token", token);
+        return getResult(t);
+    }
+
     /**
      * Clean up servlet, request and response.
      */
