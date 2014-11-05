@@ -27,7 +27,7 @@ public class ArticleHandlerTest extends GenericTester {
 
     @Test
     public void testGetArticle() throws ServletException, IOException {
-        User user = signUp("article-user-2", "article-pass-2", User.class);
+        signUp("article-user-2", "article-pass-2", User.class);
         UserHandler.TokenResult token =
             login("article-user-2", "article-pass-2", UserHandler.TokenResult.class);
         Article article1 = createArticle(token.token, "title2", "content2", Article.class);
