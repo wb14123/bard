@@ -18,8 +18,18 @@ import java.util.*;
 public abstract class Servlet extends HttpServlet {
     public static final long serialVersionUID = 1L;
 
+    /**
+     * A global map to get AnnotationMapper from servlet class.
+     * <p/>
+     * So that the reflect result could be cached to improve the performance.
+     */
     private static Map<Class<? extends Servlet>, AnnotationMapper> mapperCache = new HashMap<>();
+
+    /**
+     * All the models found in packages. Used to generate API docuemtn.
+     */
     private Map<String, JsonSchema> models = new HashMap<>();
+
     private AnnotationMapper mapper;
 
     public Servlet() {
@@ -59,6 +69,11 @@ public abstract class Servlet extends HttpServlet {
         mapperCache.put(c, mapper);
     }
 
+    /**
+     * Specify where are the handlers, middleware and models.
+     *
+     * @return A list of package name that contains the handlers, middleware and models.
+     */
     protected abstract String[] getPackageNames();
 
     /*
@@ -91,6 +106,16 @@ public abstract class Servlet extends HttpServlet {
         mapper.handlers.remove(handlerClass);
     }
 
+    /**
+     * Get document of the whole web application.
+     *
+     * @return The document.
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws JsonMappingException
+     */
     public Document getDocument()
         throws InvocationTargetException, NoSuchMethodException, InstantiationException,
         IllegalAccessException, JsonMappingException {

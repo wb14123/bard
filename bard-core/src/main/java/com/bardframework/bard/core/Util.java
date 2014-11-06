@@ -10,6 +10,11 @@ public class Util {
     private static final Logger logger = LogManager.getLogger("com.bardframework.bard");
     private static CompositeConfiguration config;
 
+    /**
+     * Get the Bard config object. The properties is set in "bard.properties".
+     *
+     * @return The config object.
+     */
     public static CompositeConfiguration getConfig() {
         if (config == null) {
             config = new CompositeConfiguration();
@@ -28,6 +33,11 @@ public class Util {
         return config;
     }
 
+    /**
+     * Get the Bard logger. The logger uses log4j2 and its name is "com.bardframework.bard"
+     *
+     * @return The Bard logger.
+     */
     public static Logger getLogger() {
         return logger;
     }
