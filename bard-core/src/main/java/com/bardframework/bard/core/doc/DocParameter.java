@@ -30,12 +30,9 @@ public class DocParameter implements Comparable<DocParameter> {
     }
 
     @Override public int compareTo(DocParameter o) {
-        boolean equal =
-            ((o.name == null && name == null) || o.name.equals(name)) &&
-                ((o.belongs == null && belongs == null) || o.belongs.equals(belongs)) &&
-                ((o.description == null && description == null) || o.description
-                    .equals(description));
-        if (equal) {
+        if (equal(o.name, name) &&
+            equal(o.belongs, belongs) &&
+            equal(o.description, description)) {
             return 0;
         }
         return 1;
@@ -44,5 +41,9 @@ public class DocParameter implements Comparable<DocParameter> {
     @JsonIgnore
     public boolean isNull() {
         return name == null && description == null;
+    }
+
+    private boolean equal(String a, String b) {
+        return a == null && b == null || a != null && a.equals(b);
     }
 }
