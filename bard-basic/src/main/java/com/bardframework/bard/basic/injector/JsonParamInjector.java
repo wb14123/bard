@@ -24,7 +24,7 @@ public class JsonParamInjector extends Injector<JsonParam> {
             description = "Read JSON data error")
     })
     @Before public void getJsonParam() throws IOException {
-        injectContext.put("param", annotation.value());
+        context.custom.put("param", annotation.value());
         HashMap<String, Object> jsonMap = (HashMap<String, Object>) context.custom.get("jsonParam");
         if (jsonMap == null) {
             JsonFactory factory = new JsonFactory();

@@ -8,7 +8,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * GenericHandler is a class that is the foundation of Adapter, Filter, Injector and Handler.
@@ -25,7 +28,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * The context in this handler.
      */
     protected Context context;
-    protected Map<String, Object> injectContext;
 
     // TODO: should injectorVariable and injectorVariableType more suitable in context?
     /**
@@ -96,7 +98,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         handler.mapper = mapper;
         handler.api = api;
         handler.docParameter = docParameter;
-        handler.injectContext = injectContext;
         return handler;
     }
 
@@ -379,7 +380,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         LinkedList<LinkedList<Injector>> injectors)
         throws Throwable {
         Object var = null;
-        injectContext = new HashMap<>();
+        Map<String, Object> oldCustomContext = context.custom;
         LinkedList<Injector> paramInjectors = new LinkedList<>();
         injectors.addFirst(paramInjectors);
         for (Annotation annotation : annotations) {
@@ -397,11 +398,11 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             injector.before();
             var = injector.injectorVariable;
             context = injector.context;
-            injectContext = injector.injectContext;
             if (context.exception != null) {
                 throw context.exception;
             }
         }
+        context.custom = oldCustomContext;
         return var;
     }
 }

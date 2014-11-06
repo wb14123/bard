@@ -19,7 +19,7 @@ public class MinInjector extends Injector<Min> {
     @Before public void validate() {
         if (injectorVariable == null ||
             Long.valueOf(injectorVariable.toString()) < annotation.value()) {
-            String paramName = (String) injectContext.get("param");
+            String paramName = (String) context.custom.get("param");
             if (paramName == null) {
                 paramName = "";
             }

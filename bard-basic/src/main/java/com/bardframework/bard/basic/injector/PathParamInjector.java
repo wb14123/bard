@@ -11,7 +11,7 @@ import java.util.Map;
 @BindTo(PathParam.class)
 public class PathParamInjector extends Injector<PathParam> {
     @Before public void getParam() {
-        injectContext.put("param", annotation.value());
+        context.custom.put("param", annotation.value());
         @SuppressWarnings("unchecked")
         Map<String, String> map = (Map<String, String>) context.custom.get("path-params");
         if (map == null) {

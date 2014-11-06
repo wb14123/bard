@@ -12,7 +12,7 @@ public class QueryParamInjector extends Injector<QueryParam> {
 
     @Before
     public void getParams() {
-        injectContext.put("param", annotation.value());
+        context.custom.put("param", annotation.value());
         String param = context.request.getParameter(annotation.value());
         if (param == null) {
             injectorVariable = null;

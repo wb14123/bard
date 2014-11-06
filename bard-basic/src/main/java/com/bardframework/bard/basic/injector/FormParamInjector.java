@@ -24,7 +24,7 @@ public class FormParamInjector extends Injector<FormParam> {
             exception = InvalidateFormException.class, logLevel = "DEBUG")
     })
     public void getParam() throws IOException, InvalidateFormException {
-        injectContext.put("param", annotation.value());
+        context.custom.put("param", annotation.value());
         // get from cache first
         @SuppressWarnings("unchecked")
         Map<String, String> formParams = (Map<String, String>) context.custom.get("form");

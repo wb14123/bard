@@ -9,7 +9,7 @@ import javax.ws.rs.HeaderParam;
 @BindTo(HeaderParam.class)
 public class HeaderParamInjector extends Injector<HeaderParam> {
     @Before public void get() {
-        injectContext.put("param", annotation.value());
+        context.custom.put("param", annotation.value());
         injectorVariable = context.request.getHeader(annotation.value());
     }
 

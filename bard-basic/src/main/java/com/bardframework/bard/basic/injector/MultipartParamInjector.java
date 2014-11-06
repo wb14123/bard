@@ -20,6 +20,7 @@ import java.util.Map;
 public class MultipartParamInjector extends Injector<MultipartParam> {
     @Before
     public void getMultipart() throws FileUploadException {
+        context.custom.put("param", annotation.value());
         Map<String, FileItem> fileMap = (Map<String, FileItem>) context.custom.get("multipart");
         if (fileMap == null) {
             fileMap = new HashMap<>();
