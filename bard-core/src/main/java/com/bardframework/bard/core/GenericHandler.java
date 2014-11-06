@@ -83,8 +83,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    @SuppressWarnings("unchecked")
-    public <HandlerType extends GenericHandler> HandlerType newFromThis(
+    private <HandlerType extends GenericHandler> HandlerType newFromThis(
         Class<? extends HandlerType> handlerClass,
         Class<?> injectorVariableType,
         Annotation annotation
