@@ -37,7 +37,7 @@ public class HandleErrorsFilter extends Filter<HandleErrors> {
         for (ErrorCase errorCase : annotation.value()) {
             Response response = new Response();
             response.code = errorCase.code();
-            response.returnType = String.class;
+            response.returnType = ErrorResult.class;
             response.description = errorCase.description();
             api.responses.add(response);
         }
