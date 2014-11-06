@@ -49,6 +49,6 @@ public class PathAdapter extends Adapter<Path> {
         if (api.path == null) {
             api.path = "";
         }
-        api.path += annotation.value();
+        api.path += removeLastSlash(annotation.value());
     }
 }
