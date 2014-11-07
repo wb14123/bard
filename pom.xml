@@ -172,5 +172,19 @@
 
     </dependencies>
 
+    <developers>
+        <developer>
+            <id>wangbin</id>
+            <name>Bin Wang</name>
+            <email>wbin00@gmail.com</email>
+            <url>http://www.binwang.me</url>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+
 
 </project>
