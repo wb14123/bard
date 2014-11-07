@@ -112,7 +112,10 @@ Java Doc
 [bard-basic](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-basic/javadoc/)
 [bard-util](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-util/javadoc/)
 
+License
+--------------
 
+This framework is licensed under [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
 
 
 
