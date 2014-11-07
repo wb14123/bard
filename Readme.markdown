@@ -13,7 +13,7 @@ Requirements
 Features
 ---------------
 
-### Use annotation to define filters, injectors and adapters.
+### Very Easy to Use
 
 You can just write handlers like this:
 
