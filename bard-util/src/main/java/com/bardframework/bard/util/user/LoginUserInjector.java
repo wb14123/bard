@@ -13,7 +13,7 @@ import javax.ws.rs.HeaderParam;
 public class LoginUserInjector extends Injector<LoginUser> {
     @Before
     public void getUser(@Doc("Auth token") @HeaderParam("auth-token") @Required String token) {
-        injectorVariable = TokenStorage.get(token);
+        context.setInjectorVariable(TokenStorage.get(token));
     }
 
     @Override public void generateDoc() {

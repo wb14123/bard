@@ -15,14 +15,14 @@ public class DBSessionInjector extends Injector<DBSession> {
     @Before public void getSession() {
         Session session = DBManager.getSessionFactory().getCurrentSession();
         tx = session.beginTransaction();
-        injectorVariable = session;
+        context.setInjectorVariable(session);
     }
 
     @After public void closeSession() {
         if (tx == null) {
             return;
         }
-        if (context.exception != null && !context.exceptionHandled) {
+        if (context.getException() != null && !context.isExceptionHandled()) {
             tx.rollback();
         } else {
             tx.commit();
