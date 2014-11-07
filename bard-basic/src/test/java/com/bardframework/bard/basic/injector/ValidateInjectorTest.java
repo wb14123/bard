@@ -61,32 +61,32 @@ public class ValidateInjectorTest extends GenericTester {
     public static class TestHandler extends Handler {
         @Path("/bigger-than-max")
         public void biggerThanMax(@DefaultValue("100") @Max(value = 10) long a) {
-            context.response.setHeader("ok", "ok");
+            context.getResponse().setHeader("ok", "ok");
         }
 
         @Path("/smaller-than-max")
         public void smallerThanMax(@DefaultValue("1") @Max(value = 10) long a) {
-            context.response.setHeader("ok", "ok");
+            context.getResponse().setHeader("ok", "ok");
         }
 
         @Path("/same-as-max")
         public void sameAsMax(@DefaultValue("10") @Max(value = 10) long a) {
-            context.response.setHeader("ok", "ok");
+            context.getResponse().setHeader("ok", "ok");
         }
 
         @Path("/bigger-than-min")
         public void biggerThanMin(@DefaultValue("100") @Min(value = 10) long a) {
-            context.response.setHeader("ok", "ok");
+            context.getResponse().setHeader("ok", "ok");
         }
 
         @Path("/smaller-than-min")
         public void smallerThanMin(@DefaultValue("1") @Min(value = 10) long a) {
-            context.response.setHeader("ok", "ok");
+            context.getResponse().setHeader("ok", "ok");
         }
 
         @Path("/same-as-min")
         public void sameAsMin(@DefaultValue("10") @Min(value = 10) long a) {
-            context.response.setHeader("ok", "ok");
+            context.getResponse().setHeader("ok", "ok");
         }
     }
 }

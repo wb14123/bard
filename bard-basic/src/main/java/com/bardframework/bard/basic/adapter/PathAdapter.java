@@ -23,17 +23,17 @@ public class PathAdapter extends Adapter<Path> {
 
     @Match
     public boolean match() {
-        oldPath = (String) context.custom.get("path");
+        oldPath = context.getCustom("path");
         if (oldPath == null) {
             oldPath = "";
         }
         String currentPath = oldPath + annotation.value();
-        context.custom.put("path", currentPath);
+        context.putCustom("path", currentPath);
         PathTemplate pathTemplate = new PathTemplate(removeLastSlash(currentPath));
         Map<String, String> values = new HashMap<>();
-        String realPath = removeLastSlash(context.request.getPathInfo());
+        String realPath = removeLastSlash(context.getRequest().getPathInfo());
         if (pathTemplate.match(realPath, values)) {
-            context.custom.put("path-params", values);
+            context.putCustom("path-params", values);
             return true;
         }
         return false;
@@ -41,7 +41,7 @@ public class PathAdapter extends Adapter<Path> {
 
     @After
     public void cleanUp() {
-        context.custom.put("path", oldPath);
+        context.putCustom("path", oldPath);
     }
 
     @Override

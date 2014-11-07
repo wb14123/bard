@@ -58,7 +58,7 @@ public class PathAdapterTest extends GenericTester {
     public static class BasicPathHandler extends Handler {
         @Path("/basic-abc")
         public void handle() {
-            context.response.addHeader("path", "basic-abc");
+            context.getResponse().addHeader("path", "basic-abc");
         }
     }
 
@@ -67,7 +67,7 @@ public class PathAdapterTest extends GenericTester {
     public static class ClassPathHandler extends Handler {
         @Path("/basic-abc")
         public void handle() {
-            context.response.addHeader("path", "class-abc");
+            context.getResponse().addHeader("path", "class-abc");
         }
     }
 
@@ -75,8 +75,8 @@ public class PathAdapterTest extends GenericTester {
     public static class ParamPathHandler extends Handler {
         @Path("/param-abc/{a}/{b}")
         public void handle(@PathParam("a") String a, @PathParam("b") String b) {
-            context.response.addHeader("param-a", a);
-            context.response.addHeader("param-b", b);
+            context.getResponse().addHeader("param-a", a);
+            context.getResponse().addHeader("param-b", b);
         }
     }
 
@@ -85,12 +85,12 @@ public class PathAdapterTest extends GenericTester {
     public static class PathTestRootHandler extends Handler {
         @Path("/{a}")
         public void withSub() {
-            context.response.addHeader("with-sub", "true");
+            context.getResponse().addHeader("with-sub", "true");
         }
 
         @Path("/")
         public void root() {
-            context.response.addHeader("path-root", "true");
+            context.getResponse().addHeader("path-root", "true");
         }
     }
 }

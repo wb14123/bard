@@ -10,7 +10,7 @@ import javax.ws.rs.Consumes;
 public class ConsumesAdapter extends Adapter<Consumes> {
     @Match public boolean match() {
         for (String v : annotation.value()) {
-            boolean result = context.request.getContentType().equals(v);
+            boolean result = context.getRequest().getContentType().equals(v);
             if (!result) {
                 return false;
             }

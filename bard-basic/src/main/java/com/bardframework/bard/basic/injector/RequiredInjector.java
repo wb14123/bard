@@ -17,8 +17,8 @@ public class RequiredInjector extends Injector<Required> {
             exception = RequiredNullException.class, logLevel = "DEBUG")
     })
     public void validateParam() throws RequiredNullException {
-        if (injectorVariable == null) {
-            String param = (String) context.custom.get("param");
+        if (context.getInjectorVariable() == null) {
+            String param = context.getCustom("param");
             if (param == null) {
                 param = "";
             }

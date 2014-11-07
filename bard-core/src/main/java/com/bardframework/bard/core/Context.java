@@ -80,6 +80,10 @@ public class Context {
         return exception;
     }
 
+    public void setException(Throwable exception) {
+        this.exception = exception;
+    }
+
     public boolean isExceptionHandled() {
         return exceptionHandled;
     }

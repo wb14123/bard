@@ -10,9 +10,10 @@ import javax.ws.rs.DefaultValue;
 @BindTo(DefaultValue.class)
 public class DefaultValueInjector extends Injector<DefaultValue> {
     @Before public void setDefault() {
-        if (injectorVariable == null) {
+        if (context.getInjectorVariable() == null) {
             TypeParser parser = TypeParser.newBuilder().build();
-            injectorVariable = parser.parse(annotation.value(), injectorVariableType);
+            context.setInjectorVariable(
+                parser.parse(annotation.value(), context.getInjectorVariableType()));
         }
     }
 

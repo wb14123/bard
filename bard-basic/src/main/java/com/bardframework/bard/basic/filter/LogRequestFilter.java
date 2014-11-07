@@ -20,19 +20,19 @@ public class LogRequestFilter extends Filter<LogRequest> {
     @After public void after() {
         Date endTime = new Date();
         long timeDiff = endTime.getTime() - startTime.getTime();
-        String queryString = context.request.getQueryString();
+        String queryString = context.getRequest().getQueryString();
         if (queryString == null) {
             queryString = "";
         } else {
             queryString = "?" + queryString;
         }
         Util.getLogger().info("Request complete, method: {}, URI: {}{}, time: {}ms",
-            context.request.getMethod(),
-            context.request.getRequestURI(),
+            context.getRequest().getMethod(),
+            context.getRequest().getRequestURI(),
             queryString,
             timeDiff);
-        if (context.exception != null && !context.exceptionHandled) {
-            Util.getLogger().warn("Exception found after request: {}", context.exception);
+        if (context.getRequest() != null && !context.isExceptionHandled()) {
+            Util.getLogger().warn("Exception found after request: {}", context.getException());
         }
     }
 

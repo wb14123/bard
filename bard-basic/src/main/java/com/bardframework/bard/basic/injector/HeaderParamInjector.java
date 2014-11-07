@@ -9,13 +9,13 @@ import javax.ws.rs.HeaderParam;
 @BindTo(HeaderParam.class)
 public class HeaderParamInjector extends Injector<HeaderParam> {
     @Before public void get() {
-        context.custom.put("param", annotation.value());
-        injectorVariable = context.request.getHeader(annotation.value());
+        context.putCustom("param", annotation.value());
+        context.setInjectorVariable(context.getRequest().getHeader(annotation.value()));
     }
 
     @Override public void generateDoc() {
         docParameter.name = annotation.value();
-        docParameter.type = injectorVariableType;
+        docParameter.type = context.getInjectorVariableType();
         docParameter.belongs = "header";
     }
 }

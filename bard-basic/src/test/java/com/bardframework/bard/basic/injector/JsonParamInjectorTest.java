@@ -26,8 +26,8 @@ public class JsonParamInjectorTest extends GenericTester {
     public static class simpleJsonHandler extends Handler {
         @Path("/simple-json")
         public void handle(@JsonParam("a") String a, @JsonParam("b") String b) {
-            context.response.addHeader("simple-json-a", a);
-            context.response.addHeader("simple-json-b", b);
+            context.getResponse().addHeader("simple-json-a", a);
+            context.getResponse().addHeader("simple-json-b", b);
         }
     }
 }

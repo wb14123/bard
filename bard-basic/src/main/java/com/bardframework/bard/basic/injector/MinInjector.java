@@ -17,9 +17,12 @@ import javax.validation.constraints.Min;
 })
 public class MinInjector extends Injector<Min> {
     @Before public void validate() {
-        if (injectorVariable == null ||
-            Long.valueOf(injectorVariable.toString()) < annotation.value()) {
-            String paramName = (String) context.custom.get("param");
+        if (context.getInjectorVariable() == null) {
+            throw new ValidationException(
+                "Param is null to validate: " + context.getCustom("param"));
+        }
+        if (Long.valueOf(context.getInjectorVariable().toString()) < annotation.value()) {
+            String paramName = context.getCustom("param");
             if (paramName == null) {
                 paramName = "";
             }

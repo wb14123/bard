@@ -56,10 +56,10 @@ public class MultipartParamInjectorTest extends GenericTester {
         public void test(
             @MultipartParam("file") FileItem file
         ) throws IOException {
-            context.response.setHeader("file-name", file.getName());
+            context.getResponse().setHeader("file-name", file.getName());
             InputStream fileInput = file.getInputStream();
             String fileContent = IOUtils.toString(fileInput);
-            context.response.setHeader("file-content", fileContent);
+            context.getResponse().setHeader("file-content", fileContent);
         }
     }
 

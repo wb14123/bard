@@ -33,7 +33,7 @@ public class DefaultValueInjectorTest extends GenericTester {
     public static class DefaultHandler extends Handler {
         @Path("/default-test")
         public void handle(@DefaultValue("a") String a) {
-            context.response.addHeader("a", a);
+            context.getResponse().addHeader("a", a);
         }
     }
 
@@ -41,7 +41,7 @@ public class DefaultValueInjectorTest extends GenericTester {
     public static class DefaultHasValueHandler extends Handler {
         @Path("/default-has-value-test")
         public void handle(@QueryParam("a") @DefaultValue("a") String a) {
-            context.response.addHeader("a", a);
+            context.getResponse().addHeader("a", a);
         }
     }
 }

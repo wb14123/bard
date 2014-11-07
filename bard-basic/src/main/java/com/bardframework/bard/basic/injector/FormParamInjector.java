@@ -24,13 +24,12 @@ public class FormParamInjector extends Injector<FormParam> {
             exception = InvalidateFormException.class, logLevel = "DEBUG")
     })
     public void getParam() throws IOException, InvalidateFormException {
-        context.custom.put("param", annotation.value());
+        context.putCustom("param", annotation.value());
         // get from cache first
-        @SuppressWarnings("unchecked")
-        Map<String, String> formParams = (Map<String, String>) context.custom.get("form");
+        Map<String, String> formParams = context.getCustom("form");
         if (formParams == null) {
             formParams = new HashMap<>();
-            BufferedReader reader = context.request.getReader();
+            BufferedReader reader = context.getRequest().getReader();
             String line = reader.readLine();
             try {
                 String[] pairs = line.split("&");
@@ -45,21 +44,21 @@ public class FormParamInjector extends Injector<FormParam> {
                 throw new InvalidateFormException("Invalidate form format", e);
             }
 
-            context.custom.put("form", formParams);
+            context.putCustom("form", formParams);
         }
 
         String param = formParams.get(annotation.value());
         if (param == null) {
-            injectorVariable = null;
+            context.setInjectorVariable(null);
             return;
         }
         TypeParser parser = TypeParser.newBuilder().build();
-        injectorVariable = parser.parse(param, injectorVariableType);
+        context.setInjectorVariable(parser.parse(param, context.getInjectorVariableType()));
     }
 
     @Override public void generateDoc() {
         docParameter.name = annotation.value();
-        docParameter.type = injectorVariableType;
+        docParameter.type = context.getInjectorVariableType();
         docParameter.belongs = "form";
     }
 

@@ -10,8 +10,10 @@ import org.apache.commons.lang.StringEscapeUtils;
 public class EscapeHTMLInjector extends Injector<EscapeHTML> {
 
     @Before public void escape() {
-        if (injectorVariable != null && injectorVariableType == String.class) {
-            injectorVariable = StringEscapeUtils.escapeHtml((String) injectorVariable);
+        if (context.getInjectorVariable() != null
+            && context.getInjectorVariableType() == String.class) {
+            context.setInjectorVariable(
+                StringEscapeUtils.escapeHtml((String) context.getInjectorVariable()));
         }
     }
 

@@ -9,7 +9,7 @@ import javax.ws.rs.POST;
 @BindTo(POST.class)
 public class PostAdapter extends Adapter<POST> {
     @Match public boolean isGet() {
-        String method = context.request.getMethod();
+        String method = context.getRequest().getMethod();
         return method.equals("POST") || method.equals("HEAD") || method.equals("OPTIONS");
     }
 

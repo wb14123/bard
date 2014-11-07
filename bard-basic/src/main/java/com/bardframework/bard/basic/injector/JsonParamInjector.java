@@ -24,16 +24,16 @@ public class JsonParamInjector extends Injector<JsonParam> {
             description = "Read JSON data error")
     })
     @Before public void getJsonParam() throws IOException {
-        context.custom.put("param", annotation.value());
-        HashMap<String, Object> jsonMap = (HashMap<String, Object>) context.custom.get("jsonParam");
+        context.putCustom("param", annotation.value());
+        HashMap<String, Object> jsonMap = context.getCustom("jsonParam");
         if (jsonMap == null) {
             JsonFactory factory = new JsonFactory();
             ObjectMapper mapper = new ObjectMapper(factory);
             TypeReference<HashMap<String, Object>> typeRef =
                 new TypeReference<HashMap<String, Object>>() {
                 };
-            jsonMap = mapper.readValue(context.request.getInputStream(), typeRef);
-            context.custom.put("jsonParam", jsonMap);
+            jsonMap = mapper.readValue(context.getRequest().getInputStream(), typeRef);
+            context.putCustom("jsonParam", jsonMap);
         }
 
         TypeParser parser = TypeParser.newBuilder().build();
@@ -41,12 +41,12 @@ public class JsonParamInjector extends Injector<JsonParam> {
         if (v == null) {
             return;
         }
-        injectorVariable = parser.parse(v.toString(), injectorVariableType);
+        context.setInjectorVariable(parser.parse(v.toString(), context.getInjectorVariableType()));
     }
 
     @Override public void generateDoc() {
         docParameter.name = annotation.value();
-        docParameter.type = injectorVariableType;
+        docParameter.type = context.getInjectorVariableType();
         docParameter.belongs = "json";
     }
 }

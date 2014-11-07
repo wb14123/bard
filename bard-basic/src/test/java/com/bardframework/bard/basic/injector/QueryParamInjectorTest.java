@@ -26,8 +26,8 @@ public class QueryParamInjectorTest extends GenericTester {
     public static class simpleQueryHandler extends Handler {
         @Path("/simple-query")
         public void handle(@QueryParam("a") String a, @QueryParam("b") String b) {
-            context.response.addHeader("simple-query-a", a);
-            context.response.addHeader("simple-query-b", b);
+            context.getResponse().addHeader("simple-query-a", a);
+            context.getResponse().addHeader("simple-query-b", b);
         }
     }
 }

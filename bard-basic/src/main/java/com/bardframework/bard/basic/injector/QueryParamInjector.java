@@ -12,20 +12,20 @@ public class QueryParamInjector extends Injector<QueryParam> {
 
     @Before
     public void getParams() {
-        context.custom.put("param", annotation.value());
-        String param = context.request.getParameter(annotation.value());
+        context.putCustom("param", annotation.value());
+        String param = context.getRequest().getParameter(annotation.value());
         if (param == null) {
-            injectorVariable = null;
+            context.setInjectorVariable(null);
             return;
         }
         TypeParser parser = TypeParser.newBuilder().build();
-        injectorVariable = parser.parse(param, injectorVariableType);
+        context.setInjectorVariable(parser.parse(param, context.getInjectorVariableType()));
     }
 
     @Override
     public void generateDoc() {
         docParameter.name = annotation.value();
-        docParameter.type = injectorVariableType;
+        docParameter.type = context.getInjectorVariableType();
         docParameter.belongs = "url";
     }
 }

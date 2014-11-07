@@ -20,21 +20,21 @@ import java.util.Map;
 public class MultipartParamInjector extends Injector<MultipartParam> {
     @Before
     public void getMultipart() throws FileUploadException {
-        context.custom.put("param", annotation.value());
-        Map<String, FileItem> fileMap = (Map<String, FileItem>) context.custom.get("multipart");
+        context.putCustom("param", annotation.value());
+        Map<String, FileItem> fileMap = context.getCustom("multipart");
         if (fileMap == null) {
             fileMap = new HashMap<>();
-            boolean isMultipart = ServletFileUpload.isMultipartContent(context.request);
+            boolean isMultipart = ServletFileUpload.isMultipartContent(context.getRequest());
             if (!isMultipart) {
                 return;
             }
 
             DiskFileItemFactory factory = new DiskFileItemFactory();
-            ServletContext servletContext = context.request.getServletContext();
+            ServletContext servletContext = context.getRequest().getServletContext();
             File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
             factory.setRepository(repository);
             ServletFileUpload upload = new ServletFileUpload(factory);
-            List<FileItem> items = upload.parseRequest(context.request);
+            List<FileItem> items = upload.parseRequest(context.getRequest());
             for (FileItem item : items) {
                 fileMap.put(item.getFieldName(), item);
             }
@@ -44,9 +44,9 @@ public class MultipartParamInjector extends Injector<MultipartParam> {
         if (item != null && item.isFormField()) {
             TypeParser parser = TypeParser.newBuilder().build();
             String param = item.getString();
-            injectorVariable = parser.parse(param, injectorVariableType);
+            context.setInjectorVariable(parser.parse(param, context.getInjectorVariableType()));
         } else {
-            injectorVariable = item;
+            context.setInjectorVariable(item);
         }
     }
 

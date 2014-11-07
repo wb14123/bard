@@ -32,16 +32,16 @@ public class ProduceFilter extends Filter<Produces> {
             contentType = annotation.value()[0];
         }
 
-        PrintWriter writer = context.response.getWriter();
+        PrintWriter writer = context.getResponse().getWriter();
 
         if (contentType.equals("application/json")) {
-            context.response.addHeader("Content-Type", contentType);
-            if (context.exception != null && !context.exceptionHandled) {
-                context.result = new ErrorResult(500, "Unknown server error.");
+            context.getResponse().addHeader("Content-Type", contentType);
+            if (context.getException() != null && !context.isExceptionHandled()) {
+                context.setResult(new ErrorResult(500, "Unknown server error."));
             }
 
             try {
-                String v = objectMapper.writeValueAsString(context.result);
+                String v = objectMapper.writeValueAsString(context.getResult());
                 writer.print(v);
             } catch (JsonProcessingException e) {
                 writer.print(e);
@@ -49,9 +49,9 @@ public class ProduceFilter extends Filter<Produces> {
                 writer.close();
             }
         } else {
-            context.result = new ErrorResult(500, "Unknown server error.");
-            context.exception = new ContentTypeNotSupportException(contentType);
-            context.exceptionHandled = false;
+            context.setResult(new ErrorResult(500, "Unknown server error."));
+            context.setException(new ContentTypeNotSupportException(contentType));
+            context.setExceptionHandled(false);
             contentType = "application/json";
             filterResult();
         }

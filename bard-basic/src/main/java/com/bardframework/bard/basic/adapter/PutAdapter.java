@@ -9,7 +9,7 @@ import javax.ws.rs.PUT;
 @BindTo(PUT.class)
 public class PutAdapter extends Adapter<PUT> {
     @Match public boolean isGet() {
-        String method = context.request.getMethod();
+        String method = context.getRequest().getMethod();
         return method.equals("PUT") || method.equals("HEAD") || method.equals("OPTIONS");
     }
 
