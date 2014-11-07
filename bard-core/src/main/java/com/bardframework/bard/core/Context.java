@@ -51,10 +51,23 @@ public class Context {
         this.response = response;
     }
 
+    /**
+     * Put a custom value into context.
+     *
+     * @param key   The key to get value.
+     * @param value The value.
+     * @param <T>   The type of value.
+     */
     public <T> void putCustom(String key, T value) {
         custom.put(key, value);
     }
 
+    /**
+     * Get the custom value in context.
+     * @param key The key to get value.
+     * @param <T> The type of value.
+     * @return The value.
+     */
     @SuppressWarnings("unchecked")
     public <T> T getCustom(String key) {
         return (T) custom.get(key);
