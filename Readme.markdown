@@ -108,9 +108,9 @@ It is better to manage the dependency with maven:
 Java Doc
 --------------
 
-[bard-core](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-core/javadoc/)
-[bard-basic](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-basic/javadoc/)
-[bard-util](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-util/javadoc/)
++ [bard-core](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-core/javadoc/)
++ [bard-basic](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-basic/javadoc/)
++ [bard-util](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-util/javadoc/)
 
 License
 --------------
