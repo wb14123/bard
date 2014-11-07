@@ -31,7 +31,7 @@ public class LogRequestFilter extends Filter<LogRequest> {
             context.getRequest().getRequestURI(),
             queryString,
             timeDiff);
-        if (context.getRequest() != null && !context.isExceptionHandled()) {
+        if (context.getException() != null && !context.isExceptionHandled()) {
             Util.getLogger().warn("Exception found after request: {}", context.getException());
         }
     }
