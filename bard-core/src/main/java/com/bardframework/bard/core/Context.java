@@ -13,35 +13,90 @@ public class Context {
     /**
      * The raw HttpServletRequest
      */
-    public HttpServletRequest request;
+    protected HttpServletRequest request;
 
     /**
      * The raw HttpServletResponse
      */
-    public HttpServletResponse response;
+    protected HttpServletResponse response;
 
     /**
      * The result got by handler
      */
-    public Object result;
+    protected Object result;
 
     /**
      * If there is any exception while running the chain, it is stored here.
      */
-    public Throwable exception;
-
+    protected Throwable exception;
     /**
-     * Is the exception handled? If not, the framework will through it.
+     * Only used by {@link Injector}, store the current injectorVariable that will be injected.
      */
-    public boolean exceptionHandled = false;
-
+    protected Object injectorVariable;
+    /**
+     * Only used by {@link Injector}, the type of inject injectorVariable.
+     */
+    protected Class<?> injectorVariableType = Object.class;
     /**
      * The custom map so that you could put anything into the context.
      */
-    public Map<String, Object> custom = new HashMap<>();
+    protected Map<String, Object> custom = new HashMap<>();
+    /**
+     * Is the exception handled? If not, the framework will through it.
+     */
+    private boolean exceptionHandled = false;
 
     public Context(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
+    }
+
+    public <T> void putCustom(String key, T value) {
+        custom.put(key, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getCustom(String key) {
+        return (T) custom.get(key);
+    }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public HttpServletResponse getResponse() {
+        return response;
+    }
+
+    public Object getResult() {
+        return result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
+    }
+
+    public Throwable getException() {
+        return exception;
+    }
+
+    public boolean isExceptionHandled() {
+        return exceptionHandled;
+    }
+
+    public void setExceptionHandled(boolean exceptionHandled) {
+        this.exceptionHandled = exceptionHandled;
+    }
+
+    public Object getInjectorVariable() {
+        return injectorVariable;
+    }
+
+    public void setInjectorVariable(Object injectorVariable) {
+        this.injectorVariable = injectorVariable;
+    }
+
+    public Class<?> getInjectorVariableType() {
+        return injectorVariableType;
     }
 }

@@ -12,7 +12,7 @@ public class TrueAdapter1Def extends Adapter<TrueAdapter1> {
     }
 
     @After public void addAfter() {
-        context.response.addHeader("after", "true");
+        context.getResponse().addHeader("after", "true");
     }
 
     @Override public void generateDoc() {

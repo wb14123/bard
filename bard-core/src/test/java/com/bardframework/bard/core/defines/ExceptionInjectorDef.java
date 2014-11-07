@@ -12,8 +12,8 @@ public class ExceptionInjectorDef extends Injector<ExceptionInjector> {
     }
 
     @After public void handleException() {
-        if (context.exception instanceof TestInjectorException) {
-            context.response.addHeader("get_exception", "true");
+        if (context.getException() instanceof TestInjectorException) {
+            context.getResponse().addHeader("get_exception", "true");
         }
     }
 

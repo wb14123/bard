@@ -7,7 +7,7 @@ import com.bardframework.bard.core.marker.Before;
 @BindTo(AddHeaderFilter.class)
 public class AddHeaderFilterDef extends Filter<AddHeaderFilter> {
     @Before public void addHeader() {
-        context.response.setHeader(annotation.name(), annotation.value());
+        context.getResponse().setHeader(annotation.name(), annotation.value());
     }
 
     @Override public void generateDoc() {

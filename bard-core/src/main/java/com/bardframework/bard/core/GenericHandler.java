@@ -30,15 +30,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     protected Context context;
 
     // TODO: should injectorVariable and injectorVariableType more suitable in context?
-    /**
-     * Only used by {@link Injector}, store the current injectorVariable that will be injected.
-     */
-    protected Object injectorVariable;
-
-    /**
-     * Only used by {@link Injector}, the type of inject injectorVariable.
-     */
-    protected Class<?> injectorVariableType = Object.class;
 
     /**
      * Used by {@link Filter}, {@link Injector} and
@@ -92,8 +83,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     ) throws IllegalAccessException, InstantiationException {
         HandlerType handler = handlerClass.newInstance();
         handler.context = context;
-        handler.injectorVariable = injectorVariable;
-        handler.injectorVariableType = injectorVariableType;
+        handler.context.injectorVariableType = injectorVariableType;
         handler.annotation = annotation;
         handler.mapper = mapper;
         handler.api = api;
@@ -379,7 +369,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     private Object runInjectors(Annotation[] annotations, Class<?> parameterClass,
         LinkedList<LinkedList<Injector>> injectors)
         throws Throwable {
-        Object var = null;
+        context.injectorVariable = null;
         Map<String, Object> oldCustomContext = context.custom;
         LinkedList<Injector> paramInjectors = new LinkedList<>();
         injectors.addFirst(paramInjectors);
@@ -392,17 +382,15 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             }
             Injector injector = newFromThis(injectorClass, parameterClass, annotation);
             injector.context = context;
-            injector.injectorVariable = var;
             // add injector, in order to run after actions
             paramInjectors.addFirst(injector);
             injector.before();
-            var = injector.injectorVariable;
             context = injector.context;
             if (context.exception != null) {
                 throw context.exception;
             }
         }
         context.custom = oldCustomContext;
-        return var;
+        return context.injectorVariable;
     }
 }

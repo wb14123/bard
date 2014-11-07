@@ -12,8 +12,8 @@ public class ExceptionFilterDef extends Filter<ExceptionFilter> {
     }
 
     @After public void getException() {
-        if (context.exception instanceof TestFilterException) {
-            context.response.setHeader("exception", "true");
+        if (context.getException() instanceof TestFilterException) {
+            context.getResponse().setHeader("exception", "true");
         }
     }
 

@@ -12,7 +12,7 @@ public class FalseAdapter1Def extends Adapter<FalseAdapter1> {
     }
 
     @After public void addAfter() {
-        context.response.addHeader("after", "true");
+        context.getResponse().addHeader("after", "true");
     }
 
     @Override public void generateDoc() {

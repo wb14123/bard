@@ -7,7 +7,7 @@ import com.bardframework.bard.core.marker.Before;
 @BindTo(IntegerZeroInjector.class)
 public class IntegerZeroInjectorDef extends Injector<IntegerZeroInjector> {
     @Before public void inject() {
-        injectorVariable = 0;
+        context.setInjectorVariable(0);
     }
 
     @Override public void generateDoc() {
