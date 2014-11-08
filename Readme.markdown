@@ -33,7 +33,7 @@ public class SimpleHandler extends Handler {
 }
 ```
 
-### Very easy to extend.
+### Very Easy to Extend.
 
 For example, you can define your custom injectors like this:
 
