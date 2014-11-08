@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION="0.0.1-SNAPSHOT"
+VERSION="0.1.0"
 MAVEN_GOAL=$1
 
 mvn clean
