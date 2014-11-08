@@ -9,11 +9,13 @@ mvn $MAVEN_GOAL || exit 1
 cd bard-archetype
 mvn archetype:create-from-project -Darchetype.keepParent=false
 cd target/generated-sources/archetype
-sed -i "" \
-"s/<artifactId>bard-simple-archetype<\/artifactId>/\
-<parent>\
-    <groupId>com.bardframework<\/groupId>\n\
-    <artifactId>bard<\/artifactId>\n\
-    <version>$VERSION<\/version>\n\
-<\/parent>\n/g" pom.xml
+
+SED_CMD="s/<groupId>com.bardframework<\/groupId>/<parent><groupId>com.bardframework<\/groupId><artifactId>bard<\/artifactId><version>$VERSION<\/version><\/parent>/g"
+
+if [ `uname` = 'Linux' ]; then
+	sed -i "$SED_CMD" pom.xml
+else
+	sed -i '' "$SED_CMD" pom.xml
+fi
+
 mvn $MAVEN_GOAL
