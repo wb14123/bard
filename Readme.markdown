@@ -91,26 +91,26 @@ It is better to manage the dependency with maven:
 <dependency>
     <groupId>com.bardframework</groupId>
     <artifactId>bard-core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 <dependency>
     <groupId>com.bardframework</groupId>
     <artifactId>bard-basic</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 <dependency>
     <groupId>com.bardframework</groupId>
     <artifactId>bard-util</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
 Java Doc
 --------------
 
-+ [bard-core](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-core/javadoc/)
-+ [bard-basic](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-basic/javadoc/)
-+ [bard-util](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc/com.bardframework$bard-util/javadoc/)
++ [bard-core](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc%200.1/com.bardframework$bard-core/javadoc/)
++ [bard-basic](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc%200.1/com.bardframework$bard-basic/javadoc/)
++ [bard-util](http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc%200.1/com.bardframework$bard-util/javadoc/)
 
 License
 --------------

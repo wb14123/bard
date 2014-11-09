@@ -7,17 +7,17 @@
     <parent>
         <groupId>com.bardframework</groupId>
         <artifactId>bard</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bard-util</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
             <groupId>com.bardframework</groupId>
             <artifactId>bard-basic</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
