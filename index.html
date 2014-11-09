@@ -33,209 +33,123 @@
       <section id="main_content" class="inner">
         <p><a href="https://travis-ci.org/wb14123/bard"><img src="https://travis-ci.org/wb14123/bard.svg" alt="Build Status"></a></p>
 
-<p>Bard is a wrapper of servlet. Makes it easier to write handlers.</p>
+<p>Bard is a web framework that is easy to use and extend.</p>
 
 <p><strong>It is not stable now.</strong></p>
 
 <h2>
-<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
 
 <ul>
-<li>Java 8</li>
+<li>Java 1.8</li>
 <li>Maven 3</li>
 </ul>
 
 <h2>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
-<ul>
-<li>Use annotation to define filters, injectors and adapters.</li>
-<li>Very easy to use and extend, no configure file requires.</li>
-<li>Small code base, easy to understand.</li>
-<li>Auto generate API documents.</li>
-</ul>
+<h3>
+<a id="very-easy-to-use" class="anchor" href="#very-easy-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>Very Easy to Use</h3>
 
-<h2>
-<a name="working-with-annotations" class="anchor" href="#working-with-annotations"><span class="octicon octicon-link"></span></a>Working with Annotations</h2>
+<p>You can just write handlers like this:</p>
 
-<p>You can just write handler class and methods with annotations on it. It will run filters, injectors
-and adapters with it.</p>
+<div class="highlight highlight-java"><pre>@Produces(<span class="s2">"application/json"</span>)
+<span class="k">public</span> <span class="k">class</span> <span class="nc">SimpleHandler</span> <span class="k">extends</span> <span class="no">Handler</span> {
 
-<p>For example, this is a handler that add two numbers:</p>
-
-<pre><code>
-@Produces("application/json")
-public class SimpleHandler extends Handler {
-
-    @GET
-    @Path("/add")
-    @Doc("Add two numbers")
-    public int add(
-        @QueryParam("a") @Required int a,
-        @QueryParam("b") @Required int b) {
-        return a + b;
+    <span class="kt">@GET</span>
+    <span class="kt">@Path</span>(<span class="s2">"/add"</span>)
+    <span class="kt">@Doc</span>(<span class="s2">"Add two numbers"</span>)
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">add</span>(
+        <span class="kt">@QueryParam</span>(<span class="s2">"a"</span>) <span class="kt">@Required</span> <span class="kt">int</span> <span class="nv">a</span>,
+        <span class="kt">@QueryParam</span>(<span class="s2">"b"</span>) <span class="kt">@Required</span> <span class="kt">int</span> <span class="nv">b</span>) {
+        <span class="k">return</span> a <span class="o">+</span> b;
     }
 
-}
+}</pre></div>
 
-</code></pre>
+<h3>
+<a id="very-easy-to-extend" class="anchor" href="#very-easy-to-extend" aria-hidden="true"><span class="octicon octicon-link"></span></a>Very Easy to Extend.</h3>
 
-<p>It will auto get params from url query. You can see the whole source under
-<code>bard-example/src/main/java/com/bardframework/bard/example/simple</code>.</p>
+<p>For example, you can define your custom injectors like this:</p>
 
-<p>Some basic annotations are already defined under <code>bard-basic</code>. It defines some annotations in JAX-RS.
-But it is not compatible with JAX-RS completely, since <strong>the order of annotations matters</strong>.</p>
+<div class="highlight highlight-java"><pre>@BindTo(<span class="kt">QueryParam</span><span class="o">.</span>class)
+<span class="k">public</span> <span class="k">class</span> <span class="nc">QueryParamInjector</span> <span class="k">extends</span> <span class="no">Injector&lt;<span class="kt">QueryParam</span>&gt;</span> {
+
+    <span class="kt">@Before</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">getParams</span>() {
+        context<span class="o">.</span>putCustom(<span class="s2">"param"</span>, annotation<span class="o">.</span>value());
+        <span class="kt">String</span> param <span class="o">=</span> context<span class="o">.</span>getRequest()<span class="o">.</span>getParameter(annotation<span class="o">.</span>value());
+        <span class="k">if</span> (param <span class="o">==</span> <span class="kc">null</span>) {
+            context<span class="o">.</span>setInjectorVariable(<span class="kc">null</span>);
+            <span class="k">return</span>;
+        }
+        <span class="kt">TypeParser</span> parser <span class="o">=</span> <span class="kt">TypeParser</span><span class="o">.</span>newBuilder()<span class="o">.</span>build();
+        context<span class="o">.</span>setInjectorVariable(parser<span class="o">.</span>parse(param, context<span class="o">.</span>getInjectorVariableType()));
+    }
+
+    <span class="kt">@Override</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">generateDoc</span>() {
+        docParameter<span class="o">.</span>name <span class="o">=</span> annotation<span class="o">.</span>value();
+        docParameter<span class="o">.</span>type <span class="o">=</span> context<span class="o">.</span>getInjectorVariableType();
+        docParameter<span class="o">.</span>belongs <span class="o">=</span> <span class="s2">"url"</span>;
+    }
+}</pre></div>
+
+<h3>
+<a id="auto-generate-beautiful-document" class="anchor" href="#auto-generate-beautiful-document" aria-hidden="true"><span class="octicon octicon-link"></span></a>Auto Generate Beautiful Document</h3>
+
+<p>No more code needed, once your handler is written, the API document is right there for you.</p>
+
+<p>See a <a href="http://doc-ui.bardframework.com/">live demo</a>.</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/1906051/4930305/5925bd98-6562-11e4-957d-e3ec17656f06.png" alt="Doc UI Screenshot"></p>
+
+<h3>
+<a id="run-in-your-favorite-servlet-container" class="anchor" href="#run-in-your-favorite-servlet-container" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run In Your Favorite Servlet Container</h3>
+
+<p>Bard could build a WAR package for you so that you could run it in your favorite serlvet container.</p>
+
+<p>You can also run it as a standalone server, too.</p>
 
 <h2>
-<a name="how-the-annotations-work" class="anchor" href="#how-the-annotations-work"><span class="octicon octicon-link"></span></a>How the Annotations work</h2>
+<a id="documents" class="anchor" href="#documents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documents</h2>
 
-<p>There are three kinds of annotations in Bard:</p>
+<p>See the <a href="https://github.com/wb14123/bard/wiki">detailed documents</a>.</p>
+
+<h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
+
+<p>It is better to manage the dependency with maven:</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="nt">dependency</span>&gt;
+    &lt;<span class="nt">groupId</span>&gt;com.bardframework&lt;/<span class="nt">groupId</span>&gt;
+    &lt;<span class="nt">artifactId</span>&gt;bard-core&lt;/<span class="nt">artifactId</span>&gt;
+    &lt;<span class="nt">version</span>&gt;0.1.0&lt;/<span class="nt">version</span>&gt;
+&lt;/<span class="nt">dependency</span>&gt;
+&lt;<span class="nt">dependency</span>&gt;
+    &lt;<span class="nt">groupId</span>&gt;com.bardframework&lt;/<span class="nt">groupId</span>&gt;
+    &lt;<span class="nt">artifactId</span>&gt;bard-basic&lt;/<span class="nt">artifactId</span>&gt;
+    &lt;<span class="nt">version</span>&gt;0.1.0&lt;/<span class="nt">version</span>&gt;
+&lt;/<span class="nt">dependency</span>&gt;
+&lt;<span class="nt">dependency</span>&gt;
+    &lt;<span class="nt">groupId</span>&gt;com.bardframework&lt;/<span class="nt">groupId</span>&gt;
+    &lt;<span class="nt">artifactId</span>&gt;bard-util&lt;/<span class="nt">artifactId</span>&gt;
+    &lt;<span class="nt">version</span>&gt;0.1.0&lt;/<span class="nt">version</span>&gt;
+&lt;/<span class="nt">dependency</span>&gt;</pre></div>
+
+<h2>
+<a id="java-doc" class="anchor" href="#java-doc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java Doc</h2>
 
 <ul>
-<li>Adapter: Define which handler should be used to handle this HTTP request.</li>
-<li>Filter: Filter HTTP request and response.</li>
-<li>Injector: Inject variables into handler method params.</li>
+<li><a href="http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc%200.1/com.bardframework%24bard-core/javadoc/">bard-core</a></li>
+<li><a href="http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc%200.1/com.bardframework%24bard-basic/javadoc/">bard-basic</a></li>
+<li><a href="http://jenkins.bardframework.com/job/Bard%20Framework%20Javadoc%200.1/com.bardframework%24bard-util/javadoc/">bard-util</a></li>
 </ul>
 
-<p>Here is how the annotations are run when a HTTP request comes:</p>
-
-<h3>
-<a name="run-adapters" class="anchor" href="#run-adapters"><span class="octicon octicon-link"></span></a>Run Adapters</h3>
-
-<p>Adapters specify which handler should handle the income request. Such as <code>@Path</code>, <code>@GET</code>, <code>@POST</code> are
-adapters.</p>
-
-<p>The framework will run adapters on the handler methods first, decide whether to use this method to
-handle the request.</p>
-
-<p>Adapters could be used both on class and method.</p>
-
-<p>Adapters has match actions (methods annotated with <code>@Match</code>). The match actions will return <code>true</code> or
-<code>false</code>. If one of the adapters' match actions returns <code>false</code>, the framework will skip this handler
-and start to check whether the next handler should be used to handle the request.</p>
-
-<p>If the adapter returns true,  after actions (methods annotated <code>@After</code>) will run in order to clean up
-things.</p>
-
-<p>If a class and a method in it both annotated with the same adapter, things will be different. I will
-write documents about this later.</p>
-
-<h3>
-<a name="run-before-actions-of-filters" class="anchor" href="#run-before-actions-of-filters"><span class="octicon octicon-link"></span></a>Run Before Actions of Filters</h3>
-
-<p>Filters could filter the HTTP request or the response. Such as <code>@Produces</code> is filter.</p>
-
-<p>The filter could be used both on class and method.</p>
-
-<p>The filters will be run after all the adapters on the method returns true. Then filters' before actions
-(methods annotated with <a href="https://github.com/Before" class="user-mention">@Before</a>) will be run. The filter could do want it wants, such as write something
-in <code>Context</code> and so on.</p>
-
-<h3>
-<a name="run-before-actions-of-injectors" class="anchor" href="#run-before-actions-of-injectors"><span class="octicon octicon-link"></span></a>Run Before Actions of Injectors</h3>
-
-<p>Injectors inject variables into handler method params. Such as <code>@PathParam</code>, <code>@PathParam</code> are injectors.</p>
-
-<p>Injectors could be used on handler method's params and class public fields.</p>
-
-<p>Injectors could get something from <code>context</code> in there before actions (methods defined with <code>@Before</code>),
-and write them to <code>context.injectoVariable</code>. Then the framework will take the variable, use them as the
-params and the invoke the handler method.</p>
-
-<h3>
-<a name="run-the-handler-method" class="anchor" href="#run-the-handler-method"><span class="octicon octicon-link"></span></a>Run the Handler Method</h3>
-
-<p>The here comes the handler method. Only the methods in Handler class with at least one adapter annotation
-are considered as handler method. You can just return the result. Filters could handle the result for you.</p>
-
-<h3>
-<a name="run-after-actions-of-filters" class="anchor" href="#run-after-actions-of-filters"><span class="octicon octicon-link"></span></a>Run After Actions of Filters</h3>
-
-<p>Filters' after actions will be run in order to clean up things. <code>context.exception</code> will store the exception
-thrown in previous steps. <code>context.result</code> will store the result returned by the handler. You can do something
-with it, such as write them into the response.</p>
-
-<h3>
-<a name="run-after-actions-of-injectors" class="anchor" href="#run-after-actions-of-injectors"><span class="octicon octicon-link"></span></a>Run After Actions of Injectors</h3>
-
-<p>After run the handler method, injectors' after actions (methods annotated with <code>@After</code>) will be run, in order
-to cleanup things. If there are any exceptions thrown by handler, <code>context.exception</code> will store it.</p>
-
-<p>Things are done for now.</p>
-
-<h3>
-<a name="break-the-chain" class="anchor" href="#break-the-chain"><span class="octicon octicon-link"></span></a>Break the Chain</h3>
-
-<p>You may want the chain break if there are something you don't except. Such as if you are writing an injector
-<code>@Requried</code> that checks whether the param is null, you may want to break the chain and return an error immediate while
-the param is null.</p>
-
-<p>When you want this, just throw an exception, then the chain will not go on. But the after actions of
-already run filters and injectors,  will still run, in order to cleanup things. But <code>context.exception</code> will
-be the exception that you just thrown.</p>
-
-<p>You can use <code>@HandleErrors</code> as a helper filter to handle the exception you thrown. See the sections
-below for details.</p>
-
 <h2>
-<a name="define-your-own-annotations" class="anchor" href="#define-your-own-annotations"><span class="octicon octicon-link"></span></a>Define Your Own Annotations</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
-<p>You can define your own annotations easily. </p>
-
-<ol>
-<li>Define an annotation. <code>@DefinedAnnotation</code> for example.</li>
-<li>Define an implement class. Extend one of these classes: <code>Adapter</code>, <code>Filter</code>, <code>Injector</code>.
-Write match actions, before actions or after actions for it.</li>
-<li>Bind them together. Use <code>@BindTo(DefinedAnnotation.class)</code> on the implement class.</li>
-<li>Use the annotations. Create the servlet with <code>new Servlet(pkg1, pkg2</code>), which <code>pkg1</code> and <code>pkg2</code> are the package
-names that contain the implementations.</li>
-</ol>
-
-<p><strong>You can see the annotations defined in <code>bard-basic</code> for examples.</strong></p>
-
-<h2>
-<a name="handle-errors" class="anchor" href="#handle-errors"><span class="octicon octicon-link"></span></a>Handle Errors</h2>
-
-<p>When there are exceptions occurs in the middleware or handler, the framework will put the exception into
-<code>context.exception</code>, so that you can handle it and do clean up in the <code>After</code> actions of middleware.</p>
-
-<p>In the basic package, we provide the filter <code>HandleErrors</code> combined with <code>ErrorCase</code> to handle the
-exceptions that could be thrown by your handler or custom middleware. It will put the exception string
-into the result, and auto add documents for you. You can see the usage in <code>bard-example</code>, with the
-example <code>crud</code>.</p>
-
-<h2>
-<a name="auto-generate-document" class="anchor" href="#auto-generate-document"><span class="octicon octicon-link"></span></a>Auto Generate Document</h2>
-
-<p>When the server is started, you can request <code>/api-doc</code> to get the document as JSON format. You could use
-<a href="https://github.com/wb14123/bard-doc-ui">bard-doc-ui</a> as a beautiful UI interface to display the document
-on a web page.</p>
-
-<p><code>generateDoc</code> method in Adapter, Filter and Injector are used to auto generate documents.</p>
-
-<h2>
-<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
-
-<p>There are some examples under <code>bard-example</code>:</p>
-
-<ul>
-<li>simple: a simple example that adds two numbers.</li>
-<li>crud: a restful service that could create, read, update and delete user.</li>
-</ul>
-
-<p>You could use maven to run the examples, run <code>simple</code> for example:</p>
-
-<pre><code>mvn install
-cd bard-example
-mvn exec:java -Dexec.mainClass="com.bardframework.bard.example.simple.Main"
-</code></pre>
-
-<p>This will start a server on port 8080.</p>
-
-<p><code>curl http://localhost:8080/add?a=1&amp;b=2</code> will get <code>3</code> as a result.</p>
-
-<p>You can view <a href="http://localhost:8080/api-doc">http://localhost:8080/api-doc</a>
-to get the auto generated documents in JSON format.</p>
+<p>This framework is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a>.</p>
       </section>
     </div>
 
