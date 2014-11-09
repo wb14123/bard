@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION="0.0.1-SNAPSHOT"
+VERSION=`cat version.txt`
 MAVEN_GOAL=$1
 
 mvn clean
