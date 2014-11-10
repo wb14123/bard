@@ -10,12 +10,15 @@ cd bard-archetype
 mvn archetype:create-from-project -Darchetype.keepParent=false
 cd target/generated-sources/archetype
 
-SED_CMD="s/<groupId>com.bardframework<\/groupId>/<parent><groupId>com.bardframework<\/groupId><artifactId>bard<\/artifactId><version>$VERSION<\/version><\/parent>/g"
+SED_POM_CMD="s/<groupId>com.bardframework<\/groupId>/<parent><groupId>com.bardframework<\/groupId><artifactId>bard<\/artifactId><version>$VERSION<\/version><\/parent>/g"
+SED_JAVA_CMD="s/\${groupId}/com.bardframework/g"
 
 if [ `uname` = 'Linux' ]; then
-	sed -i "$SED_CMD" pom.xml
+	find . -type f ! -name "pom.xml" | xargs sed -i "$SED_JAVA_CMD"
+	sed -i "$SED_POM_CMD" pom.xml
 else
-	sed -i '' "$SED_CMD" pom.xml
+	find . -type f ! -name "pom.xml" | xargs sed -i '' "$SED_JAVA_CMD"
+	sed -i '' "$SED_POM_CMD" pom.xml
 fi
 
 mvn $MAVEN_GOAL
