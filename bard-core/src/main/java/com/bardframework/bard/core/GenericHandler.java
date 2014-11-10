@@ -60,6 +60,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected Class<?> returnType;
 
+    protected Annotation[] servletAnnotations = new Annotation[] {};
+
     public GenericHandler() {
     }
 
@@ -120,12 +122,17 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         for (Method m : methods) {
             boolean isHandler = false;
             Annotation[] methodAnnotations = m.getAnnotations();
-            for (int i = 0; i < methodAnnotations.length + classAnnotations.length; i++) {
+            int annotationLength =
+                methodAnnotations.length + classAnnotations.length + servletAnnotations.length;
+            for (int i = 0; i < annotationLength; i++) {
                 Annotation annotation;
-                if (i < classAnnotations.length) {
-                    annotation = classAnnotations[i];
+                if (i < servletAnnotations.length) {
+                    annotation = servletAnnotations[i];
+                } else if (i < classAnnotations.length) {
+                    annotation = classAnnotations[i - servletAnnotations.length];
                 } else {
-                    annotation = methodAnnotations[i - classAnnotations.length];
+                    annotation =
+                        methodAnnotations[i - servletAnnotations.length - classAnnotations.length];
                 }
 
                 Class<? extends Annotation> annotationClass = annotation.annotationType();
@@ -204,16 +211,21 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         // get class's annotation
         Annotation[] classAnnotations = this.getClass().getAnnotations();
         Map<Class<? extends Annotation>, List<Adapter>> adapterMap = new LinkedHashMap<>();
-        Filter[] filters = new Filter[methodAnnotations.length + classAnnotations.length];
+        int annotationLength =
+            methodAnnotations.length + classAnnotations.length + servletAnnotations.length;
+        Filter[] filters = new Filter[annotationLength];
         int filterSize = 0;
 
         // check the annotations, to get adapters and filters
-        for (int i = 0; i < methodAnnotations.length + classAnnotations.length; i++) {
+        for (int i = 0; i < annotationLength; i++) {
             Annotation annotation;
-            if (i < classAnnotations.length) {
-                annotation = classAnnotations[i];
+            if (i < servletAnnotations.length) {
+                annotation = servletAnnotations[i];
+            } else if (i < servletAnnotations.length + classAnnotations.length) {
+                annotation = classAnnotations[i - servletAnnotations.length];
             } else {
-                annotation = methodAnnotations[i - classAnnotations.length];
+                annotation =
+                    methodAnnotations[i - servletAnnotations.length - classAnnotations.length];
             }
             Class<? extends Annotation> annotationClass = annotation.annotationType();
             if (annotationClass == requiredAnnotation) {

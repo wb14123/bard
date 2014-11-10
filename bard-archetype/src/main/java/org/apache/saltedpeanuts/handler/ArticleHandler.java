@@ -1,9 +1,7 @@
 package org.apache.saltedpeanuts.handler;
 
 
-import com.bardframework.bard.basic.marker.CORSHeaders;
 import com.bardframework.bard.basic.marker.EscapeHTML;
-import com.bardframework.bard.basic.marker.LogRequest;
 import com.bardframework.bard.basic.marker.Required;
 import com.bardframework.bard.core.Handler;
 import com.bardframework.bard.util.db.marker.DBSession;
@@ -14,9 +12,7 @@ import org.hibernate.Session;
 
 import javax.ws.rs.*;
 
-@LogRequest
-@CORSHeaders
-@Produces("application/json")
+
 @Path("/article")
 public class ArticleHandler extends Handler {
     @DBSession public Session dbSession;

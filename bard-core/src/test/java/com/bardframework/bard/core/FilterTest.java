@@ -39,6 +39,17 @@ public class FilterTest {
     }
 
     @Test
+    public void complexFilterTest() {
+        servlet = new ComplexFilterServlet();
+        servlet.addHandler(ComplexFilterHandler.class);
+        servlet.service(request, response);
+        assertEquals("true", response.getHeader("complex-filter-0"));
+        assertEquals("true", response.getHeader("complex-filter-1"));
+        assertEquals("true", response.getHeader("complex-filter-1"));
+        servlet.removeHandler(ComplexFilterHandler.class);
+    }
+
+    @Test
     public void exceptionFilterTest() {
         servlet.addHandler(ExceptionFilterHandler.class);
         servlet.service(request, response);
@@ -56,6 +67,22 @@ public class FilterTest {
         }
     }
 
+
+    @AddHeaderFilter(name = "complex-filter-1", value = "true")
+    public static class ComplexFilterHandler extends Handler {
+        @TrueAdapter1
+        @AddHeaderFilter(name = "complex-filter-2", value = "true")
+        public void addHeader() {
+        }
+    }
+
+
+    @AddHeaderFilter(name = "complex-filter-0", value = "true")
+    public static class ComplexFilterServlet extends Servlet {
+        @Override protected String[] getPackageNames() {
+            return new String[] {"com.bardframework.bard.core.defines"};
+        }
+    }
 
     public static class ExceptionFilterHandler extends Handler {
         @TrueAdapter1

@@ -1,6 +1,9 @@
 package org.apache.saltedpeanuts.handler;
 
-import com.bardframework.bard.basic.marker.*;
+import com.bardframework.bard.basic.marker.Doc;
+import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleErrors;
+import com.bardframework.bard.basic.marker.Required;
 import com.bardframework.bard.core.Handler;
 import com.bardframework.bard.core.marker.Model;
 import com.bardframework.bard.util.db.marker.DBSession;
@@ -12,12 +15,8 @@ import org.hibernate.Session;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-@LogRequest
-@CORSHeaders
-@Produces("application/json")
 @Path("/user")
 public class UserHandler extends Handler {
 

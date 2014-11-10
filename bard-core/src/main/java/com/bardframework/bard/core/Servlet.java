@@ -163,6 +163,7 @@ public abstract class Servlet extends HttpServlet {
             for (Class<? extends Handler> handlerClass : mapper.handlers) {
                 Context context = new Context(request, response);
                 Handler handler = Handler.newInstance(handlerClass, context, mapper);
+                handler.servletAnnotations = this.getClass().getAnnotations();
                 Object result = handler.run();
                 if (result != NoAdapter.NO_ADAPTER) {
                     return;
