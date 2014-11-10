@@ -7,17 +7,17 @@
     <parent>
         <groupId>com.bardframework</groupId>
         <artifactId>bard</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.1</version>
     </parent>
 
     <artifactId>bard-basic</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
     <dependencies>
         <dependency>
             <groupId>com.bardframework</groupId>
             <artifactId>bard-core</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </dependency>
         <!-- used in basic util -->
         <dependency>
