@@ -46,11 +46,6 @@ public class Context {
      */
     private boolean exceptionHandled = false;
 
-    public Context(HttpServletRequest request, HttpServletResponse response) {
-        this.request = request;
-        this.response = response;
-    }
-
     /**
      * Put a custom value into context.
      *

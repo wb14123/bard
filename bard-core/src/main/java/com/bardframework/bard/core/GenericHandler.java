@@ -27,7 +27,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     /**
      * The context in this handler.
      */
-    protected Context context;
+    protected Context context = new Context();
 
     /**
      * Used by {@link Filter}, {@link Injector} and

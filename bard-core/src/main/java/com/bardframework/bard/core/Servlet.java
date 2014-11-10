@@ -130,7 +130,7 @@ public abstract class Servlet extends HttpServlet {
         }
         List<Api> apis = new LinkedList<>();
         for (Class<? extends Handler> handlerClass : mapper.handlers) {
-            Handler handler = Handler.newInstance(handlerClass, null, mapper);
+            Handler handler = Handler.newInstance(handlerClass, new Context(), mapper);
             handler.generateApi();
             apis.addAll(handler.apis);
         }
@@ -161,7 +161,9 @@ public abstract class Servlet extends HttpServlet {
         try {
             // TODO: performance for adapter? (instead of linear time)
             for (Class<? extends Handler> handlerClass : mapper.handlers) {
-                Context context = new Context(request, response);
+                Context context = new Context();
+                context.request = request;
+                context.response = response;
                 Handler handler = Handler.newInstance(handlerClass, context, mapper);
                 handler.servletAnnotations = this.getClass().getAnnotations();
                 Object result = handler.run();
