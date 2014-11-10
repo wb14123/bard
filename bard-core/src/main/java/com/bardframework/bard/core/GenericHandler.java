@@ -29,8 +29,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected Context context;
 
-    // TODO: should injectorVariable and injectorVariableType more suitable in context?
-
     /**
      * Used by {@link Filter}, {@link Injector} and
      * {@link Adapter}, the annotation instance that bind to it.
