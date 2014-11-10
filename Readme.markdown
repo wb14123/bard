@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/wb14123/bard.svg)](https://travis-ci.org/wb14123/bard)
-[![Coverage Status](https://img.shields.io/coveralls/wb14123/bard.svg)](https://coveralls.io/r/wb14123/bard)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.bardframework/bard/badge.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.bardframework%22)
 
 Bard is a web framework that is easy to use and extend.
