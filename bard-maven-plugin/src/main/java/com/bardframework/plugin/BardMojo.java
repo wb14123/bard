@@ -31,6 +31,8 @@ public class BardMojo extends AbstractMojo {
     private BuildPluginManager pluginManager;
     @Parameter(property = "servletClass", required = true)
     private String servletClass;
+    @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}")
+    private String outputDirectory;
     private boolean cleanWebApp = false;
     private boolean cleanWEBINF = false;
     private boolean cleanWebXml = false;
@@ -46,6 +48,7 @@ public class BardMojo extends AbstractMojo {
             ),
             goal("war"),
             configuration(
+                element(name("outputDirectory"), outputDirectory)
             ),
             executionEnvironment(
                 mavenProject,
