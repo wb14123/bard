@@ -70,7 +70,7 @@ public class BardStandaloneMojo extends AbstractMojo {
             FileUtils.copyFileToDirectory(jarFile, toFile);
             // write config.sh
             JarFile j = new JarFile(jarFile);
-            if (!configScript.createNewFile()) {
+            if (!configScript.exists() && !configScript.createNewFile()) {
                 throw new MojoExecutionException("Fail to create bin/config.sh");
             }
             PrintWriter writer = new PrintWriter(configScript);
