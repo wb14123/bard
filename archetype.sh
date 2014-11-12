@@ -15,11 +15,11 @@ SED_ARCHETYPE_POM_CMD="s/org.apache.saltedpeanuts/\${package}/g"
 SED_JAVA_CMD="s/\${groupId}/com.bardframework/g"
 
 if [ `uname` = 'Linux' ]; then
-	find src/ -type f ! -name "pom.xml" | xargs sed -i "$SED_JAVA_CMD"
+	find ./src -type f ! -name "pom.xml" | xargs sed -i "$SED_JAVA_CMD"
 	sed -i "$SED_POM_CMD" pom.xml
 	sed -i "$SED_ARCHETYPE_POM_CMD" src/main/resources/archetype-resources/pom.xml
 else
-	find src/ -type f ! -name "pom.xml" | xargs sed -i '' "$SED_JAVA_CMD"
+	find ./src -type f ! -name "pom.xml" | xargs sed -i '' "$SED_JAVA_CMD"
 	sed -i '' "$SED_POM_CMD" pom.xml
 	sed -i '' "$SED_ARCHETYPE_POM_CMD" src/main/resources/archetype-resources/pom.xml
 fi
