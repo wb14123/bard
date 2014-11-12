@@ -4,10 +4,21 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
+        <RollingFile name="Rolling" fileName="log/server.log"
+                     filePattern="log/server-%d{yyyy-MM-dd}.%i.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="info">
-        <AppenderRef ref="Console"/>
+            <AppenderRef ref="Rolling"/>
+            <!-- uncomment this if you want to the log output to stdout -->
+            <!-- <AppenderRef ref="Console"/> -->
         </Root>
     </Loggers>
 </Configuration>
