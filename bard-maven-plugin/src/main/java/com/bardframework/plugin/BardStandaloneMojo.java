@@ -34,9 +34,6 @@ public class BardStandaloneMojo extends AbstractMojo {
         String toFileName =
             outputDirectory + "/" + mavenProject.getName() + "-" + mavenProject.getVersion();
         File toFile = new File(toFileName);
-        if (!toFile.mkdirs()) {
-            throw new MojoExecutionException("Cannot mkdir for root");
-        }
         File resourceDir = new File("src/main/resources");
         File confDir = new File(toFile, "conf");
         File configScript = new File(toFile, "bin/config.sh");
