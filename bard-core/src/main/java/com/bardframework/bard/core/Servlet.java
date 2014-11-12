@@ -131,6 +131,7 @@ public abstract class Servlet extends HttpServlet {
         List<Api> apis = new LinkedList<>();
         for (Class<? extends Handler> handlerClass : mapper.handlers) {
             Handler handler = Handler.newInstance(handlerClass, new Context(), mapper);
+            handler.servletAnnotations = this.getClass().getAnnotations();
             handler.generateApi();
             apis.addAll(handler.apis);
         }

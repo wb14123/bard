@@ -128,7 +128,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 Annotation annotation;
                 if (i < servletAnnotations.length) {
                     annotation = servletAnnotations[i];
-                } else if (i < classAnnotations.length) {
+                } else if (i < servletAnnotations.length + classAnnotations.length) {
                     annotation = classAnnotations[i - servletAnnotations.length];
                 } else {
                     annotation =
