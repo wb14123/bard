@@ -16,7 +16,7 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 
 @Mojo(name = "war", defaultPhase = LifecyclePhase.PACKAGE,
     requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class BardMojo extends AbstractMojo {
+public class BardWarMojo extends AbstractMojo {
 
     File webAppFile;
     File webInfFile;
