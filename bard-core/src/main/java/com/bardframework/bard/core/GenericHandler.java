@@ -127,6 +127,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
             for (int i = 0; i < annotationLength; i++) {
                 Annotation annotation;
                 if (i < servletAnnotations.length) {
+                    if (!(this instanceof Handler)) {
+                        continue;
+                    }
                     annotation = servletAnnotations[i];
                 } else if (i < servletAnnotations.length + classAnnotations.length) {
                     annotation = classAnnotations[i - servletAnnotations.length];
@@ -220,6 +223,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         for (int i = 0; i < annotationLength; i++) {
             Annotation annotation;
             if (i < servletAnnotations.length) {
+                if (!(this instanceof Handler)) {
+                    continue;
+                }
                 annotation = servletAnnotations[i];
             } else if (i < servletAnnotations.length + classAnnotations.length) {
                 annotation = classAnnotations[i - servletAnnotations.length];
