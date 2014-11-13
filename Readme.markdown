@@ -67,7 +67,7 @@ public class QueryParamInjector extends Injector<QueryParam> {
 
 No more code needed, once your handler is written, the API document is right there for you.
 
-See a [live demo](http://doc-ui.bardframework.com/).
+See a [live demo](http://doc-ui.bardframework.com/?host=http:%2F%2Flinode.binwang.me:8082).
 
 ![Doc UI Screenshot](https://cloud.githubusercontent.com/assets/1906051/4930305/5925bd98-6562-11e4-957d-e3ec17656f06.png)
 
