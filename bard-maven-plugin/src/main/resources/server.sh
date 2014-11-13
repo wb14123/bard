@@ -35,7 +35,7 @@ start () {
     fi
 
     cd $DIR
-    nohup java -cp "$CONF_DIR:$LIB_DIR/*:$JAR_FILE" $MAIN_CLASS &
+    nohup java $JAVA_OPTS -cp "$CONF_DIR:$LIB_DIR/*:$JAR_FILE" $MAIN_CLASS &
     echo $! > $PID_FILE
     echo "Server started as pid `cat $PID_FILE`"
 }
