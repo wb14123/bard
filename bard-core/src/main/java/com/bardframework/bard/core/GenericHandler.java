@@ -68,7 +68,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     /**
      * Which servlet invoke this handler?
      */
-    protected Servlet servlet;
+    private Servlet servlet;
 
     public GenericHandler() {
     }
