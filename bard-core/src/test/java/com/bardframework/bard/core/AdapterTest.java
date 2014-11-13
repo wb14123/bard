@@ -24,7 +24,7 @@ public class AdapterTest {
         throws NoSuchMethodException, InstantiationException, IllegalAccessException,
         NoSuchFieldException, JsonMappingException {
         servlet = new Servlet() {
-            @Override protected String[] getPackageNames() {
+            @Override public String[] getPackageNames() {
                 return new String[] {"com.bardframework.bard.core.defines"};
             }
         };

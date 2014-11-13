@@ -16,6 +16,9 @@ public class Document {
     @JsonProperty(value = "APIs")
     public List<Api> apis = new LinkedList<>();
 
+    @JsonProperty(value = "name")
+    public String name;
+
     @JsonProperty(value = "models")
     public Map<String, JsonSchema> models = new HashMap<>();
 

@@ -13,7 +13,7 @@ public class GenericTester {
     @Before
     public void setUp() throws Exception {
         servlet = new Servlet() {
-            @Override protected String[] getPackageNames() {
+            @Override public String[] getPackageNames() {
                 return new String[] {"com.bardframework.bard.basic"};
             }
         };

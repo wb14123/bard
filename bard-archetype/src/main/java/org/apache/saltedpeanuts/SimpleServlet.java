@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 public class SimpleServlet extends Servlet {
     public static final long serialVersionUID = 1L;
 
-    @Override protected String[] getPackageNames() {
+    @Override public String[] getPackageNames() {
         return new String[] {
             "com.bardframework.bard.basic",
             "com.bardframework.bard.util",

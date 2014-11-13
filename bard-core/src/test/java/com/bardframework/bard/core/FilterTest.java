@@ -21,7 +21,7 @@ public class FilterTest {
     @Before
     public void setUp() throws Exception {
         servlet = new Servlet() {
-            @Override protected String[] getPackageNames() {
+            @Override public String[] getPackageNames() {
                 return new String[] {"com.bardframework.bard.core.defines"};
             }
         };
@@ -79,10 +79,11 @@ public class FilterTest {
 
     @AddHeaderFilter(name = "complex-filter-0", value = "true")
     public static class ComplexFilterServlet extends Servlet {
-        @Override protected String[] getPackageNames() {
+        @Override public String[] getPackageNames() {
             return new String[] {"com.bardframework.bard.core.defines"};
         }
     }
+
 
     public static class ExceptionFilterHandler extends Handler {
         @TrueAdapter1

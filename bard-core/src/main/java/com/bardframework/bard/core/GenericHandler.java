@@ -60,7 +60,15 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected Class<?> returnType;
 
+    /**
+     * Annotations on servlet.
+     */
     protected Annotation[] servletAnnotations = new Annotation[] {};
+
+    /**
+     * Which servlet invoke this handler?
+     */
+    protected Servlet servlet;
 
     public GenericHandler() {
     }
@@ -88,7 +96,17 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         handler.mapper = mapper;
         handler.api = api;
         handler.docParameter = docParameter;
+        handler.setServlet(servlet);
         return handler;
+    }
+
+    public Servlet getServlet() {
+        return servlet;
+    }
+
+    public void setServlet(Servlet servlet) {
+        this.servlet = servlet;
+        this.servletAnnotations = servlet.getClass().getAnnotations();
     }
 
     /**
@@ -116,7 +134,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    protected void generateApi() throws InstantiationException, IllegalAccessException {
+    public List<Api> generateApi() throws InstantiationException, IllegalAccessException {
         Method[] methods = this.getClass().getDeclaredMethods();
         Annotation[] classAnnotations = this.getClass().getAnnotations();
         for (Method m : methods) {
@@ -188,6 +206,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 api = new Api();
             }
         }
+        return apis;
     }
 
     /**

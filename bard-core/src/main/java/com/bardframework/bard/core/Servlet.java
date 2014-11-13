@@ -1,10 +1,5 @@
 package com.bardframework.bard.core;
 
-import com.bardframework.bard.core.doc.Api;
-import com.bardframework.bard.core.doc.Document;
-import com.bardframework.bard.core.marker.Model;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import org.reflections.Reflections;
 
 import javax.servlet.http.HttpServlet;
@@ -13,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class Servlet extends HttpServlet {
     public static final long serialVersionUID = 1L;
@@ -28,7 +25,6 @@ public abstract class Servlet extends HttpServlet {
     /**
      * All the models found in packages. Used to generate API docuemtn.
      */
-    private Map<String, JsonSchema> models = new HashMap<>();
 
     private AnnotationMapper mapper;
 
@@ -74,7 +70,7 @@ public abstract class Servlet extends HttpServlet {
      *
      * @return A list of package name that contains the handlers, middleware and models.
      */
-    protected abstract String[] getPackageNames();
+    public abstract String[] getPackageNames();
 
     /*
     These methods that modified the filters, adapters, injectors and handlers, will not
@@ -106,59 +102,8 @@ public abstract class Servlet extends HttpServlet {
         mapper.handlers.remove(handlerClass);
     }
 
-    /**
-     * Get document of the whole web application.
-     *
-     * @return The document.
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws JsonMappingException
-     */
-    public Document getDocument()
-        throws InvocationTargetException, NoSuchMethodException, InstantiationException,
-        IllegalAccessException, JsonMappingException {
-        // get models
-        for (String pkg : getPackageNames()) {
-            Reflections reflections = new Reflections(pkg);
-            Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Model.class);
-            for (Class<?> c : classes) {
-                JsonSchema schema = Document.toJsonSchema(c);
-                models.put(schema.getId(), schema);
-            }
-        }
-        List<Api> apis = new LinkedList<>();
-        for (Class<? extends Handler> handlerClass : mapper.handlers) {
-            Handler handler = Handler.newInstance(handlerClass, new Context(), mapper);
-            handler.servletAnnotations = this.getClass().getAnnotations();
-            handler.generateApi();
-            apis.addAll(handler.apis);
-        }
-        Document document = new Document();
-        document.apis = apis;
-        document.models = models;
-        return document;
-    }
-
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) {
-        String path = request.getPathInfo();
-        if (path != null && path.equals("/api-doc")) {
-            try {
-                response.setHeader("Access-Control-Allow-Origin", "*");
-                response.getWriter().write(getDocument().toJson());
-                response.getWriter().close();
-                return;
-            } catch (IOException |
-                InvocationTargetException |
-                NoSuchMethodException |
-                InstantiationException |
-                IllegalAccessException e) {
-                Util.getLogger().error("Error found in /api-doc: {}", e);
-            }
-        }
-
         try {
             // TODO: performance for adapter? (instead of linear time)
             for (Class<? extends Handler> handlerClass : mapper.handlers) {
@@ -166,7 +111,7 @@ public abstract class Servlet extends HttpServlet {
                 context.request = request;
                 context.response = response;
                 Handler handler = Handler.newInstance(handlerClass, context, mapper);
-                handler.servletAnnotations = this.getClass().getAnnotations();
+                handler.setServlet(this);
                 Object result = handler.run();
                 if (result != NoAdapter.NO_ADAPTER) {
                     return;
