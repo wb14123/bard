@@ -1,12 +1,14 @@
 package com.bardframework.bard.basic.filter;
 
 import com.bardframework.bard.basic.marker.APIDoc;
+import com.bardframework.bard.basic.marker.Doc;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Context;
 import com.bardframework.bard.core.Filter;
 import com.bardframework.bard.core.Handler;
 import com.bardframework.bard.core.doc.Api;
 import com.bardframework.bard.core.doc.Document;
+import com.bardframework.bard.core.doc.Response;
 import com.bardframework.bard.core.marker.After;
 import com.bardframework.bard.core.marker.Model;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -20,6 +22,7 @@ import java.util.*;
 public class APIDocFilter extends Filter<APIDoc> {
     private static Document document;
 
+    @Doc("Return API document")
     @After public void generateAPI()
         throws JsonMappingException, InvocationTargetException, NoSuchMethodException,
         InstantiationException, IllegalAccessException {
@@ -45,8 +48,14 @@ public class APIDocFilter extends Filter<APIDoc> {
             document.name = annotation.value();
         }
         context.setResult(document);
+        context.returnType = Document.class;
     }
 
     @Override public void generateDoc() {
+        for (Response response : api.responses) {
+            if (response.code == 200 && response.returnType == void.class) {
+                response.returnType = Document.class;
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ public class SimpleServlet extends Servlet {
 
     @Override public String[] getPackageNames() {
         return new String[] {
+            "com.bardframework.bard.core",
             "com.bardframework.bard.basic",
             "com.bardframework.bard.util",
             "org.apache.saltedpeanuts"

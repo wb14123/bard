@@ -61,7 +61,7 @@ public class ProduceFilter extends Filter<Produces> {
         api.produces = annotation.value();
         Response response = new Response();
         response.code = 200;
-        response.returnType = returnType;
+        response.returnType = context.returnType;
         api.responses.add(response);
     }
 

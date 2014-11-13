@@ -11,20 +11,21 @@ import java.util.Map;
  */
 public class Context {
     /**
+     * Handler return type, used for generate API. Used in {@link Filter}
+     */
+    public Class<?> returnType;
+    /**
      * The raw HttpServletRequest
      */
     protected HttpServletRequest request;
-
     /**
      * The raw HttpServletResponse
      */
     protected HttpServletResponse response;
-
     /**
      * The result got by handler
      */
     protected Object result;
-
     /**
      * If there is any exception while running the chain, it is stored here.
      */
@@ -59,6 +60,7 @@ public class Context {
 
     /**
      * Get the custom value in context.
+     *
      * @param key The key to get value.
      * @param <T> The type of value.
      * @return The value.

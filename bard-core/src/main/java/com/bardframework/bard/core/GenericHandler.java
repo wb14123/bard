@@ -55,10 +55,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
      */
     protected DocParameter docParameter;
 
-    /**
-     * Handler return type, used for generate API. Used in {@link Filter}
-     */
-    protected Class<?> returnType;
+
 
     /**
      * Annotations on servlet.
@@ -138,6 +135,9 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         Method[] methods = this.getClass().getDeclaredMethods();
         Annotation[] classAnnotations = this.getClass().getAnnotations();
         for (Method m : methods) {
+            if (this instanceof Handler) {
+                context.returnType = m.getReturnType();
+            }
             boolean isHandler = false;
             Annotation[] methodAnnotations = m.getAnnotations();
             int annotationLength =
@@ -160,7 +160,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
                 if (filterClass != null) {
                     Filter<?> filter = newFromThis(filterClass, Object.class, annotation);
-                    filter.returnType = m.getReturnType();
                     filter.generateApi();
                     filter.generateDoc();
                     api = filter.api;
@@ -227,6 +226,10 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         Boolean findRequiredAnnotation = false;
         Boolean findAdapterOnMethod = false;
         NoAdapter noAdapter = NoAdapter.NO_ADAPTER;
+
+        if (this instanceof Handler) {
+            context.returnType = m.getReturnType();
+        }
 
         // get method's annotation
         Annotation[] methodAnnotations = m.getAnnotations();
