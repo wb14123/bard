@@ -1,6 +1,10 @@
 #!/bin/bash
 
-JAVA_OPTS=""
+JAVA_OPTS="\
+-Dorg.jboss.logging.provider=slf4j \
+-Xmx2G \
+-XX:+UseG1GC -XX:MaxGCPauseMillis=200 \
+"
 
 DIR=$(cd `dirname $0`/.. && pwd)
 
