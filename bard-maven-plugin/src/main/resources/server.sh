@@ -1,6 +1,7 @@
 #!/bin/bash
 
 JAVA_OPTS="\
+-server \
 -Dorg.jboss.logging.provider=slf4j \
 -Xmx2G \
 -XX:+UseG1GC -XX:MaxGCPauseMillis=200 \
