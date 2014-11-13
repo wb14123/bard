@@ -18,7 +18,7 @@
         <Root level="info">
             <AppenderRef ref="Rolling"/>
             <!-- uncomment this if you want to the log output to stdout -->
-            <!-- <AppenderRef ref="Console"/> -->
+            <AppenderRef ref="Console" level="warn"/>
         </Root>
     </Loggers>
 </Configuration>
