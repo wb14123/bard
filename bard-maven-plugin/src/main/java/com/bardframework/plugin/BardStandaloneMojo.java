@@ -36,11 +36,16 @@ public class BardStandaloneMojo extends AbstractMojo {
         File toFile = new File(toFileName);
         File resourceDir = new File("src/main/resources");
         File confDir = new File(toFile, "conf");
+        File confNewDir = new File(toFile, "conf.new");
         File configScript = new File(toFile, "bin/config.sh");
         File binDir = new File(toFile, "bin");
         try {
-            // copy resource files to conf
-            FileUtils.copyDirectory(resourceDir, confDir);
+            // copy resource files to conf. If conf already exist, copy resources to conf.new
+            if (confDir.exists()) {
+                FileUtils.copyDirectory(resourceDir, confNewDir);
+            } else {
+                FileUtils.copyDirectory(resourceDir, confDir);
+            }
             // copy server.sh
             InputStream serverInput = getClass().getClassLoader().getResourceAsStream("server.sh");
             File serverScript = new File(binDir, "server.sh");
