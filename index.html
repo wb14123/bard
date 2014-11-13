@@ -31,7 +31,8 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p><a href="https://travis-ci.org/wb14123/bard"><img src="https://travis-ci.org/wb14123/bard.svg" alt="Build Status"></a></p>
+        <p><a href="https://travis-ci.org/wb14123/bard"><img src="https://travis-ci.org/wb14123/bard.svg" alt="Build Status"></a>
+<a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.bardframework%22"><img src="https://maven-badges.herokuapp.com/maven-central/com.bardframework/bard/badge.svg" alt="Maven Central"></a></p>
 
 <p>Bard is a web framework that is easy to use and extend.</p>
 
@@ -53,16 +54,16 @@
 
 <p>You can just write handlers like this:</p>
 
-<div class="highlight highlight-java"><pre>@Produces(<span class="s2">"application/json"</span>)
-<span class="k">public</span> <span class="k">class</span> <span class="nc">SimpleHandler</span> <span class="k">extends</span> <span class="no">Handler</span> {
+<div class="highlight highlight-java"><pre>@Produces(<span class="pl-s1"><span class="pl-pds">"</span>application/json<span class="pl-pds">"</span></span>)
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-entc">SimpleHandler</span> <span class="pl-s">extends</span> <span class="pl-eoi">Handler</span> {
 
-    <span class="kt">@GET</span>
-    <span class="kt">@Path</span>(<span class="s2">"/add"</span>)
-    <span class="kt">@Doc</span>(<span class="s2">"Add two numbers"</span>)
-    <span class="k">public</span> <span class="kt">int</span> <span class="nf">add</span>(
-        <span class="kt">@QueryParam</span>(<span class="s2">"a"</span>) <span class="kt">@Required</span> <span class="kt">int</span> <span class="nv">a</span>,
-        <span class="kt">@QueryParam</span>(<span class="s2">"b"</span>) <span class="kt">@Required</span> <span class="kt">int</span> <span class="nv">b</span>) {
-        <span class="k">return</span> a <span class="o">+</span> b;
+    <span class="pl-s">@GET</span>
+    <span class="pl-s">@Path</span>(<span class="pl-s1"><span class="pl-pds">"</span>/add<span class="pl-pds">"</span></span>)
+    <span class="pl-s">@Doc</span>(<span class="pl-s1"><span class="pl-pds">"</span>Add two numbers<span class="pl-pds">"</span></span>)
+    <span class="pl-s">public</span> <span class="pl-s">int</span> <span class="pl-enf">add</span>(
+        <span class="pl-s">@QueryParam</span>(<span class="pl-s1"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>) <span class="pl-s">@Required</span> <span class="pl-s">int</span> <span class="pl-v">a</span>,
+        <span class="pl-s">@QueryParam</span>(<span class="pl-s1"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>) <span class="pl-s">@Required</span> <span class="pl-s">int</span> <span class="pl-v">b</span>) {
+        <span class="pl-k">return</span> a <span class="pl-ko">+</span> b;
     }
 
 }</pre></div>
@@ -72,26 +73,26 @@
 
 <p>For example, you can define your custom injectors like this:</p>
 
-<div class="highlight highlight-java"><pre>@BindTo(<span class="kt">QueryParam</span><span class="o">.</span>class)
-<span class="k">public</span> <span class="k">class</span> <span class="nc">QueryParamInjector</span> <span class="k">extends</span> <span class="no">Injector&lt;<span class="kt">QueryParam</span>&gt;</span> {
+<div class="highlight highlight-java"><pre>@BindTo(<span class="pl-s">QueryParam</span><span class="pl-ko">.</span>class)
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-entc">QueryParamInjector</span> <span class="pl-s">extends</span> <span class="pl-eoi">Injector&lt;<span class="pl-s">QueryParam</span>&gt;</span> {
 
-    <span class="kt">@Before</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">getParams</span>() {
-        context<span class="o">.</span>putCustom(<span class="s2">"param"</span>, annotation<span class="o">.</span>value());
-        <span class="kt">String</span> param <span class="o">=</span> context<span class="o">.</span>getRequest()<span class="o">.</span>getParameter(annotation<span class="o">.</span>value());
-        <span class="k">if</span> (param <span class="o">==</span> <span class="kc">null</span>) {
-            context<span class="o">.</span>setInjectorVariable(<span class="kc">null</span>);
-            <span class="k">return</span>;
+    <span class="pl-s">@Before</span>
+    <span class="pl-s">public</span> <span class="pl-s">void</span> <span class="pl-enf">getParams</span>() {
+        context<span class="pl-ko">.</span>putCustom(<span class="pl-s1"><span class="pl-pds">"</span>param<span class="pl-pds">"</span></span>, annotation<span class="pl-ko">.</span>value());
+        <span class="pl-s">String</span> param <span class="pl-ko">=</span> context<span class="pl-ko">.</span>getRequest()<span class="pl-ko">.</span>getParameter(annotation<span class="pl-ko">.</span>value());
+        <span class="pl-k">if</span> (param <span class="pl-ko">==</span> <span class="pl-c1">null</span>) {
+            context<span class="pl-ko">.</span>setInjectorVariable(<span class="pl-c1">null</span>);
+            <span class="pl-k">return</span>;
         }
-        <span class="kt">TypeParser</span> parser <span class="o">=</span> <span class="kt">TypeParser</span><span class="o">.</span>newBuilder()<span class="o">.</span>build();
-        context<span class="o">.</span>setInjectorVariable(parser<span class="o">.</span>parse(param, context<span class="o">.</span>getInjectorVariableType()));
+        <span class="pl-s">TypeParser</span> parser <span class="pl-ko">=</span> <span class="pl-s">TypeParser</span><span class="pl-ko">.</span>newBuilder()<span class="pl-ko">.</span>build();
+        context<span class="pl-ko">.</span>setInjectorVariable(parser<span class="pl-ko">.</span>parse(param, context<span class="pl-ko">.</span>getInjectorVariableType()));
     }
 
-    <span class="kt">@Override</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">generateDoc</span>() {
-        docParameter<span class="o">.</span>name <span class="o">=</span> annotation<span class="o">.</span>value();
-        docParameter<span class="o">.</span>type <span class="o">=</span> context<span class="o">.</span>getInjectorVariableType();
-        docParameter<span class="o">.</span>belongs <span class="o">=</span> <span class="s2">"url"</span>;
+    <span class="pl-s">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-s">void</span> <span class="pl-enf">generateDoc</span>() {
+        docParameter<span class="pl-ko">.</span>name <span class="pl-ko">=</span> annotation<span class="pl-ko">.</span>value();
+        docParameter<span class="pl-ko">.</span>type <span class="pl-ko">=</span> context<span class="pl-ko">.</span>getInjectorVariableType();
+        docParameter<span class="pl-ko">.</span>belongs <span class="pl-ko">=</span> <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>;
     }
 }</pre></div>
 
@@ -100,7 +101,7 @@
 
 <p>No more code needed, once your handler is written, the API document is right there for you.</p>
 
-<p>See a <a href="http://doc-ui.bardframework.com/">live demo</a>.</p>
+<p>See a <a href="http://doc-ui.bardframework.com/?host=http:%2F%2Flinode.binwang.me:8082">live demo</a>.</p>
 
 <p><img src="https://cloud.githubusercontent.com/assets/1906051/4930305/5925bd98-6562-11e4-957d-e3ec17656f06.png" alt="Doc UI Screenshot"></p>
 
@@ -121,21 +122,21 @@
 
 <p>It is better to manage the dependency with maven:</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="nt">dependency</span>&gt;
-    &lt;<span class="nt">groupId</span>&gt;com.bardframework&lt;/<span class="nt">groupId</span>&gt;
-    &lt;<span class="nt">artifactId</span>&gt;bard-core&lt;/<span class="nt">artifactId</span>&gt;
-    &lt;<span class="nt">version</span>&gt;0.1.0&lt;/<span class="nt">version</span>&gt;
-&lt;/<span class="nt">dependency</span>&gt;
-&lt;<span class="nt">dependency</span>&gt;
-    &lt;<span class="nt">groupId</span>&gt;com.bardframework&lt;/<span class="nt">groupId</span>&gt;
-    &lt;<span class="nt">artifactId</span>&gt;bard-basic&lt;/<span class="nt">artifactId</span>&gt;
-    &lt;<span class="nt">version</span>&gt;0.1.0&lt;/<span class="nt">version</span>&gt;
-&lt;/<span class="nt">dependency</span>&gt;
-&lt;<span class="nt">dependency</span>&gt;
-    &lt;<span class="nt">groupId</span>&gt;com.bardframework&lt;/<span class="nt">groupId</span>&gt;
-    &lt;<span class="nt">artifactId</span>&gt;bard-util&lt;/<span class="nt">artifactId</span>&gt;
-    &lt;<span class="nt">version</span>&gt;0.1.0&lt;/<span class="nt">version</span>&gt;
-&lt;/<span class="nt">dependency</span>&gt;</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.bardframework&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;bard-core&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;0.1.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.bardframework&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;bard-basic&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;0.1.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.bardframework&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;bard-util&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;0.1.0&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
 <a id="java-doc" class="anchor" href="#java-doc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java Doc</h2>
