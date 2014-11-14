@@ -75,7 +75,7 @@ public class UserHandler extends Handler {
     @Doc("Get the user info")
     @GET
     @Path("/info")
-    public User info(@LoginUser @Required String id) {
+    public User info(@LoginUser @Required("Auth token error") String id) {
         User user = new User();
         dbSession.load(user, id);
         return user;

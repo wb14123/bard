@@ -17,6 +17,6 @@ public class LoginUserInjector extends Injector<LoginUser> {
     }
 
     @Override public void generateDoc() {
-        docParameter.description = "Username auto get by token";
+        docParameter.description = "Auth token";
     }
 }

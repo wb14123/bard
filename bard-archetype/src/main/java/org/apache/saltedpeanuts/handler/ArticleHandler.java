@@ -16,7 +16,7 @@ import javax.ws.rs.*;
 @Path("/article")
 public class ArticleHandler extends Handler {
     @DBSession public Session dbSession;
-    @LoginUser @Required("User not login") public String userId;
+    @LoginUser @Required("Auth token error") public String userId;
 
     @PUT
     @Path("/")
