@@ -177,27 +177,12 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 }
             }
 
-            Parameter[] parameters = m.getParameters();
-            for (Parameter parameter : parameters) {
-                docParameter = new DocParameter();
-                boolean hasInjector = false;
-                Annotation[] pAnnotations = parameter.getAnnotations();
-                for (Annotation annotation : pAnnotations) {
-                    Class<? extends Annotation> annotationClass = annotation.annotationType();
-                    Class<? extends Injector> injectorClass =
-                        mapper.injectorMap.get(annotationClass);
-                    if (injectorClass != null) {
-                        hasInjector = true;
-                        Injector injector =
-                            newFromThis(injectorClass, parameter.getType(), annotation);
-                        injector.generateApi();
-                        injector.generateDoc();
-                        docParameter = injector.docParameter;
-                    }
-                }
-                if (hasInjector && !docParameter.isNull()) {
-                    api.parameters.add(docParameter);
-                }
+
+            for (Parameter parameter : m.getParameters()) {
+                generateInjectorAPI(parameter.getAnnotations(), parameter.getType());
+            }
+            for (Field field : this.getClass().getDeclaredFields()) {
+                generateInjectorAPI(field.getAnnotations(), field.getType());
             }
 
             if (isHandler && this instanceof Handler) {
@@ -207,6 +192,30 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         }
         return apis;
     }
+
+    private void generateInjectorAPI(Annotation[] annotations, Class<?> injectorValueType)
+        throws InstantiationException, IllegalAccessException {
+        docParameter = new DocParameter();
+        boolean hasInjector = false;
+        for (Annotation annotation : annotations) {
+            Class<? extends Annotation> annotationClass = annotation.annotationType();
+            Class<? extends Injector> injectorClass =
+                mapper.injectorMap.get(annotationClass);
+            if (injectorClass != null) {
+                hasInjector = true;
+                Injector injector =
+                    newFromThis(injectorClass, injectorValueType, annotation);
+                injector.generateApi();
+                injector.generateDoc();
+                docParameter = injector.docParameter;
+            }
+        }
+        if (hasInjector && !docParameter.isNull()) {
+            api.parameters.add(docParameter);
+        }
+
+    }
+
 
     /**
      * Run GenericHandler method with adapters, filters and injectors.
