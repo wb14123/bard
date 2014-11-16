@@ -10,7 +10,7 @@ import javax.ws.rs.PUT;
 public class PutAdapter extends Adapter<PUT> {
     @Match public boolean isGet() {
         String method = context.getRequest().getMethod();
-        return method.equals("PUT") || method.equals("HEAD") || method.equals("OPTIONS");
+        return method.equals("PUT");
     }
 
     @Override public void generateDoc() {

@@ -10,7 +10,7 @@ import javax.ws.rs.DELETE;
 public class DeleteAdapter extends Adapter<DELETE> {
     @Match public boolean isGet() {
         String method = context.getRequest().getMethod();
-        return method.equals("DELETE") || method.equals("HEAD") || method.equals("OPTIONS");
+        return method.equals("DELETE");
     }
 
     @Override public void generateDoc() {
