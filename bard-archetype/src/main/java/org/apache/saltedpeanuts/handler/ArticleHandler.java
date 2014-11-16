@@ -1,6 +1,7 @@
 package org.apache.saltedpeanuts.handler;
 
 
+import com.bardframework.bard.basic.marker.Doc;
 import com.bardframework.bard.basic.marker.EscapeHTML;
 import com.bardframework.bard.basic.marker.Required;
 import com.bardframework.bard.core.Handler;
@@ -20,6 +21,7 @@ public class ArticleHandler extends Handler {
 
     @PUT
     @Path("/")
+    @Doc("Create an article")
     public Article createArticle(
         @FormParam("title") @Required String title,
         @FormParam("content") @EscapeHTML @Required String content
@@ -34,6 +36,7 @@ public class ArticleHandler extends Handler {
 
     @GET
     @Path("/{id}")
+    @Doc("Get an article by id")
     public Article getArticle(@PathParam("id") @Required String articleId) {
         Article article = new Article();
         dbSession.load(article, articleId);
