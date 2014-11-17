@@ -27,7 +27,7 @@ public class Article {
     @JsonPropertyDescription("The create time of this article")
     public Date createdAt = new Date();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonPropertyDescription("The author of this article")
     public User author;
 
