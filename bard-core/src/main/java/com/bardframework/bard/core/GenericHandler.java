@@ -159,7 +159,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 Class<? extends Annotation> annotationClass = annotation.annotationType();
                 Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
                 if (filterClass != null) {
-                    Filter<?> filter = newFromThis(filterClass, Object.class, annotation);
+                    Filter<?> filter =
+                        newFromThis(filterClass, context.injectorVariableType, annotation);
                     filter.generateApi();
                     filter.generateDoc();
                     api = filter.api;
@@ -170,7 +171,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                     if (i >= classAnnotations.length) {
                         isHandler = true;
                     }
-                    Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
+                    Adapter adapter =
+                        newFromThis(adapterClass, context.injectorVariableType, annotation);
                     adapter.generateApi();
                     adapter.generateDoc();
                     api = adapter.api;
