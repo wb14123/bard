@@ -8,13 +8,11 @@ import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.criterion.Restrictions;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Model
 @Entity
+@Cacheable
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     @Id @GeneratedValue(generator = "system-uuid")
