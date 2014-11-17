@@ -26,9 +26,7 @@ public class HandleErrorsFilter extends Filter<HandleErrors> {
                 }
                 err.message = msg;
                 context.setResult(err);
-                if (errorCase.logLevel().equals("ERROR")) {
-                    Util.getLogger().error(context.getException());
-                }
+                Util.getLogger().debug(context.getException());
                 break;
             }
         }

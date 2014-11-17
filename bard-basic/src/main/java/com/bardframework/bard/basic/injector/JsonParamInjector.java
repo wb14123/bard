@@ -19,7 +19,7 @@ import java.util.HashMap;
 @BindTo(JsonParam.class)
 public class JsonParamInjector extends Injector<JsonParam> {
     @HandleErrors({
-        @ErrorCase(code = BardBasicError.READ_JSON_ERROR, logLevel = "DEBUG",
+        @ErrorCase(code = BardBasicError.READ_JSON_ERROR,
             exception = JsonMappingException.class,
             description = "Read JSON data error")
     })

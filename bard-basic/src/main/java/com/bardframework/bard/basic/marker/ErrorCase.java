@@ -9,7 +9,5 @@ public @interface ErrorCase {
 
     public int code();
 
-    public String logLevel();
-
     public String description();
 }

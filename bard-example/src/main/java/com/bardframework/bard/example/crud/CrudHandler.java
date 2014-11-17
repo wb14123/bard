@@ -37,7 +37,7 @@ public class CrudHandler extends Handler {
     @Path("/{id}")
     @Doc("Delete a user")
     @HandleErrors({
-        @ErrorCase(code = 20000, logLevel = "DEBUG", exception = UserNotFoundException.class,
+        @ErrorCase(code = 20000, exception = UserNotFoundException.class,
             description = "user not found")
     })
     public User deleteUser(@PathParam("id") @Required int id) throws UserNotFoundException {

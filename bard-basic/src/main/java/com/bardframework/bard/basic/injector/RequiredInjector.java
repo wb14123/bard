@@ -14,7 +14,7 @@ public class RequiredInjector extends Injector<Required> {
     @HandleErrors({
         @ErrorCase(description = "required param doesn't provided",
             code = BardBasicError.REQUIRED_ERROR,
-            exception = RequiredNullException.class, logLevel = "DEBUG")
+            exception = RequiredNullException.class)
     })
     public void validateParam() throws RequiredNullException {
         if (context.getInjectorVariable() == null) {

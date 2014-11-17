@@ -12,7 +12,7 @@ import javax.validation.constraints.Min;
 
 @BindTo(Min.class)
 @HandleErrors({
-    @ErrorCase(code = BardBasicError.VALIDATION_ERROR, logLevel = "DEBUG",
+    @ErrorCase(code = BardBasicError.VALIDATION_ERROR,
         exception = ValidationException.class, description = "Param validation error")
 })
 public class MinInjector extends Injector<Min> {

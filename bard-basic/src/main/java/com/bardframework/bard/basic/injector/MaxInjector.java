@@ -12,7 +12,7 @@ import javax.validation.constraints.Max;
 
 @BindTo(Max.class)
 @HandleErrors({
-    @ErrorCase(code = BardBasicError.VALIDATION_ERROR, logLevel = "DEBUG",
+    @ErrorCase(code = BardBasicError.VALIDATION_ERROR,
         exception = ValidationException.class, description = "Param validation error")
 })
 public class MaxInjector extends Injector<Max> {

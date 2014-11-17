@@ -26,7 +26,7 @@ public class UserHandler extends Handler {
     @GET
     @Path("/signup")
     @HandleErrors({
-        @ErrorCase(code = 20000, logLevel = "DEBUG",
+        @ErrorCase(code = 20000,
             exception = UsernameDuplicateException.class,
             description = "Username duplicate")
     })
@@ -54,7 +54,7 @@ public class UserHandler extends Handler {
     @GET
     @Path("/login")
     @HandleErrors({
-        @ErrorCase(code = 20001, logLevel = "DEBUG",
+        @ErrorCase(code = 20001,
             exception = InvalidatePasswordException.class,
             description = "invalidate password")
     })

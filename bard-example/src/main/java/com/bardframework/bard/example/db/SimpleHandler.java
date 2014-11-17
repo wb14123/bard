@@ -21,7 +21,7 @@ public class SimpleHandler extends Handler {
     @Path("/get")
     @Doc("Get a user")
     @HandleErrors({
-        @ErrorCase(code = 20000, exception = ObjectNotFoundException.class, logLevel = "DEBUG",
+        @ErrorCase(code = 20000, exception = ObjectNotFoundException.class,
             description = "User not found")
     })
     public User getUser(

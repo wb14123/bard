@@ -21,7 +21,7 @@ public class FormParamInjector extends Injector<FormParam> {
     @HandleErrors({
         @ErrorCase(description = "read form data error",
             code = BardBasicError.READ_FORM_ERROR,
-            exception = InvalidateFormException.class, logLevel = "DEBUG")
+            exception = InvalidateFormException.class)
     })
     public void getParam() throws IOException, InvalidateFormException {
         context.putCustom("param", annotation.value());
