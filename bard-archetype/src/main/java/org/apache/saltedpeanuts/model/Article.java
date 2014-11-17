@@ -2,6 +2,8 @@ package org.apache.saltedpeanuts.model;
 
 import com.bardframework.bard.core.marker.Model;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.util.Date;
 
 @Model
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Article {
     @Id @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
@@ -27,7 +31,7 @@ public class Article {
     @JsonPropertyDescription("The create time of this article")
     public Date createdAt = new Date();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonPropertyDescription("The author of this article")
     public User author;
 
