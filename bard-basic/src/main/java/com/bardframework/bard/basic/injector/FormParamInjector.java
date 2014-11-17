@@ -5,7 +5,6 @@ import com.bardframework.bard.basic.marker.ErrorCase;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Injector;
-import com.bardframework.bard.core.Util;
 import com.bardframework.bard.core.marker.Before;
 import com.github.drapostolos.typeparser.TypeParser;
 
@@ -60,7 +59,6 @@ public class FormParamInjector extends Injector<FormParam> {
     @Override public void generateDoc() {
         docParameter.name = annotation.value();
         docParameter.type = context.getInjectorVariableType();
-        Util.getLogger().error("Type: {}", docParameter.type);
         docParameter.belongs = "form";
     }
 
