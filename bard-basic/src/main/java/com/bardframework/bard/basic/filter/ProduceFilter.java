@@ -32,6 +32,7 @@ public class ProduceFilter extends Filter<Produces> {
             contentType = annotation.value()[0];
         }
 
+        context.getResponse().setCharacterEncoding("UTF-8");
         PrintWriter writer = context.getResponse().getWriter();
 
         if (contentType.equals("application/json")) {

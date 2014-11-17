@@ -4,6 +4,7 @@ import com.bardframework.bard.basic.ErrorResult;
 import com.bardframework.bard.basic.GenericTester;
 import com.bardframework.bard.core.Handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.ws.rs.Produces;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ProduceFilterTest extends GenericTester {
 
@@ -21,10 +23,11 @@ public class ProduceFilterTest extends GenericTester {
     public void jsonTest() throws ServletException, IOException {
         request.setPathInfo("/produce-test/json");
         servlet.service(request, response);
-        assertEquals("application/json", response.getHeader("Content-Type"));
         String content = response.getContentAsString();
         TesterClass tester = mapper.readValue(content, TesterClass.class);
         assertEquals(1, tester.a);
+        assertThat(response.getHeader("Content-Type"),
+            CoreMatchers.containsString("application/json"));
     }
 
     @Test
@@ -34,7 +37,8 @@ public class ProduceFilterTest extends GenericTester {
         String content = response.getContentAsString();
         ErrorResult result = mapper.readValue(content, ErrorResult.class);
         assertEquals(500, result.code);
-        assertEquals("application/json", response.getHeader("Content-Type"));
+        assertThat(response.getHeader("Content-Type"),
+            CoreMatchers.containsString("application/json"));
     }
 
 
