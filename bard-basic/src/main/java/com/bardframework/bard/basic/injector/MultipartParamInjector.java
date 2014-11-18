@@ -52,5 +52,8 @@ public class MultipartParamInjector extends Injector<MultipartParam> {
 
 
     @Override public void generateDoc() {
+        docParameter.name = annotation.value();
+        docParameter.type = context.getInjectorVariableType();
+        docParameter.belongs = "multipart";
     }
 }
