@@ -3,6 +3,7 @@ package com.bardframework.bard.basic.injector;
 import com.bardframework.bard.basic.marker.MultipartParam;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Injector;
+import com.bardframework.bard.core.Util;
 import com.bardframework.bard.core.marker.Before;
 import com.github.drapostolos.typeparser.TypeParser;
 import org.apache.commons.fileupload.FileItem;
@@ -10,7 +11,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import javax.servlet.ServletContext;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -30,14 +30,16 @@ public class MultipartParamInjector extends Injector<MultipartParam> {
             }
 
             DiskFileItemFactory factory = new DiskFileItemFactory();
-            ServletContext servletContext = context.getRequest().getServletContext();
-            File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+            File repository;
+            String pathName = Util.getConfig().getString("bard.upload.tempdir", "/tmp");
+            repository = new File(pathName);
             factory.setRepository(repository);
             ServletFileUpload upload = new ServletFileUpload(factory);
             List<FileItem> items = upload.parseRequest(context.getRequest());
             for (FileItem item : items) {
                 fileMap.put(item.getFieldName(), item);
             }
+            context.putCustom("multipart", fileMap);
         }
 
         FileItem item = fileMap.get(annotation.value());
