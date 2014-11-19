@@ -4,9 +4,7 @@ import com.bardframework.bard.core.marker.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import org.hibernate.Session;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.*;
 
@@ -14,6 +12,9 @@ import javax.persistence.*;
 @Entity
 @Cacheable
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NamedQueries({
+    @NamedQuery(name = "user.username", query = "SELECT u from User u where u.username = :username")
+})
 public class User {
     @Id @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
@@ -42,11 +43,5 @@ public class User {
 
     public User(String id) {
         this.id = id;
-    }
-
-    public static User getUserByUsername(Session session, String username) {
-        return (User) session.createCriteria(User.class)
-            .add(Restrictions.eq("username", username))
-            .uniqueResult();
     }
 }

@@ -1,0 +1,45 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="test">
+        <class>org.apache.saltedpeanuts.model.User</class>
+        <class>org.apache.saltedpeanuts.model.Article</class>
+        <properties>
+            <!-- Database connection settings -->
+            <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:tsg"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+
+            <!-- JDBC connection pool -->
+            <property name="hibernate.connection.provider_class"
+                      value="org.hibernate.connection.C3P0ConnectionProvider"/>
+
+            <property name="hibernate.c3p0.max_size" value="100"/>
+            <property name="hibernate.c3p0.min_size" value="0"/>
+            <property name="hibernate.c3p0.acquire_increment" value="1"/>
+            <property name="hibernate.c3p0.idle_test_period" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="0"/>
+            <property name="hibernate.c3p0.timeout" value="100"/>
+
+            <!-- Use EHCache as cache provider -->
+            <property name="hibernate.cache.region.factory_class"
+                      value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+            <property name="hibernate.cache.default_cache_concurrency_strategy" value="read-only"/>
+
+            <!-- SQL dialect -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+
+            <!-- Enable Hibernate's automatic session context management -->
+            <property name="hibernate.current_session_context_class" value="thread"/>
+
+
+            <!-- Echo all executed SQL to stdout -->
+            <property name="hibernate.show_sql" value="true"/>
+
+            <!-- Drop and re-create the database schema on startup -->
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+        </properties>
+    </persistence-unit>
+</persistence>

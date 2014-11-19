@@ -11,8 +11,9 @@ import com.bardframework.bard.util.user.PasswordEncrypter;
 import com.bardframework.bard.util.user.TokenStorage;
 import com.bardframework.bard.util.user.marker.LoginUser;
 import org.apache.saltedpeanuts.model.User;
-import org.hibernate.Session;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -20,7 +21,7 @@ import javax.ws.rs.QueryParam;
 @Path("/user")
 public class UserHandler extends Handler {
 
-    @DBSession public Session dbSession;
+    @DBSession public EntityManager em;
 
     @Doc("Sign up a user")
     @GET
@@ -35,19 +36,21 @@ public class UserHandler extends Handler {
         @QueryParam("password") @Required String password,
         @QueryParam("email") String email
     ) throws UsernameDuplicateException {
-        User user = User.getUserByUsername(dbSession, username);
-        if (user != null) {
+        try {
+            em.createNamedQuery("user.username", User.class)
+                .setParameter("username", username)
+                .getSingleResult();
             throw new UsernameDuplicateException(username);
+        } catch (NoResultException e) {
+            User user = new User();
+            user.username = username;
+            user.email = email;
+            String[] result = PasswordEncrypter.encrypt(password);
+            user.password = result[0];
+            user.salt = result[1];
+            em.persist(user);
+            return user;
         }
-        user = new User();
-        user.username = username;
-        user.email = email;
-        String[] result = PasswordEncrypter.encrypt(password);
-        user.password = result[0];
-        user.salt = result[1];
-        dbSession.save(user);
-
-        return user;
     }
 
     @Doc("User login. Returns the auth token.")
@@ -62,7 +65,10 @@ public class UserHandler extends Handler {
         @QueryParam("username") @Required String username,
         @QueryParam("password") @Required String password
     ) throws InvalidatePasswordException {
-        User user = User.getUserByUsername(dbSession, username);
+        User user = em.createNamedQuery("user.username", User.class)
+            .setParameter("username", username)
+            .getSingleResult();
+
         if (user == null ||
             !user.password.equals(PasswordEncrypter.encrypt(password, user.salt))) {
             throw new InvalidatePasswordException();
@@ -76,9 +82,7 @@ public class UserHandler extends Handler {
     @GET
     @Path("/info")
     public User info(@LoginUser @Required("Auth token error") String id) {
-        User user = new User();
-        dbSession.load(user, id);
-        return user;
+        return em.find(User.class, id);
     }
 
     @Model

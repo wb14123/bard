@@ -8,14 +8,14 @@ import com.bardframework.bard.util.user.marker.LoginUser;
 import org.apache.saltedpeanuts.model.Article;
 import org.apache.saltedpeanuts.model.User;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Session;
 
+import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 
 
 @Path("/article")
 public class ArticleHandler extends Handler {
-    @DBSession public Session dbSession;
+    @DBSession public EntityManager em;
     @LoginUser @Required("Auth token error") public String userId;
 
     @PUT
@@ -29,7 +29,7 @@ public class ArticleHandler extends Handler {
         article.author = new User(userId);
         article.title = title;
         article.content = content;
-        dbSession.save(article);
+        em.persist(article);
         return article;
     }
 
@@ -41,8 +41,6 @@ public class ArticleHandler extends Handler {
     @Path("/{id}")
     @Doc("Get an article by id")
     public Article getArticle(@PathParam("id") @Required String articleId) {
-        Article article = new Article();
-        dbSession.load(article, articleId);
-        return article;
+        return em.find(Article.class, articleId);
     }
 }
