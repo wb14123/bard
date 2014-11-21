@@ -19,6 +19,9 @@ public class DBSessionInjector extends Injector<DBSession> {
     }
 
     @After public void closeSession() {
+        if (em == null) {
+            return;
+        }
         if (context.getException() != null && !context.isExceptionHandled()) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
