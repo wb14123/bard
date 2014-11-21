@@ -65,12 +65,15 @@ public class UserHandler extends Handler {
         @QueryParam("username") @Required String username,
         @QueryParam("password") @Required String password
     ) throws InvalidatePasswordException {
-        User user = em.createNamedQuery("user.username", User.class)
-            .setParameter("username", username)
-            .getSingleResult();
-
-        if (user == null ||
-            !user.password.equals(PasswordEncrypter.encrypt(password, user.salt))) {
+        User user;
+        try {
+            user = em.createNamedQuery("user.username", User.class)
+                .setParameter("username", username)
+                .getSingleResult();
+        } catch (NoResultException e) {
+            throw new InvalidatePasswordException();
+        }
+        if (!user.password.equals(PasswordEncrypter.encrypt(password, user.salt))) {
             throw new InvalidatePasswordException();
         }
         TokenResult result = new TokenResult();
