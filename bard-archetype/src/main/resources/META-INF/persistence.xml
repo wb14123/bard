@@ -23,6 +23,7 @@
             <property name="hibernate.c3p0.idle_test_period" value="300"/>
             <property name="hibernate.c3p0.max_statements" value="0"/>
             <property name="hibernate.c3p0.timeout" value="100"/>
+            <property name="c3p0.testConnectionOnCheckout" value="true" />
 
             <!-- Use EHCache as cache provider -->
             <property name="hibernate.cache.region.factory_class"
