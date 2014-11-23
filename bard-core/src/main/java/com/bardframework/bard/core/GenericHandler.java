@@ -419,7 +419,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
         LinkedList<LinkedList<Injector>> injectors)
         throws Throwable {
         context.injectorVariable = null;
-        Map<String, Object> oldCustomContext = context.custom;
         LinkedList<Injector> paramInjectors = new LinkedList<>();
         injectors.addFirst(paramInjectors);
         for (Annotation annotation : annotations) {
@@ -439,7 +438,6 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 throw context.exception;
             }
         }
-        context.custom = oldCustomContext;
         return context.injectorVariable;
     }
 }
