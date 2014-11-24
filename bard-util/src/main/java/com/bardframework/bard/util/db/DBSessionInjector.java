@@ -29,6 +29,7 @@ public class DBSessionInjector extends Injector<DBSession> {
         } else {
             em.getTransaction().commit();
         }
+        em.close();
     }
 
 
