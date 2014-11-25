@@ -25,7 +25,10 @@ public class RedisCache implements Cache {
     }
 
     @Override public String get(String key) {
-        return jedisPool.getResource().get(getkey(key));
+        Jedis jedis = jedisPool.getResource();
+        String result = jedis.get(getkey(key));
+        jedis.close();
+        return result;
     }
 
     @Override public void set(String key, String value) {
