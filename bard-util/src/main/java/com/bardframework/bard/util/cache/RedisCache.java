@@ -1,10 +1,12 @@
 package com.bardframework.bard.util.cache;
 
 import com.bardframework.bard.core.Util;
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisCache implements Cache {
-    private final Jedis jedis = new Jedis(
+    private final JedisPool jedisPool = new JedisPool(
+        new JedisPoolConfig(),
         Util.getConfig().getString("bard.util.redis.host", "localhost"),
         Util.getConfig().getInt("bard.util.redis.port", 6379));
 
@@ -22,18 +24,18 @@ public class RedisCache implements Cache {
     }
 
     @Override public String get(String key) {
-        return jedis.get(getkey(key));
+        return jedisPool.getResource().get(getkey(key));
     }
 
     @Override public void set(String key, String value) {
-        jedis.set(getkey(key), value);
+        jedisPool.getResource().set(getkey(key), value);
     }
 
     @Override public void setex(String key, final int seconds, String value) {
-        jedis.setex(getkey(key), seconds, value);
+        jedisPool.getResource().setex(getkey(key), seconds, value);
     }
 
     @Override public void del(String key) {
-        jedis.del(getkey(key));
+        jedisPool.getResource().del(getkey(key));
     }
 }
