@@ -70,7 +70,7 @@ The users could also try the APIs in the web UI. Isn't that cool?
 
 See a [live demo](http://doc-ui.bardframework.com/?host=http:%2F%2Flinode.binwang.me:8082).
 
-![Doc UI Screenshot](https://cloud.githubusercontent.com/assets/1906051/4930305/5925bd98-6562-11e4-957d-e3ec17656f06.png)
+![bard-doc-ui](https://cloud.githubusercontent.com/assets/1906051/5196278/42b7f008-7566-11e4-822b-24eb6e3cb744.gif)
 
 ### Build A Self Contained Directory That Is Ready to Deploy
 
