@@ -65,18 +65,25 @@ public class QueryParamInjector extends Injector<QueryParam> {
 
 ### Auto Generate Beautiful Document
 
-No more code needed, once your handler is written, the API document is right there for you.
+No more code needed, once your handler is written, the API documents is right there for you.
+The users could also try the APIs in the web UI. Isn't that cool?
 
 See a [live demo](http://doc-ui.bardframework.com/?host=http:%2F%2Flinode.binwang.me:8082).
 
 ![Doc UI Screenshot](https://cloud.githubusercontent.com/assets/1906051/4930305/5925bd98-6562-11e4-957d-e3ec17656f06.png)
 
+### Build A Self Contained Directory That Is Ready to Deploy
 
-### Run In Your Favorite Servlet Container
+Just with one command `mvn package bard:standalone`, this framework will generate a self contained directory
+which is ready to deploy. It contains directory `conf` to store config files, `bin` to store start up and shut
+down scripts, `lib` to store library JARs and `log` to store all the logs for you.
 
-Bard could build a WAR package for you so that you could run it in your favorite serlvet container.
+Just run `bin/server.sh start | restart | stop`, you can control your server.
 
-You can also run it as a standalone server, too.
+### Or Run In Your Favorite Servlet Container
+
+If you want to build a WAR package in order to run in a servlet container, that is easy, too.
+Just run `mvn package bard:war`, then you will get a WAR package.
 
 Documents
 --------------
