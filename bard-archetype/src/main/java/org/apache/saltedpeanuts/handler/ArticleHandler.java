@@ -26,7 +26,7 @@ public class ArticleHandler extends Handler {
         @FormParam("content") @EscapeHTML @Required String content
     ) {
         Article article = new Article();
-        article.author = new User(userId);
+        article.author = em.find(User.class, userId);
         article.title = title;
         article.content = content;
         em.persist(article);

@@ -20,7 +20,7 @@ public class ArticleHandlerTest extends GenericTester {
             login("article-user-1", "article-pass-1", UserHandler.TokenResult.class);
         Article article = createArticle(token.token, "title", "content", Article.class);
         assertNotNull(article.id);
-        assertEquals(user.id, article.author.id);
+        assertEquals(user.username, article.author.username);
         assertEquals("title", article.title);
         assertEquals("content", article.content);
     }
