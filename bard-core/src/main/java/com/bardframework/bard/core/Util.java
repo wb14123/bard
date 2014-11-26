@@ -3,11 +3,11 @@ package com.bardframework.bard.core;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Util {
-    private static final Logger logger = LogManager.getLogger("com.bardframework.bard");
+    private static final Logger logger = LoggerFactory.getLogger("com.bardframework.bard");
     private static CompositeConfiguration config;
 
     /**

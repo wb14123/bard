@@ -26,7 +26,7 @@ public class HandleErrorsFilter extends Filter<HandleErrors> {
                 }
                 err.message = msg;
                 context.setResult(err);
-                Util.getLogger().debug(context.getException());
+                Util.getLogger().debug("Handle error found exception: {}", context.getException());
                 break;
             }
         }
