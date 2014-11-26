@@ -10,10 +10,11 @@ import com.bardframework.bard.util.db.marker.DBSession;
 import com.bardframework.bard.util.user.PasswordEncrypter;
 import com.bardframework.bard.util.user.TokenStorage;
 import com.bardframework.bard.util.user.marker.LoginUser;
+import com.mysema.query.jpa.impl.JPAQuery;
+import org.apache.saltedpeanuts.model.QUser;
 import org.apache.saltedpeanuts.model.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -36,21 +37,20 @@ public class UserHandler extends Handler {
         @QueryParam("password") @Required String password,
         @QueryParam("email") String email
     ) throws UsernameDuplicateException {
-        try {
-            em.createNamedQuery("user.username", User.class)
-                .setParameter("username", username)
-                .getSingleResult();
+        JPAQuery query = new JPAQuery(em);
+        QUser quser = QUser.user;
+        User user = query.from(quser).where(quser.username.eq(username)).uniqueResult(quser);
+        if (user != null) {
             throw new UsernameDuplicateException(username);
-        } catch (NoResultException e) {
-            User user = new User();
-            user.username = username;
-            user.email = email;
-            String[] result = PasswordEncrypter.encrypt(password);
-            user.password = result[0];
-            user.salt = result[1];
-            em.persist(user);
-            return user;
         }
+        user = new User();
+        user.username = username;
+        user.email = email;
+        String[] result = PasswordEncrypter.encrypt(password);
+        user.password = result[0];
+        user.salt = result[1];
+        em.persist(user);
+        return user;
     }
 
     @Doc("User login. Returns the auth token.")
@@ -65,15 +65,10 @@ public class UserHandler extends Handler {
         @QueryParam("username") @Required String username,
         @QueryParam("password") @Required String password
     ) throws InvalidatePasswordException {
-        User user;
-        try {
-            user = em.createNamedQuery("user.username", User.class)
-                .setParameter("username", username)
-                .getSingleResult();
-        } catch (NoResultException e) {
-            throw new InvalidatePasswordException();
-        }
-        if (!user.password.equals(PasswordEncrypter.encrypt(password, user.salt))) {
+        QUser quser = QUser.user;
+        User user =
+            new JPAQuery(em).from(quser).where(quser.username.eq(username)).uniqueResult(quser);
+        if (user == null || !user.password.equals(PasswordEncrypter.encrypt(password, user.salt))) {
             throw new InvalidatePasswordException();
         }
         TokenResult result = new TokenResult();

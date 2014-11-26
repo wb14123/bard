@@ -12,9 +12,6 @@ import javax.persistence.*;
 @Entity
 @Cacheable
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@NamedQueries({
-    @NamedQuery(name = "user.username", query = "SELECT u from User u where u.username = :username")
-})
 public class User {
     @Id @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")

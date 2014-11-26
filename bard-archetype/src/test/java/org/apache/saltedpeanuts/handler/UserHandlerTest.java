@@ -42,6 +42,13 @@ public class UserHandlerTest extends GenericTester {
     }
 
     @Test
+    public void testLoginNoUsername() throws Exception {
+        ErrorResult result = login("user1111", "pass6", ErrorResult.class);
+        assertEquals(20001, result.code);
+
+    }
+
+    @Test
     public void testInfo() throws Exception {
         signUp("user5", "pass5", User.class);
         UserHandler.TokenResult result = login("user5", "pass5", UserHandler.TokenResult.class);
