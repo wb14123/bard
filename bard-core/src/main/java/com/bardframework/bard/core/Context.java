@@ -9,7 +9,7 @@ import java.util.Map;
  * This class is used in GenericHandler, so that you could store information while run
  * the middleware and handlers.
  */
-public class Context {
+public class Context implements Cloneable {
     /**
      * Handler return type, used for generate API. Used in {@link Filter}
      */
@@ -46,6 +46,10 @@ public class Context {
      * Is the exception handled? If not, the framework will through it.
      */
     private boolean exceptionHandled = false;
+
+    public Context clone() throws CloneNotSupportedException {
+        return (Context) super.clone();
+    }
 
     /**
      * Put a custom value into context.

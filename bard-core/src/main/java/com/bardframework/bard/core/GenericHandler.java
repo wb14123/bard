@@ -273,7 +273,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
             Class<? extends Adapter> adapterClass = mapper.adapterMap.get(annotationClass);
             if (adapterClass != null) {
-                Adapter adapter = newFromThis(adapterClass, Object.class, annotation);
+                Adapter adapter =
+                    newFromThis(adapterClass, context.getInjectorVariableType(), annotation);
                 /*
                  Add the adapters with the same annotation type to one list, in order to processing them together.
                  Helpful while define adapters could be used both on class and method.
@@ -291,7 +292,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
 
             Class<? extends Filter> filterClass = mapper.filterMap.get(annotationClass);
             if (filterClass != null) {
-                Filter filter = newFromThis(filterClass, Object.class, annotation);
+                Filter filter =
+                    newFromThis(filterClass, context.getInjectorVariableType(), annotation);
                 filters[filterSize++] = filter;
             }
         }
@@ -418,6 +420,10 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     private Object runInjectors(Annotation[] annotations, Class<?> parameterClass,
         LinkedList<LinkedList<Injector>> injectors)
         throws Throwable {
+        if (annotations.length == 0) {
+            return null;
+        }
+        Context oldContext = context.clone();
         context.injectorVariable = null;
         LinkedList<Injector> paramInjectors = new LinkedList<>();
         injectors.addFirst(paramInjectors);
@@ -438,6 +444,8 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
                 throw context.exception;
             }
         }
-        return context.injectorVariable;
+        Object result = context.injectorVariable;
+        context = oldContext.clone();
+        return result;
     }
 }
