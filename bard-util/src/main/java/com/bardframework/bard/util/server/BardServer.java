@@ -2,11 +2,15 @@ package com.bardframework.bard.util.server;
 
 import com.bardframework.bard.core.Servlet;
 import com.bardframework.bard.core.Util;
+import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+
+import java.lang.management.ManagementFactory;
 
 public class BardServer {
     Server server;
@@ -25,6 +29,14 @@ public class BardServer {
         ServletHandler handler = new ServletHandler();
         handler.addServletWithMapping(servletClass, "/*");
         server.setHandler(handler);
+
+        // Setup JMX
+        MBeanContainer mbContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
+        server.addEventListener(mbContainer);
+        server.addBean(mbContainer);
+
+        // Add loggers MBean to server (will be picked up by MBeanContainer above)
+        server.addBean(Log.getLog());
 
     }
 
