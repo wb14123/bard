@@ -29,7 +29,8 @@ public class HandlerMethod {
         Object result = null;
         try {
             result = before(context, o, isCleanup);
-            if (o instanceof Handler) {
+            // if context.exception is null, then the result is not he real result we need
+            if (o instanceof Handler && context.exception == null) {
                 context.result = result;
             }
         } catch (final InvocationTargetException e) {
