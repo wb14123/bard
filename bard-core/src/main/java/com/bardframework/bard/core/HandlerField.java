@@ -14,11 +14,10 @@ public class HandlerField {
     public List<AnnotatedHandler<? extends Injector>> annotatedInjectors = new LinkedList<>();
 
     private LinkedList<Injector> runInjectors = new LinkedList<>();
-    private boolean setted = false;
 
     public void run(Context context, Object c)
         throws IllegalAccessException, InstantiationException {
-        if (setted || annotatedInjectors.size() == 0) {
+        if (annotatedInjectors.size() == 0) {
             return;
         }
         context.injectorVariableType = field.getType();
@@ -33,7 +32,6 @@ public class HandlerField {
             }
         }
         field.set(c, context.injectorVariable);
-        setted = true;
     }
 
     public void cleanup() throws IllegalAccessException, InstantiationException {
