@@ -182,13 +182,14 @@ public class HandlerMeta {
                     HandlerMeta.get(adapterClass, servletClass);
                 }
             }
-            for (Parameter parameter : method.getParameters()) {
-                handlerMethod.parameters.add(newHandlerParameter(parameter, servletClass));
-            }
-            for (Field filed : fields) {
-                handlerMethod.fields.add(newHandlerField(filed, servletClass));
-            }
+
             i++;
+        }
+        for (Parameter parameter : method.getParameters()) {
+            handlerMethod.parameters.add(newHandlerParameter(parameter, servletClass));
+        }
+        for (Field filed : fields) {
+            handlerMethod.fields.add(newHandlerField(filed, servletClass));
         }
         return handlerMethod;
     }
