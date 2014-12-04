@@ -82,7 +82,7 @@ public class HandlerMeta {
         if (method == null) {
             return null;
         }
-        return method.run(handler.context, handler);
+        return method.run(handler.context, handler, annotationClass == After.class);
     }
 
     public static <T extends GenericHandler> Object runHandler(
@@ -90,7 +90,7 @@ public class HandlerMeta {
     ) {
         HandlerMeta meta = HandlerMeta.get(handler.getClass(), servletClass);
         for (HandlerMethod method : meta.handlerMethods) {
-            Object result = method.run(handler.context, handler);
+            Object result = method.run(handler.context, handler, false);
             if (result != NoAdapter.NO_ADAPTER) {
                 return result;
             }

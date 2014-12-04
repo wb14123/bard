@@ -27,7 +27,7 @@ public class HandlerField {
             injector.context = context;
             runInjectors.addFirst(injector);
             HandlerMeta.runAnnotated(injector, servletClass, Before.class);
-            if (context.exception != null && !context.isExceptionHandled()) {
+            if (context.exception != null) {
                 return;
             }
         }

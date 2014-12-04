@@ -25,10 +25,10 @@ public class HandlerMethod {
     private LinkedList<HandlerParameter> runParameters = new LinkedList<>();
     private LinkedList<HandlerField> runFields = new LinkedList<>();
 
-    public Object run(Context context, GenericHandler o) {
+    public Object run(Context context, GenericHandler o, boolean isCleanup) {
         Object result = null;
         try {
-            result = before(context, o);
+            result = before(context, o, isCleanup);
             if (o instanceof Handler) {
                 context.result = result;
             }
@@ -50,7 +50,7 @@ public class HandlerMethod {
         return result;
     }
 
-    private Object before(Context context, Object o) throws Throwable {
+    private Object before(Context context, Object o, boolean isCleanup) throws Throwable {
         // TODO: This is really an ugly hacker for chained adapter
 
         // not match if there is no adapter defines on handler method
@@ -86,7 +86,7 @@ public class HandlerMethod {
             filter.context = context;
             runFilters.addFirst(filter);
             HandlerMeta.runAnnotated(filter, servletClass, Before.class);
-            if (context.exception != null && !context.isExceptionHandled()) {
+            if (context.exception != null && !isCleanup) {
                 return null;
             }
         }
@@ -94,7 +94,7 @@ public class HandlerMethod {
         for (HandlerField field : fields) {
             runFields.addFirst(field);
             field.run(context, o);
-            if (context.exception != null && !context.isExceptionHandled()) {
+            if (context.exception != null && !isCleanup) {
                 return null;
             }
         }
@@ -107,7 +107,7 @@ public class HandlerMethod {
             context.injectorVariable = null;
             parameters.get(i).run(context);
             args[i] = context.injectorVariable;
-            if (context.exception != null && !context.isExceptionHandled()) {
+            if (context.exception != null && !isCleanup) {
                 return null;
             }
         }
