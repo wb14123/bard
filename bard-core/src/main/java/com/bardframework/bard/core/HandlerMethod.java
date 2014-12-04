@@ -25,14 +25,13 @@ public class HandlerMethod {
     private LinkedList<HandlerParameter> runParameters = new LinkedList<>();
     private LinkedList<HandlerField> runFields = new LinkedList<>();
 
-    public Object run(Context context, Object o) {
+    public Object run(Context context, GenericHandler o) {
         Object result = null;
         try {
             result = before(context, o);
             if (o instanceof Handler) {
                 context.result = result;
             }
-            after();
         } catch (final InvocationTargetException e) {
             // throw by method.invoke, the cause is the true exception
             context.exception = e.getCause();
@@ -42,6 +41,11 @@ public class HandlerMethod {
         } catch (Throwable e) {
             // it is the exception throw by filters or injectors
             context.exception = e;
+        }
+        try {
+            after();
+        } catch (IllegalAccessException | InstantiationException e) {
+            Util.getLogger().error("Error found in generic handler: {}", e);
         }
         return result;
     }
