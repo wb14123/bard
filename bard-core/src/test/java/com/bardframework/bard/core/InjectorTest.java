@@ -54,7 +54,7 @@ public class InjectorTest {
     }
 
     @Test
-    public void filedExceptionInjectorTest() {
+    public void fieldExceptionInjectorTest() {
         servlet.addHandler(FieldExceptionInjectorHandler.class);
         servlet.service(request, response);
         assertEquals("true", response.getHeader("get_exception"));
