@@ -91,7 +91,7 @@ public class HandlerMeta {
         HandlerMeta meta = HandlerMeta.get(handler.getClass(), servletClass);
         for (HandlerMethod method : meta.handlerMethods) {
             Object result = method.run(handler.context, handler);
-            if (result != null && result != NoAdapter.NO_ADAPTER) {
+            if (result != NoAdapter.NO_ADAPTER) {
                 return result;
             }
         }
