@@ -4,13 +4,10 @@ import com.bardframework.bard.core.marker.After;
 import com.bardframework.bard.core.marker.Before;
 import com.bardframework.bard.core.marker.Match;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class HandlerMethod {
     public Method method;
@@ -32,6 +29,9 @@ public class HandlerMethod {
         Object result = null;
         try {
             result = before(context, o);
+            if (o instanceof Handler) {
+                context.result = result;
+            }
             after();
         } catch (final InvocationTargetException e) {
             // throw by method.invoke, the cause is the true exception
