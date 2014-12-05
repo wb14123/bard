@@ -68,6 +68,7 @@ public class APIDocFilter extends Filter<APIDoc> {
                 Adapter adapter = annotatedAdapter.handlerClass.newInstance();
                 adapter.annotation = annotatedAdapter.annotation;
                 adapter.api = api;
+                adapter.context = context;
                 adapter.generateDoc();
             }
             for (AnnotatedHandler<? extends Filter> annotatedFilter : method.annotatedFilters) {
@@ -75,16 +76,18 @@ public class APIDocFilter extends Filter<APIDoc> {
                 Filter filter = annotatedFilter.handlerClass.newInstance();
                 filter.annotation = annotatedFilter.annotation;
                 filter.api = api;
+                filter.context = context;
                 filter.generateDoc();
             }
             for (HandlerField field : method.fields) {
                 DocParameter docParameter = new DocParameter();
-                context.setInjectorVariable(field.field.getType());
+                context.setInjectorVariableType(field.field.getType());
                 for (AnnotatedHandler<? extends Injector> annotatedInjector: field.annotatedInjectors) {
                     getOneApi(document, api, context, annotatedInjector.handlerClass, servletClass);
                     Injector injector = annotatedInjector.handlerClass.newInstance();
                     injector.annotation = annotatedInjector.annotation;
                     injector.docParameter = docParameter;
+                    injector.context = context;
                     injector.generateDoc();
                 }
                 if (!docParameter.isNull()) {
@@ -93,12 +96,13 @@ public class APIDocFilter extends Filter<APIDoc> {
             }
             for (HandlerParameter parameter: method.parameters) {
                 DocParameter docParameter = new DocParameter();
-                context.setInjectorVariable(parameter.parameter.getType());
+                context.setInjectorVariableType(parameter.parameter.getType());
                 for (AnnotatedHandler<? extends Injector> annotatedInjector: parameter.annotatedInjectors) {
                     getOneApi(document, api, context, annotatedInjector.handlerClass, servletClass);
                     Injector injector = annotatedInjector.handlerClass.newInstance();
                     injector.annotation = annotatedInjector.annotation;
                     injector.docParameter = docParameter;
+                    injector.context = context;
                     injector.generateDoc();
                 }
                 if (!docParameter.isNull()) {

@@ -21,7 +21,7 @@ public abstract class GenericHandler<AnnotationType extends Annotation> {
     /**
      * The context in this handler.
      */
-    protected Context context = new Context();
+    public Context context = new Context();
 
     public GenericHandler() {
     }
