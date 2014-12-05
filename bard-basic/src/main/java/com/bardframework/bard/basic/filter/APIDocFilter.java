@@ -59,7 +59,11 @@ public class APIDocFilter extends Filter<APIDoc> {
                 context = new Context();
                 context.returnType = method.method.getReturnType();
             }
-            for (AnnotatedHandler<? extends Adapter> annotatedAdapter : method.annotatedAdapters) {
+            List<AnnotatedHandler<? extends Adapter>> annotatedAdapters = new LinkedList<>();
+            annotatedAdapters.addAll(method.annotatedServletAdapters);
+            annotatedAdapters.addAll(method.annotatedClassAdapters);
+            annotatedAdapters.addAll(method.annotatedAdapters);
+            for (AnnotatedHandler<? extends Adapter> annotatedAdapter : annotatedAdapters) {
                 getOneApi(document, api, context, annotatedAdapter.handlerClass, servletClass);
                 Adapter adapter = annotatedAdapter.handlerClass.newInstance();
                 adapter.annotation = annotatedAdapter.annotation;
