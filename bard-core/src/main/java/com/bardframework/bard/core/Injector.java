@@ -1,25 +1,12 @@
 package com.bardframework.bard.core;
 
-import com.bardframework.bard.core.marker.After;
-import com.bardframework.bard.core.marker.Before;
+import com.bardframework.bard.core.doc.DocParameter;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 
 public abstract class Injector<AnnotationType extends Annotation>
     extends GenericHandler<AnnotationType> {
-
-    public void before()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-        InvocationTargetException {
-        runMethods(Before.class);
-    }
-
-    public void after()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-        InvocationTargetException {
-        runMethods(After.class);
-    }
+    public DocParameter docParameter;
 
     public abstract void generateDoc();
 }

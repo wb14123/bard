@@ -1,5 +1,6 @@
 package com.bardframework.bard.core;
 
+import com.bardframework.bard.core.doc.Document;
 import com.bardframework.bard.core.marker.After;
 import com.bardframework.bard.core.marker.Before;
 import com.bardframework.bard.core.marker.Match;
@@ -136,6 +137,16 @@ public class HandlerMeta {
         return handlerField;
     }
 
+    public static void genDoc(
+        Document document,
+        Class<? extends GenericHandler> handlerClass,
+        Class<? extends Servlet> servletClass
+    ) throws InstantiationException, IllegalAccessException {
+        HandlerMeta meta = HandlerMeta.get(handlerClass, servletClass);
+        for (HandlerMethod method : meta.handlerMethods) {
+        }
+    }
+
     private HandlerMethod newHandlerMethod(Method method, Field[] fields,
         Class<? extends GenericHandler> handlerClass,
         Class<? extends Servlet> servletClass
@@ -170,8 +181,7 @@ public class HandlerMeta {
                 if (Handler.class.isAssignableFrom(handlerClass)) {
                     if (i < servletClass.getAnnotations().length) {
                         handlerMethod.annotatedServletAdapters.add(annotatedAdapter);
-                    }
-                    else if (i < servletClass.getAnnotations().length + handlerClass
+                    } else if (i < servletClass.getAnnotations().length + handlerClass
                         .getAnnotations().length) {
                         handlerMethod.annotatedClassAdapters.add(annotatedAdapter);
                     } else {

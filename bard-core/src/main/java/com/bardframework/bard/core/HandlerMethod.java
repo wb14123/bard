@@ -1,5 +1,6 @@
 package com.bardframework.bard.core;
 
+import com.bardframework.bard.core.doc.Document;
 import com.bardframework.bard.core.marker.After;
 import com.bardframework.bard.core.marker.Before;
 import com.bardframework.bard.core.marker.Match;
@@ -49,6 +50,16 @@ public class HandlerMethod {
             Util.getLogger().error("Error found in generic handler: {}", e);
         }
         return result;
+    }
+
+    public void genDoc(Document document, Class<? extends Servlet> servletClass)
+        throws IllegalAccessException, InstantiationException {
+        for (AnnotatedHandler<? extends Adapter> annotatedAdapter : annotatedAdapters) {
+            Adapter adapter = annotatedAdapter.handlerClass.newInstance();
+            adapter.annotation = annotatedAdapter.annotation;
+            runAdapters.addFirst(adapter);
+            adapter.generateDoc();
+        }
     }
 
     private Object before(Context context, Object o, boolean isCleanup) throws Throwable {

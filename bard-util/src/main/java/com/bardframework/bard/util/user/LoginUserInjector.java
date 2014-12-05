@@ -17,6 +17,5 @@ public class LoginUserInjector extends Injector<LoginUser> {
     }
 
     @Override public void generateDoc() {
-        docParameter.description = "Auth token";
     }
 }
