@@ -12,12 +12,14 @@ public class GenericTester {
 
     @Before
     public void setUp() throws Exception {
-        servlet = new Servlet() {
-            @Override public String[] getPackageNames() {
-                return new String[] {"com.bardframework.bard.basic"};
-            }
-        };
+        servlet = new TestServlet();
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
+    }
+
+    public static class TestServlet extends Servlet {
+        @Override public String[] getPackageNames() {
+            return new String[] {"com.bardframework.bard.basic"};
+        }
     }
 }

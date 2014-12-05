@@ -35,7 +35,7 @@ public class APIDocFilterTest extends GenericTester {
     public static class APIHandler extends Handler {
         @Path("/test-api-doc")
         @Produces("application/json")
-        @APIDoc("name")
+        @APIDoc(value = "name", servletClass = TestServlet.class)
         public void getAPI() {
         }
     }

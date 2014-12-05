@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -105,25 +104,31 @@ public abstract class Servlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) {
         try {
+            HandlerMeta.annotationMapper = mapper;
+
             // TODO: performance for adapter? (instead of linear time)
             for (Class<? extends Handler> handlerClass : mapper.handlers) {
                 Context context = new Context();
                 context.request = request;
                 context.response = response;
+                Handler handler = handlerClass.newInstance();
+                handler.context = context;
+                Object result = HandlerMeta.runHandler(handler, this.getClass());
+
+                /*
                 Handler handler = Handler.newInstance(handlerClass, context, mapper);
                 handler.setServlet(this);
-                Object result = handler.run();
+                */
                 if (result != NoAdapter.NO_ADAPTER) {
                     return;
                 }
             }
             response.setStatus(404);
             response.getWriter().println("page not found");
-        } catch (NoSuchMethodException |
-            IllegalAccessException |
-            InvocationTargetException |
-            InstantiationException |
-            IOException e) {
+        } catch (
+                IllegalAccessException |
+                InstantiationException |
+                IOException e) {
             Util.getLogger().error("Error found in servlet: {}", e);
         }
     }

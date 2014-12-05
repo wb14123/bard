@@ -117,4 +117,8 @@ public class Context implements Cloneable {
     public Class<?> getInjectorVariableType() {
         return injectorVariableType;
     }
+
+    public void setInjectorVariableType(Class<?> injectorVariableType) {
+        this.injectorVariableType = injectorVariableType;
+    }
 }

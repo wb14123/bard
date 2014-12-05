@@ -1,11 +1,8 @@
 package com.bardframework.bard.core;
 
-import com.bardframework.bard.core.marker.After;
-import com.bardframework.bard.core.marker.Match;
+import com.bardframework.bard.core.doc.Api;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * <p>
@@ -26,34 +23,7 @@ import java.lang.reflect.Method;
 public abstract class Adapter<AnnotationType extends Annotation>
     extends GenericHandler<AnnotationType> {
 
-    /**
-     * Run all the methods with annotation {@link com.bardframework.bard.core.marker.Match}, see if all the methods return true.
-     *
-     * @return True if all the methods with {@link com.bardframework.bard.core.marker.Match} return true. Otherwise return false.
-     * @throws InvocationTargetException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    public boolean match()
-        throws InvocationTargetException, NoSuchMethodException, InstantiationException,
-        IllegalAccessException {
-        Method[] methods = this.getClass().getDeclaredMethods();
-        for (Method method : methods) {
-            Object result = runMethod(method, Match.class);
-            // if result is match method and result is not true
-            if (result != NoAdapter.NO_ADAPTER && !((Boolean) result)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void after()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-        InvocationTargetException {
-        runMethods(After.class);
-    }
+    public Api api;
 
     public abstract void generateDoc();
 }
