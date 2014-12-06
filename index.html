@@ -55,15 +55,15 @@
 <p>You can just write handlers like this:</p>
 
 <div class="highlight highlight-java"><pre>@Produces(<span class="pl-s1"><span class="pl-pds">"</span>application/json<span class="pl-pds">"</span></span>)
-<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-entc">SimpleHandler</span> <span class="pl-s">extends</span> <span class="pl-eoi">Handler</span> {
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">SimpleHandler</span> <span class="pl-s">extends</span> <span class="pl-e">Handler</span> {
 
-    <span class="pl-s">@GET</span>
-    <span class="pl-s">@Path</span>(<span class="pl-s1"><span class="pl-pds">"</span>/add<span class="pl-pds">"</span></span>)
-    <span class="pl-s">@Doc</span>(<span class="pl-s1"><span class="pl-pds">"</span>Add two numbers<span class="pl-pds">"</span></span>)
-    <span class="pl-s">public</span> <span class="pl-s">int</span> <span class="pl-enf">add</span>(
-        <span class="pl-s">@QueryParam</span>(<span class="pl-s1"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>) <span class="pl-s">@Required</span> <span class="pl-s">int</span> <span class="pl-v">a</span>,
-        <span class="pl-s">@QueryParam</span>(<span class="pl-s1"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>) <span class="pl-s">@Required</span> <span class="pl-s">int</span> <span class="pl-v">b</span>) {
-        <span class="pl-k">return</span> a <span class="pl-ko">+</span> b;
+    <span class="pl-st">@GET</span>
+    <span class="pl-st">@Path</span>(<span class="pl-s1"><span class="pl-pds">"</span>/add<span class="pl-pds">"</span></span>)
+    <span class="pl-st">@Doc</span>(<span class="pl-s1"><span class="pl-pds">"</span>Add two numbers<span class="pl-pds">"</span></span>)
+    <span class="pl-s">public</span> <span class="pl-st">int</span> <span class="pl-en">add</span>(
+        <span class="pl-st">@QueryParam</span>(<span class="pl-s1"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>) <span class="pl-st">@Required</span> <span class="pl-st">int</span> <span class="pl-v">a</span>,
+        <span class="pl-st">@QueryParam</span>(<span class="pl-s1"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>) <span class="pl-st">@Required</span> <span class="pl-st">int</span> <span class="pl-v">b</span>) {
+        <span class="pl-k">return</span> a <span class="pl-k">+</span> b;
     }
 
 }</pre></div>
@@ -73,44 +73,53 @@
 
 <p>For example, you can define your custom injectors like this:</p>
 
-<div class="highlight highlight-java"><pre>@BindTo(<span class="pl-s">QueryParam</span><span class="pl-ko">.</span>class)
-<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-entc">QueryParamInjector</span> <span class="pl-s">extends</span> <span class="pl-eoi">Injector&lt;<span class="pl-s">QueryParam</span>&gt;</span> {
+<div class="highlight highlight-java"><pre>@BindTo(<span class="pl-stj">QueryParam</span><span class="pl-k">.</span>class)
+<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">QueryParamInjector</span> <span class="pl-s">extends</span> <span class="pl-e">Injector&lt;<span class="pl-stj">QueryParam</span>&gt;</span> {
 
-    <span class="pl-s">@Before</span>
-    <span class="pl-s">public</span> <span class="pl-s">void</span> <span class="pl-enf">getParams</span>() {
-        context<span class="pl-ko">.</span>putCustom(<span class="pl-s1"><span class="pl-pds">"</span>param<span class="pl-pds">"</span></span>, annotation<span class="pl-ko">.</span>value());
-        <span class="pl-s">String</span> param <span class="pl-ko">=</span> context<span class="pl-ko">.</span>getRequest()<span class="pl-ko">.</span>getParameter(annotation<span class="pl-ko">.</span>value());
-        <span class="pl-k">if</span> (param <span class="pl-ko">==</span> <span class="pl-c1">null</span>) {
-            context<span class="pl-ko">.</span>setInjectorVariable(<span class="pl-c1">null</span>);
+    <span class="pl-st">@Before</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">getParams</span>() {
+        context<span class="pl-k">.</span>putCustom(<span class="pl-s1"><span class="pl-pds">"</span>param<span class="pl-pds">"</span></span>, annotation<span class="pl-k">.</span>value());
+        <span class="pl-stj">String</span> param <span class="pl-k">=</span> context<span class="pl-k">.</span>getRequest()<span class="pl-k">.</span>getParameter(annotation<span class="pl-k">.</span>value());
+        <span class="pl-k">if</span> (param <span class="pl-k">==</span> <span class="pl-c1">null</span>) {
+            context<span class="pl-k">.</span>setInjectorVariable(<span class="pl-c1">null</span>);
             <span class="pl-k">return</span>;
         }
-        <span class="pl-s">TypeParser</span> parser <span class="pl-ko">=</span> <span class="pl-s">TypeParser</span><span class="pl-ko">.</span>newBuilder()<span class="pl-ko">.</span>build();
-        context<span class="pl-ko">.</span>setInjectorVariable(parser<span class="pl-ko">.</span>parse(param, context<span class="pl-ko">.</span>getInjectorVariableType()));
+        <span class="pl-stj">TypeParser</span> parser <span class="pl-k">=</span> <span class="pl-stj">TypeParser</span><span class="pl-k">.</span>newBuilder()<span class="pl-k">.</span>build();
+        context<span class="pl-k">.</span>setInjectorVariable(parser<span class="pl-k">.</span>parse(param, context<span class="pl-k">.</span>getInjectorVariableType()));
     }
 
-    <span class="pl-s">@Override</span>
-    <span class="pl-s">public</span> <span class="pl-s">void</span> <span class="pl-enf">generateDoc</span>() {
-        docParameter<span class="pl-ko">.</span>name <span class="pl-ko">=</span> annotation<span class="pl-ko">.</span>value();
-        docParameter<span class="pl-ko">.</span>type <span class="pl-ko">=</span> context<span class="pl-ko">.</span>getInjectorVariableType();
-        docParameter<span class="pl-ko">.</span>belongs <span class="pl-ko">=</span> <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>;
+    <span class="pl-st">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">generateDoc</span>() {
+        docParameter<span class="pl-k">.</span>name <span class="pl-k">=</span> annotation<span class="pl-k">.</span>value();
+        docParameter<span class="pl-k">.</span>type <span class="pl-k">=</span> context<span class="pl-k">.</span>getInjectorVariableType();
+        docParameter<span class="pl-k">.</span>belongs <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>;
     }
 }</pre></div>
 
 <h3>
 <a id="auto-generate-beautiful-document" class="anchor" href="#auto-generate-beautiful-document" aria-hidden="true"><span class="octicon octicon-link"></span></a>Auto Generate Beautiful Document</h3>
 
-<p>No more code needed, once your handler is written, the API document is right there for you.</p>
+<p>No more code needed, once your handler is written, the API documents is right there for you.
+The users could also try the APIs in the web UI. Isn't that cool?</p>
 
 <p>See a <a href="http://doc-ui.bardframework.com/?host=http:%2F%2Flinode.binwang.me:8082">live demo</a>.</p>
 
-<p><img src="https://cloud.githubusercontent.com/assets/1906051/4930305/5925bd98-6562-11e4-957d-e3ec17656f06.png" alt="Doc UI Screenshot"></p>
+<p><img src="https://cloud.githubusercontent.com/assets/1906051/5196278/42b7f008-7566-11e4-822b-24eb6e3cb744.gif" alt="bard-doc-ui"></p>
 
 <h3>
-<a id="run-in-your-favorite-servlet-container" class="anchor" href="#run-in-your-favorite-servlet-container" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run In Your Favorite Servlet Container</h3>
+<a id="build-a-self-contained-directory-that-is-ready-to-deploy" class="anchor" href="#build-a-self-contained-directory-that-is-ready-to-deploy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build A Self Contained Directory That Is Ready to Deploy</h3>
 
-<p>Bard could build a WAR package for you so that you could run it in your favorite serlvet container.</p>
+<p>Just with one command <code>mvn package bard:standalone</code>, this framework will generate a self contained directory
+which is ready to deploy. It contains directory <code>conf</code> to store config files, <code>bin</code> to store start up and shut
+down scripts, <code>lib</code> to store library JARs and <code>log</code> to store all the logs for you.</p>
 
-<p>You can also run it as a standalone server, too.</p>
+<p>Just run <code>bin/server.sh start | restart | stop</code>, you can control your server.</p>
+
+<h3>
+<a id="or-run-in-your-favorite-servlet-container" class="anchor" href="#or-run-in-your-favorite-servlet-container" aria-hidden="true"><span class="octicon octicon-link"></span></a>Or Run In Your Favorite Servlet Container</h3>
+
+<p>If you want to build a WAR package in order to run in a servlet container, that is easy, too.
+Just run <code>mvn package bard:war</code>, then you will get a WAR package.</p>
 
 <h2>
 <a id="documents" class="anchor" href="#documents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documents</h2>
