@@ -42,12 +42,18 @@ public abstract class Servlet extends HttpServlet {
             Set<Class<? extends Filter>> filters = reflections.getSubTypesOf(Filter.class);
             for (Class<? extends Filter> filterClass : filters) {
                 BindTo bindTo = filterClass.getAnnotation(BindTo.class);
+                if (bindTo == null) {
+                    continue;
+                }
                 addFilter(bindTo.value(), filterClass);
             }
 
             Set<Class<? extends Adapter>> adapters = reflections.getSubTypesOf(Adapter.class);
             for (Class<? extends Adapter> adapterClass : adapters) {
                 BindTo bindTo = adapterClass.getAnnotation(BindTo.class);
+                if (bindTo == null) {
+                    continue;
+                }
                 addAdapter(bindTo.value(), adapterClass);
             }
 
@@ -55,6 +61,9 @@ public abstract class Servlet extends HttpServlet {
                 reflections.getSubTypesOf(Injector.class);
             for (Class<? extends Injector> injectorClass : injectors) {
                 BindTo bindTo = injectorClass.getAnnotation(BindTo.class);
+                if (bindTo == null) {
+                    continue;
+                }
                 addInjector(bindTo.value(), injectorClass);
             }
 
@@ -126,7 +135,7 @@ public abstract class Servlet extends HttpServlet {
             response.setStatus(404);
             response.getWriter().println("page not found");
         } catch (
-                IllegalAccessException |
+            IllegalAccessException |
                 InstantiationException |
                 IOException e) {
             Util.getLogger().error("Error found in servlet: {}", e);
