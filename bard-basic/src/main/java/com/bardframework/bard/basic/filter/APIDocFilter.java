@@ -23,7 +23,7 @@ public class APIDocFilter extends Filter<APIDoc> {
     @Doc("Return API document")
     @After public void generateAPI()
         throws JsonMappingException, InvocationTargetException, NoSuchMethodException,
-        InstantiationException, IllegalAccessException {
+        HandlerFactory.HandlerInitException, IllegalAccessException, InstantiationException {
         if (document == null) {
             Map<String, JsonSchema> models = new HashMap<>();
             for (String pkg : annotation.servletClass().newInstance().getPackageNames()) {
@@ -51,7 +51,7 @@ public class APIDocFilter extends Filter<APIDoc> {
         Context context,
         Class<? extends GenericHandler> handlerClass,
         Class<? extends Servlet> servletClass
-    ) throws IllegalAccessException, InstantiationException {
+    ) throws HandlerFactory.HandlerInitException {
         HandlerMeta meta = HandlerMeta.get(handlerClass, servletClass);
         for (HandlerMethod method : meta.handlerMethods) {
             if (Handler.class.isAssignableFrom(handlerClass)) {
@@ -65,7 +65,8 @@ public class APIDocFilter extends Filter<APIDoc> {
             annotatedAdapters.addAll(method.annotatedAdapters);
             for (AnnotatedHandler<? extends Adapter> annotatedAdapter : annotatedAdapters) {
                 getOneApi(document, api, context, annotatedAdapter.handlerClass, servletClass);
-                Adapter adapter = annotatedAdapter.handlerClass.newInstance();
+                Adapter adapter = HandlerMeta.handlerFactory.initAdapter(
+                    annotatedAdapter.handlerClass);
                 adapter.annotation = annotatedAdapter.annotation;
                 adapter.api = api;
                 adapter.context = context;
@@ -73,7 +74,7 @@ public class APIDocFilter extends Filter<APIDoc> {
             }
             for (AnnotatedHandler<? extends Filter> annotatedFilter : method.annotatedFilters) {
                 getOneApi(document, api, context, annotatedFilter.handlerClass, servletClass);
-                Filter filter = annotatedFilter.handlerClass.newInstance();
+                Filter filter = HandlerMeta.handlerFactory.initFilter(annotatedFilter.handlerClass);
                 filter.annotation = annotatedFilter.annotation;
                 filter.api = api;
                 filter.context = context;
@@ -82,9 +83,10 @@ public class APIDocFilter extends Filter<APIDoc> {
             for (HandlerField field : method.fields) {
                 DocParameter docParameter = new DocParameter();
                 context.setInjectorVariableType(field.field.getType());
-                for (AnnotatedHandler<? extends Injector> annotatedInjector: field.annotatedInjectors) {
+                for (AnnotatedHandler<? extends Injector> annotatedInjector : field.annotatedInjectors) {
                     getOneApi(document, api, context, annotatedInjector.handlerClass, servletClass);
-                    Injector injector = annotatedInjector.handlerClass.newInstance();
+                    Injector injector = HandlerMeta.handlerFactory.initInjector(
+                        annotatedInjector.handlerClass);
                     injector.annotation = annotatedInjector.annotation;
                     injector.docParameter = docParameter;
                     injector.context = context;
@@ -94,12 +96,13 @@ public class APIDocFilter extends Filter<APIDoc> {
                     api.parameters.add(docParameter);
                 }
             }
-            for (HandlerParameter parameter: method.parameters) {
+            for (HandlerParameter parameter : method.parameters) {
                 DocParameter docParameter = new DocParameter();
                 context.setInjectorVariableType(parameter.parameter.getType());
-                for (AnnotatedHandler<? extends Injector> annotatedInjector: parameter.annotatedInjectors) {
+                for (AnnotatedHandler<? extends Injector> annotatedInjector : parameter.annotatedInjectors) {
                     getOneApi(document, api, context, annotatedInjector.handlerClass, servletClass);
-                    Injector injector = annotatedInjector.handlerClass.newInstance();
+                    Injector injector = HandlerMeta.handlerFactory.initInjector(
+                        annotatedInjector.handlerClass);
                     injector.annotation = annotatedInjector.annotation;
                     injector.docParameter = docParameter;
                     injector.context = context;

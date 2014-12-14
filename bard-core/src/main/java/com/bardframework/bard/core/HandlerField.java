@@ -16,13 +16,14 @@ public class HandlerField {
     private LinkedList<Injector> runInjectors = new LinkedList<>();
 
     public void run(Context context, Object c)
-        throws IllegalAccessException, InstantiationException {
+        throws HandlerFactory.HandlerInitException, IllegalAccessException {
         if (annotatedInjectors.size() == 0) {
             return;
         }
         context.injectorVariableType = field.getType();
         for (AnnotatedHandler<? extends Injector> annotatedInjector : annotatedInjectors) {
-            Injector injector = annotatedInjector.handlerClass.newInstance();
+            Injector injector = HandlerMeta.handlerFactory.initInjector(
+                annotatedInjector.handlerClass);
             injector.annotation = annotatedInjector.annotation;
             injector.context = context;
             runInjectors.addFirst(injector);

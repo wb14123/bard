@@ -120,14 +120,10 @@ public abstract class Servlet extends HttpServlet {
                 Context context = new Context();
                 context.request = request;
                 context.response = response;
-                Handler handler = handlerClass.newInstance();
+                Handler handler = HandlerMeta.handlerFactory.initHandler(handlerClass);
                 handler.context = context;
                 Object result = HandlerMeta.runHandler(handler, this.getClass());
 
-                /*
-                Handler handler = Handler.newInstance(handlerClass, context, mapper);
-                handler.setServlet(this);
-                */
                 if (result != NoAdapter.NO_ADAPTER) {
                     return;
                 }
@@ -135,9 +131,7 @@ public abstract class Servlet extends HttpServlet {
             response.setStatus(404);
             response.getWriter().println("page not found");
         } catch (
-            IllegalAccessException |
-                InstantiationException |
-                IOException e) {
+            HandlerFactory.HandlerInitException | IOException e) {
             Util.getLogger().error("Error found in servlet: {}", e);
         }
     }

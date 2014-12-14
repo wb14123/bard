@@ -15,10 +15,11 @@ public class HandlerParameter {
 
     private LinkedList<Injector> runInjectors = new LinkedList<>();
 
-    public void run(Context context) throws IllegalAccessException, InstantiationException {
+    public void run(Context context) throws HandlerFactory.HandlerInitException {
         context.injectorVariableType = parameter.getType();
         for (AnnotatedHandler<? extends Injector> annotatedInjector : annotatedInjectors) {
-            Injector injector = annotatedInjector.handlerClass.newInstance();
+            Injector injector = HandlerMeta.handlerFactory.initInjector(
+                annotatedInjector.handlerClass);
             injector.annotation = annotatedInjector.annotation;
             injector.context = context;
             runInjectors.addFirst(injector);

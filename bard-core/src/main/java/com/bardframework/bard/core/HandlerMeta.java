@@ -1,6 +1,5 @@
 package com.bardframework.bard.core;
 
-import com.bardframework.bard.core.doc.Document;
 import com.bardframework.bard.core.marker.After;
 import com.bardframework.bard.core.marker.Before;
 import com.bardframework.bard.core.marker.Match;
@@ -14,6 +13,7 @@ import java.util.*;
 public class HandlerMeta {
 
     public static AnnotationMapper annotationMapper;
+    public static HandlerFactory handlerFactory = new DefaultHandlerFactory();
     private static HashMap<
         Class<? extends Servlet>,
         HashMap<Class<? extends GenericHandler>, HandlerMeta>
@@ -77,7 +77,7 @@ public class HandlerMeta {
         T handler,
         Class<? extends Servlet> servletClass,
         Class<? extends Annotation> annotationClass
-    ) throws IllegalAccessException, InstantiationException {
+    ) {
         HandlerMeta meta = HandlerMeta.get(handler.getClass(), servletClass);
         HandlerMethod method = meta.methodsMap.get(annotationClass);
         if (method == null) {
@@ -135,16 +135,6 @@ public class HandlerMeta {
             }
         }
         return handlerField;
-    }
-
-    public static void genDoc(
-        Document document,
-        Class<? extends GenericHandler> handlerClass,
-        Class<? extends Servlet> servletClass
-    ) throws InstantiationException, IllegalAccessException {
-        HandlerMeta meta = HandlerMeta.get(handlerClass, servletClass);
-        for (HandlerMethod method : meta.handlerMethods) {
-        }
     }
 
     private HandlerMethod newHandlerMethod(Method method, Field[] fields,

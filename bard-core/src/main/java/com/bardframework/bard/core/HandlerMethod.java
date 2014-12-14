@@ -1,6 +1,5 @@
 package com.bardframework.bard.core;
 
-import com.bardframework.bard.core.doc.Document;
 import com.bardframework.bard.core.marker.After;
 import com.bardframework.bard.core.marker.Before;
 import com.bardframework.bard.core.marker.Match;
@@ -52,16 +51,6 @@ public class HandlerMethod {
         return result;
     }
 
-    public void genDoc(Document document, Class<? extends Servlet> servletClass)
-        throws IllegalAccessException, InstantiationException {
-        for (AnnotatedHandler<? extends Adapter> annotatedAdapter : annotatedAdapters) {
-            Adapter adapter = annotatedAdapter.handlerClass.newInstance();
-            adapter.annotation = annotatedAdapter.annotation;
-            runAdapters.addFirst(adapter);
-            adapter.generateDoc();
-        }
-    }
-
     private Object before(Context context, Object o, boolean isCleanup) throws Throwable {
         // TODO: This is really an ugly hacker for chained adapter
 
@@ -74,7 +63,7 @@ public class HandlerMethod {
         outAnnotatedAdapters.addAll(annotatedServletAdapters);
         outAnnotatedAdapters.addAll(annotatedClassAdapters);
         for (AnnotatedHandler<? extends Adapter> annotatedAdapter : outAnnotatedAdapters) {
-            Adapter adapter = annotatedAdapter.handlerClass.newInstance();
+            Adapter adapter = HandlerMeta.handlerFactory.initAdapter(annotatedAdapter.handlerClass);
             adapter.annotation = annotatedAdapter.annotation;
             adapter.context = context;
             runAdapters.addFirst(adapter);
@@ -82,7 +71,7 @@ public class HandlerMethod {
         }
 
         for (AnnotatedHandler<? extends Adapter> annotatedAdapter : annotatedAdapters) {
-            Adapter adapter = annotatedAdapter.handlerClass.newInstance();
+            Adapter adapter = HandlerMeta.handlerFactory.initAdapter(annotatedAdapter.handlerClass);
             adapter.annotation = annotatedAdapter.annotation;
             adapter.context = context;
             runAdapters.addFirst(adapter);
@@ -93,7 +82,7 @@ public class HandlerMethod {
         }
 
         for (AnnotatedHandler<? extends Filter> annotatedFilter : annotatedFilters) {
-            Filter filter = annotatedFilter.handlerClass.newInstance();
+            Filter filter = HandlerMeta.handlerFactory.initFilter(annotatedFilter.handlerClass);
             filter.annotation = annotatedFilter.annotation;
             filter.context = context;
             runFilters.addFirst(filter);
