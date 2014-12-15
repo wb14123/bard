@@ -61,11 +61,11 @@ public class AdapterTest {
 
     @Test
     public void classAdapterTest() {
-        servlet.addHandler(ClassAdpaterHandler.class);
+        servlet.addHandler(ClassAdapterHandler.class);
         servlet.service(request, response);
         Assert.assertEquals("added", response.getHeader("test_adapter"));
         Assert.assertEquals(null, response.getHeader("test_no_adapter"));
-        servlet.removeHandler(ClassAdpaterHandler.class);
+        servlet.removeHandler(ClassAdapterHandler.class);
     }
 
 
@@ -101,7 +101,7 @@ public class AdapterTest {
 
 
     @TrueAdapter1
-    public static class ClassAdpaterHandler extends Handler {
+    public static class ClassAdapterHandler extends Handler {
         // method with no adapter will not run
         public void notHere() {
             context.response.addHeader("test_no_adapter", "added");
