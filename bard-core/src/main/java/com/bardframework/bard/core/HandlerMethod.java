@@ -63,7 +63,7 @@ public class HandlerMethod {
         outAnnotatedAdapters.addAll(annotatedServletAdapters);
         outAnnotatedAdapters.addAll(annotatedClassAdapters);
         for (AnnotatedHandler<? extends Adapter> annotatedAdapter : outAnnotatedAdapters) {
-            Adapter adapter = HandlerMeta.handlerFactory.initAdapter(annotatedAdapter.handlerClass);
+            Adapter adapter = HandlerMeta.handlerFactory.initHandler(annotatedAdapter.handlerClass);
             adapter.annotation = annotatedAdapter.annotation;
             adapter.context = context;
             runAdapters.addFirst(adapter);
@@ -71,7 +71,7 @@ public class HandlerMethod {
         }
 
         for (AnnotatedHandler<? extends Adapter> annotatedAdapter : annotatedAdapters) {
-            Adapter adapter = HandlerMeta.handlerFactory.initAdapter(annotatedAdapter.handlerClass);
+            Adapter adapter = HandlerMeta.handlerFactory.initHandler(annotatedAdapter.handlerClass);
             adapter.annotation = annotatedAdapter.annotation;
             adapter.context = context;
             runAdapters.addFirst(adapter);
@@ -82,7 +82,7 @@ public class HandlerMethod {
         }
 
         for (AnnotatedHandler<? extends Filter> annotatedFilter : annotatedFilters) {
-            Filter filter = HandlerMeta.handlerFactory.initFilter(annotatedFilter.handlerClass);
+            Filter filter = HandlerMeta.handlerFactory.initHandler(annotatedFilter.handlerClass);
             filter.annotation = annotatedFilter.annotation;
             filter.context = context;
             runFilters.addFirst(filter);

@@ -18,7 +18,7 @@ public class HandlerParameter {
     public void run(Context context) throws HandlerFactory.HandlerInitException {
         context.injectorVariableType = parameter.getType();
         for (AnnotatedHandler<? extends Injector> annotatedInjector : annotatedInjectors) {
-            Injector injector = HandlerMeta.handlerFactory.initInjector(
+            Injector injector = HandlerMeta.handlerFactory.initHandler(
                 annotatedInjector.handlerClass);
             injector.annotation = annotatedInjector.annotation;
             injector.context = context;
