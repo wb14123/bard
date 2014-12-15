@@ -13,7 +13,8 @@ import java.util.*;
 public class HandlerMeta {
 
     public static AnnotationMapper annotationMapper;
-    public static HandlerFactory handlerFactory = new DefaultHandlerFactory();
+    private static Map<Class<? extends Annotation>, HandlerFactory> handlerFactoryMap =
+        new HashMap<>();
     private static HashMap<
         Class<? extends Servlet>,
         HashMap<Class<? extends GenericHandler>, HandlerMeta>
@@ -71,6 +72,17 @@ public class HandlerMeta {
 
         putToCache(handlerClass, servletClass, meta);
         return meta;
+    }
+
+    public static void registerHandlerFactory(
+        Class<? extends Annotation> annotationClass,
+        HandlerFactory handlerFactory
+    ) {
+        handlerFactoryMap.put(annotationClass, handlerFactory);
+    }
+
+    public static HandlerFactory getHandlerFactory(Class<? extends Annotation> annotationClass) {
+        return handlerFactoryMap.get(annotationClass);
     }
 
     public static <T extends GenericHandler> Object runAnnotated(

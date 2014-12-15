@@ -22,8 +22,7 @@ public class HandlerField {
         }
         context.injectorVariableType = field.getType();
         for (AnnotatedHandler<? extends Injector> annotatedInjector : annotatedInjectors) {
-            Injector injector = HandlerMeta.handlerFactory.initHandler(
-                annotatedInjector.handlerClass);
+            Injector injector = annotatedInjector.newInstance();
             injector.annotation = annotatedInjector.annotation;
             injector.context = context;
             runInjectors.addFirst(injector);

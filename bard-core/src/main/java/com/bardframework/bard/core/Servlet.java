@@ -120,7 +120,9 @@ public abstract class Servlet extends HttpServlet {
                 Context context = new Context();
                 context.request = request;
                 context.response = response;
-                Handler handler = HandlerMeta.handlerFactory.initHandler(handlerClass);
+                AnnotatedHandler<? extends Handler> annotatedHandler =
+                    new AnnotatedHandler<>(null, handlerClass);
+                Handler handler = annotatedHandler.newInstance();
                 handler.context = context;
                 Object result = HandlerMeta.runHandler(handler, this.getClass());
 
