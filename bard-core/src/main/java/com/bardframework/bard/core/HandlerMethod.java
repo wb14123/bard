@@ -59,21 +59,17 @@ public class HandlerMethod {
             return NoAdapter.NO_ADAPTER;
         }
 
-        List<AnnotatedHandler<? extends Adapter>> outAnnotatedAdapters = new LinkedList<>();
-        outAnnotatedAdapters.addAll(annotatedServletAdapters);
-        outAnnotatedAdapters.addAll(annotatedClassAdapters);
-        for (AnnotatedHandler<? extends Adapter> annotatedAdapter : outAnnotatedAdapters) {
+        List<AnnotatedHandler<? extends Adapter>> allAdapters = new LinkedList<>();
+        allAdapters.addAll(annotatedServletAdapters);
+        allAdapters.addAll(annotatedClassAdapters);
+        allAdapters.addAll(annotatedAdapters);
+        int adapterLoop = 0;
+        for (AnnotatedHandler<? extends Adapter> annotatedAdapter : allAdapters) {
             Adapter adapter = annotatedAdapter.newInstance();
             adapter.annotation = annotatedAdapter.annotation;
             adapter.context = context;
-            runAdapters.addFirst(adapter);
-            HandlerMeta.runAnnotated(adapter, servletClass, Match.class);
-        }
-
-        for (AnnotatedHandler<? extends Adapter> annotatedAdapter : annotatedAdapters) {
-            Adapter adapter = annotatedAdapter.newInstance();
-            adapter.annotation = annotatedAdapter.annotation;
-            adapter.context = context;
+            adapter.isFinal =
+                adapterLoop++ >= annotatedServletAdapters.size() + annotatedClassAdapters.size();
             runAdapters.addFirst(adapter);
             Object result = HandlerMeta.runAnnotated(adapter, servletClass, Match.class);
             if (result != NoAdapter.NO_ADAPTER && !((Boolean) result)) {

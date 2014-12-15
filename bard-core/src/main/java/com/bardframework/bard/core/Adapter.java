@@ -25,5 +25,7 @@ public abstract class Adapter<AnnotationType extends Annotation>
 
     public Api api;
 
+    public boolean isFinal = true;
+
     public abstract void generateDoc();
 }

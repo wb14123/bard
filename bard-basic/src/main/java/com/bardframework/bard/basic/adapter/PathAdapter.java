@@ -21,6 +21,10 @@ public class PathAdapter extends Adapter<Path> {
         return str;
     }
 
+    private String addWildcard(String str) {
+        return removeLastSlash(str) + "{_inner_all:.*}";
+    }
+
     @Match
     public boolean match() {
         oldPath = context.getCustom("path");
@@ -29,7 +33,11 @@ public class PathAdapter extends Adapter<Path> {
         }
         String currentPath = oldPath + annotation.value();
         context.putCustom("path", currentPath);
-        PathTemplate pathTemplate = new PathTemplate(removeLastSlash(currentPath));
+        currentPath = removeLastSlash(currentPath);
+        if (!isFinal) {
+            currentPath = addWildcard(currentPath);
+        }
+        PathTemplate pathTemplate = new PathTemplate(currentPath);
         Map<String, String> values = new HashMap<>();
         String realPath = removeLastSlash(context.getRequest().getPathInfo());
         if (pathTemplate.match(realPath, values)) {
