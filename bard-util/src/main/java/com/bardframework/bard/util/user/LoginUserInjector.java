@@ -3,7 +3,6 @@ package com.bardframework.bard.util.user;
 import com.bardframework.bard.basic.marker.Doc;
 import com.bardframework.bard.basic.marker.ErrorCase;
 import com.bardframework.bard.basic.marker.HandleErrors;
-import com.bardframework.bard.basic.marker.Required;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Injector;
 import com.bardframework.bard.core.marker.Before;
@@ -17,8 +16,14 @@ public class LoginUserInjector extends Injector<LoginUser> {
     @HandleErrors({
         @ErrorCase(exception = LoginUserInjector.NoAuthException.class, code = 403, description = "No Auth")
     })
-    public void getUser(@Doc("Auth token") @HeaderParam("auth-token") @Required String token)
+    public void getUser(@Doc("Auth token") @HeaderParam("auth-token") String token)
         throws NoAuthException {
+        if (token == null) {
+            if (annotation.required()) {
+                throw new NoAuthException();
+            }
+            return;
+        }
         String uid = TokenStorage.get(token);
         if (uid == null && annotation.required()) {
             throw new NoAuthException();
