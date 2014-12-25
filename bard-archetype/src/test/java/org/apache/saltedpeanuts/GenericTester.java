@@ -1,97 +1,75 @@
 package org.apache.saltedpeanuts;
 
-import com.bardframework.bard.core.Servlet;
+import com.bardframework.bard.util.server.BardServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
 
 public class GenericTester {
-    protected Servlet servlet = null;
-    protected MockHttpServletRequest request;
-    protected MockHttpServletResponse response;
+    protected static String host;
+    private static BardServer server = new BardServer(SimpleServlet.class);
     protected ObjectMapper mapper = new ObjectMapper();
 
-    @Before
-    public void setUp() {
-        newRequest();
+    @BeforeClass
+    public static void runBeforeClass() throws Exception {
+        host = server.startForTest();
     }
 
+    @AfterClass
+    public static void runAfterClass() throws Exception {
+        server.stop();
+        server = new BardServer(SimpleServlet.class);
+    }
 
     // user handler
     protected <T> T signUp(String username, String password, Class<T> t)
-        throws ServletException, IOException {
-        newRequest();
-        request.setPathInfo("/user/signup");
-        request.setParameter("username", username);
-        request.setParameter("password", password);
-        request.setMethod("GET");
-        return getResult(t);
+        throws UnirestException, IOException {
+        String content = Unirest.get(host + "/user/signup")
+            .queryString("username", username)
+            .queryString("password", password)
+            .asString().getBody();
+        return mapper.readValue(content, t);
     }
 
     protected <T> T login(String username, String password, Class<T> t)
-        throws ServletException, IOException {
-        newRequest();
-        request.setPathInfo("/user/login");
-        request.setParameter("username", username);
-        request.setParameter("password", password);
-        request.setMethod("GET");
-        return getResult(t);
+        throws IOException, UnirestException {
+        String content = Unirest.get(host + "/user/login")
+            .queryString("username", username)
+            .queryString("password", password)
+            .asString().getBody();
+        return mapper.readValue(content, t);
     }
 
-    protected <T> T info(String token, Class<T> t) throws ServletException, IOException {
-        newRequest();
-        request.setPathInfo("/user/info");
-        request.addHeader("auth-token", token);
-        request.setMethod("GET");
-        return getResult(t);
+    protected <T> T info(String token, Class<T> t)
+        throws IOException, UnirestException {
+        String content = Unirest.get(host + "/user/info")
+            .header("auth-token", token)
+            .asString().getBody();
+        return mapper.readValue(content, t);
     }
 
     // article handler
     protected <T> T createArticle(String token, String title, String content, Class<T> t)
-        throws ServletException, IOException {
-        newRequest();
-        String requestContent = "title=" + title + "&content=" + content;
-        request.setPathInfo("/article");
-        request.setContent(requestContent.getBytes());
-        request.addHeader("auth-token", token);
-        request.setMethod("PUT");
-        return getResult(t);
+        throws IOException, UnirestException {
+        String c = Unirest.put(host + "/article")
+            .header("auth-token", token)
+            .field("title", title)
+            .field("content", content)
+            .asString().getBody();
+        return mapper.readValue(c, t);
     }
 
     protected <T> T getArticle(String token, String id, Class<T> t)
-        throws ServletException, IOException {
-        newRequest();
-        request.setPathInfo("/article/" + id);
-        request.setMethod("GET");
-        request.addHeader("auth-token", token);
-        return getResult(t);
-    }
+        throws IOException, UnirestException {
+        String c = Unirest.get(host + "/article/{id}")
+            .header("auth-token", token)
+            .routeParam("id", id)
+            .asString().getBody();
+        return mapper.readValue(c, t);
 
-    /**
-     * Clean up servlet, request and response.
-     */
-    protected void newRequest() {
-        servlet = new SimpleServlet();
-        request = new MockHttpServletRequest();
-        response = new MockHttpServletResponse();
-    }
-
-    /**
-     * Get result from response. Use JSON mapper to decode.
-     *
-     * @param t   The class to decode by JSON mapper.
-     * @param <T> The class to decode by JSON mapper.
-     * @return The decoded value.
-     * @throws ServletException
-     * @throws IOException
-     */
-    protected <T> T getResult(Class<T> t) throws ServletException, IOException {
-        servlet.service(request, response);
-        String content = response.getContentAsString();
-        return mapper.readValue(content, t);
     }
 }

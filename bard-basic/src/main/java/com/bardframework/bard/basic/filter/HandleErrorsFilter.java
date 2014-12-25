@@ -18,7 +18,12 @@ public class HandleErrorsFilter extends Filter<HandleErrors> {
                 ErrorResult err = new ErrorResult();
 
                 context.setExceptionHandled(true);
-                context.getResponse().setStatus(errorCase.code());
+                if (errorCase.code() < 600 && errorCase.code() >= 200) {
+                    context.getResponse().setStatus(errorCase.code());
+                } else {
+                    // set return status code to 400 if the error code is not validate
+                    context.getResponse().setStatus(400);
+                }
                 err.code = errorCase.code();
                 String msg = context.getException().getMessage();
                 if (msg == null) {

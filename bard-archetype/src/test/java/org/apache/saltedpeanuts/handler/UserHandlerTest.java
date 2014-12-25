@@ -1,11 +1,11 @@
 package org.apache.saltedpeanuts.handler;
 
 import com.bardframework.bard.basic.ErrorResult;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.saltedpeanuts.GenericTester;
 import org.apache.saltedpeanuts.model.User;
 import org.junit.Test;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class UserHandlerTest extends GenericTester {
 
     @Test
-    public void testSignup() throws Exception {
+    public void testSignup() throws IOException, UnirestException {
         User user = signUp("user1", "pass1", User.class);
         assertNotNull(user.id);
         assertEquals("user1", user.username);
@@ -21,7 +21,7 @@ public class UserHandlerTest extends GenericTester {
     }
 
     @Test
-    public void testDuplicateSignup() throws ServletException, IOException {
+    public void testDuplicateSignup() throws IOException, UnirestException {
         signUp("user2", "pass2", User.class);
         ErrorResult error = signUp("user2", "pass3", ErrorResult.class);
         assertEquals(20000, error.code);

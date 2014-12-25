@@ -1,11 +1,11 @@
 package org.apache.saltedpeanuts.handler;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.saltedpeanuts.GenericTester;
 import org.apache.saltedpeanuts.model.Article;
 import org.apache.saltedpeanuts.model.User;
 import org.junit.Test;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class ArticleHandlerTest extends GenericTester {
 
     @Test
-    public void testCreateArticle() throws ServletException, IOException {
+    public void testCreateArticle() throws IOException, UnirestException {
         User user = signUp("article-user-1", "article-pass-1", User.class);
         UserHandler.TokenResult token =
             login("article-user-1", "article-pass-1", UserHandler.TokenResult.class);
@@ -26,7 +26,7 @@ public class ArticleHandlerTest extends GenericTester {
     }
 
     @Test
-    public void testGetArticle() throws ServletException, IOException {
+    public void testGetArticle() throws IOException, UnirestException {
         signUp("article-user-2", "article-pass-2", User.class);
         UserHandler.TokenResult token =
             login("article-user-2", "article-pass-2", UserHandler.TokenResult.class);
