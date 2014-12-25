@@ -79,7 +79,7 @@ public class UserHandler extends Handler {
     @Doc("Get the user info")
     @GET
     @Path("/info")
-    public User info(@LoginUser @Required("Auth token error") String id) {
+    public User info(@LoginUser(required = true) String id) {
         return em.find(User.class, id);
     }
 

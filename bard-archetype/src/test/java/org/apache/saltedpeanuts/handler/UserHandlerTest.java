@@ -59,7 +59,7 @@ public class UserHandlerTest extends GenericTester {
     @Test
     public void testInfoNoAuth() throws Exception {
         ErrorResult result = info("", ErrorResult.class);
-        assertEquals(5000, result.code);
+        assertEquals(403, result.code);
     }
 
 
