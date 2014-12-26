@@ -1,0 +1,56 @@
+package $package
+
+import com.bardframework.bard.util.server.BardServer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.HttpRequest;
+
+import static com.mashape.unirest.http.Unirest.*;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
+import java.io.IOException;
+
+public class GenericTester {
+    protected static String host;
+    private static BardServer server = new BardServer(SimpleServlet.class);
+    protected ObjectMapper mapper = new ObjectMapper();
+
+    @BeforeClass
+    public static void runBeforeClass() throws Exception {
+        host = server.startForTest();
+    }
+
+    @AfterClass
+    public static void runAfterClass() throws Exception {
+        server.stop();
+        server = new BardServer(SimpleServlet.class);
+    }
+
+    #foreach ($api in $doc.APIs)
+    public <T> T $api.name (
+        #foreach ($params in $api.parameters)
+            $params.type $params.name,
+        #end
+        Class<T> _type
+    ) throws UnirestException, IOException {
+        HttpRequest req = Unirest.get(host + "$api.path");
+        #foreach ($params in $api.parameters)
+            #if ($params.belongs == "header")
+                #set($method = "header")
+            #elseif ($params.belongs == "path")
+                #set($method = "routeParam")
+            #elseif ($params.belongs == "url")
+                #set($method = "queryString")
+            #end
+            req = req.${method}("$params.name", $params.name);
+        #end
+        String _c = req.asString().getBody();
+        return mapper.readValue(_c, _type);
+    }
+    #end
+}
+
+

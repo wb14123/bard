@@ -25,7 +25,7 @@ public abstract class Servlet extends HttpServlet {
      * All the models found in packages. Used to generate API docuemtn.
      */
 
-    private AnnotationMapper mapper;
+    public AnnotationMapper mapper;
 
     public Servlet() {
         Class<? extends Servlet> c = this.getClass();

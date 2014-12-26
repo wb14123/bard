@@ -24,9 +24,18 @@ public class APIDocFilter extends Filter<APIDoc> {
     @After public void generateAPI()
         throws JsonMappingException, InvocationTargetException, NoSuchMethodException,
         HandlerFactory.HandlerInitException, IllegalAccessException, InstantiationException {
+
+        Document document = getDocument(annotation.servletClass(), annotation.value());
+        context.setResult(document);
+        context.returnType = Document.class;
+    }
+
+    public static Document getDocument(Class<? extends Servlet> servletClass, String name)
+        throws IllegalAccessException, InstantiationException, JsonMappingException,
+        HandlerFactory.HandlerInitException {
         if (document == null) {
             Map<String, JsonSchema> models = new HashMap<>();
-            for (String pkg : annotation.servletClass().newInstance().getPackageNames()) {
+            for (String pkg : servletClass.newInstance().getPackageNames()) {
                 Reflections reflections = new Reflections(pkg);
                 Set<Class<?>> classes = reflections.getTypesAnnotatedWith(Model.class);
                 for (Class<?> c : classes) {
@@ -36,16 +45,15 @@ public class APIDocFilter extends Filter<APIDoc> {
             }
             document = new Document();
             document.models = models;
-            document.name = annotation.value();
+            document.name = name;
             for (Class<? extends Handler> handlerClass : HandlerMeta.annotationMapper.handlers) {
-                getOneApi(document, null, null, handlerClass, annotation.servletClass());
+                getOneApi(document, null, null, handlerClass, servletClass);
             }
         }
-        context.setResult(document);
-        context.returnType = Document.class;
+        return document;
     }
 
-    private void getOneApi(
+    private static void getOneApi(
         Document document,
         Api api,
         Context context,
