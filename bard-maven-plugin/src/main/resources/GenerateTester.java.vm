@@ -1,3 +1,4 @@
+#* @vtlvariable name="instance" type="com.bardframework.plugin.BardTesterMojo" *#
 #* @vtlvariable name="servletClass" type="java.lang.String" *#
 #* @vtlvariable name="handlerClass" type="java.lang.String" *#
 #* @vtlvariable name="package" type="java.lang.String" *#
@@ -38,11 +39,11 @@ public class ${handlerClass}Tester {
     #foreach ($api in $apis)
         public static <T> T $api.handlerMethod.name (
         #foreach ($params in $api.parameters)
-            $params.rawType.name $params.name,
+            $params.rawType.name $instance.covertNameToParam($params.name),
         #end
         Class<T> _type
     ) throws UnirestException, IOException {
-        HttpRequest req = Unirest.get(host + "$api.path");
+            String _c = Unirest. ${instance.lowerMethod($api.method)}(host + "$api.path")
         #foreach ($params in $api.parameters)
             #if ($params.belongs == "header")
                 #set($method = "header")
@@ -53,9 +54,9 @@ public class ${handlerClass}Tester {
             #elseif ($params.belongs == "form" || $params.belongs == "multipart" )
                 #set($method = "field")
             #end
-            req = req. ${method}("$params.name",$params.name);
+            .${method}("$params.name",$params.name)
         #end
-        String _c = req.asString().getBody();
+            .asString().getBody();
         return mapper.readValue(_c, _type);
     }
     #end

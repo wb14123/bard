@@ -22,8 +22,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
 
-@Mojo(name = "generate", defaultPhase = LifecyclePhase.PACKAGE,
-    requiresDependencyResolution = ResolutionScope.RUNTIME)
+@Mojo(name = "generate-tester", defaultPhase = LifecyclePhase.GENERATE_TEST_SOURCES,
+    requiresDependencyResolution = ResolutionScope.COMPILE, requiresProject = true)
 public class BardTesterMojo extends AbstractMojo {
 
     @Component
@@ -78,7 +78,7 @@ public class BardTesterMojo extends AbstractMojo {
                 File fileName = new File(packageDir, className + "Tester.java");
                 FileWriter fileWriter = new FileWriter(fileName);
                 context.put("package", packageName);
-                System.out.println(servletClass);
+                context.put("instance", this);
                 context.put("servletClass", servletClass);
                 context.put("handlerClass", className);
                 context.put("apis", entry.getValue());
@@ -89,5 +89,13 @@ public class BardTesterMojo extends AbstractMojo {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String covertNameToParam(String name) {
+        return name;
+    }
+
+    public String lowerMethod(String method) {
+        return "get";
     }
 }
