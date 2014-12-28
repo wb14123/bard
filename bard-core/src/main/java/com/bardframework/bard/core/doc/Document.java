@@ -42,4 +42,28 @@ public class Document {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(this);
     }
+
+    public List<Api> getApis() {
+        return apis;
+    }
+
+    public void setApis(List<Api> apis) {
+        this.apis = apis;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<String, JsonSchema> getModels() {
+        return models;
+    }
+
+    public void setModels(Map<String, JsonSchema> models) {
+        this.models = models;
+    }
 }

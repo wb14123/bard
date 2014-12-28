@@ -31,10 +31,18 @@ public class DocParameter implements Comparable<DocParameter> {
     @JsonPropertyDescription("Limitations on this param")
     public Map<String, Object> limitations = new HashMap<>();
 
+    public Class<?> getRawType() {
+        return this.type;
+    }
+
     @JsonProperty(value = "schema")
     @JsonPropertyDescription("The type of this param")
     public JsonSchema getType() throws JsonMappingException {
         return Document.toJsonSchema(type);
+    }
+
+    public void setType(Class<?> type) {
+        this.type = type;
     }
 
     @Override public int compareTo(DocParameter o) {
@@ -54,5 +62,37 @@ public class DocParameter implements Comparable<DocParameter> {
     @JsonIgnore
     private boolean equal(String a, String b) {
         return a == null && b == null || a != null && a.equals(b);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getBelongs() {
+        return belongs;
+    }
+
+    public void setBelongs(String belongs) {
+        this.belongs = belongs;
+    }
+
+    public Map<String, Object> getLimitations() {
+        return limitations;
+    }
+
+    public void setLimitations(Map<String, Object> limitations) {
+        this.limitations = limitations;
     }
 }

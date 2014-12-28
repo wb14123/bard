@@ -20,16 +20,6 @@ import java.util.*;
 public class APIDocFilter extends Filter<APIDoc> {
     private static Document document;
 
-    @Doc("Return API document")
-    @After public void generateAPI()
-        throws JsonMappingException, InvocationTargetException, NoSuchMethodException,
-        HandlerFactory.HandlerInitException, IllegalAccessException, InstantiationException {
-
-        Document document = getDocument(annotation.servletClass(), annotation.value());
-        context.setResult(document);
-        context.returnType = Document.class;
-    }
-
     public static Document getDocument(Class<? extends Servlet> servletClass, String name)
         throws IllegalAccessException, InstantiationException, JsonMappingException,
         HandlerFactory.HandlerInitException {
@@ -64,6 +54,7 @@ public class APIDocFilter extends Filter<APIDoc> {
         for (HandlerMethod method : meta.handlerMethods) {
             if (Handler.class.isAssignableFrom(handlerClass)) {
                 api = new Api();
+                api.setHandlerMethod(method.method);
                 context = new Context();
                 context.returnType = method.method.getReturnType();
             }
@@ -121,6 +112,16 @@ public class APIDocFilter extends Filter<APIDoc> {
                 document.apis.add(api);
             }
         }
+    }
+
+    @Doc("Return API document")
+    @After public void generateAPI()
+        throws JsonMappingException, InvocationTargetException, NoSuchMethodException,
+        HandlerFactory.HandlerInitException, IllegalAccessException, InstantiationException {
+
+        Document document = getDocument(annotation.servletClass(), annotation.value());
+        context.setResult(document);
+        context.returnType = Document.class;
     }
 
     @Override public void generateDoc() {

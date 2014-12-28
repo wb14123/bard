@@ -1,4 +1,6 @@
-package $package
+#* @vtlvariable name="apis" type="java.util.Set<com.bardframework.bard.core.doc.Api>" *#
+package
+    $package;
 
 import com.bardframework.bard.util.server.BardServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +15,7 @@ import org.junit.BeforeClass;
 
 import java.io.IOException;
 
-public class GenericTester {
+public class ${handlerClass}Tester {
     protected static String host;
     private static BardServer server = new BardServer(SimpleServlet.class);
     protected ObjectMapper mapper = new ObjectMapper();
@@ -29,10 +31,10 @@ public class GenericTester {
         server = new BardServer(SimpleServlet.class);
     }
 
-    #foreach ($api in $doc.APIs)
-    public <T> T $api.name (
+    #foreach ($api in $apis)
+        public <T> T $api.handlerMethod.name (
         #foreach ($params in $api.parameters)
-            $params.type $params.name,
+            $params.rawType.name $params.name,
         #end
         Class<T> _type
     ) throws UnirestException, IOException {
@@ -44,8 +46,10 @@ public class GenericTester {
                 #set($method = "routeParam")
             #elseif ($params.belongs == "url")
                 #set($method = "queryString")
+            #elseif ($params.belongs == "form" || $params.belongs == "multipart" )
+                #set($method = "field")
             #end
-            req = req.${method}("$params.name", $params.name);
+            req = req. ${method}("$params.name",$params.name);
         #end
         String _c = req.asString().getBody();
         return mapper.readValue(_c, _type);
