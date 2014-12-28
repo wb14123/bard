@@ -1,3 +1,6 @@
+#* @vtlvariable name="servletClass" type="java.lang.String" *#
+#* @vtlvariable name="handlerClass" type="java.lang.String" *#
+#* @vtlvariable name="package" type="java.lang.String" *#
 #* @vtlvariable name="apis" type="java.util.Set<com.bardframework.bard.core.doc.Api>" *#
 package
     $package;
@@ -17,8 +20,9 @@ import java.io.IOException;
 
 public class ${handlerClass}Tester {
     protected static String host;
-    private static BardServer server = new BardServer(SimpleServlet.class);
-    protected ObjectMapper mapper = new ObjectMapper();
+    private static BardServer server = new BardServer(${servletClass}.
+    class);
+    protected static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeClass
     public static void runBeforeClass() throws Exception {
@@ -28,11 +32,11 @@ public class ${handlerClass}Tester {
     @AfterClass
     public static void runAfterClass() throws Exception {
         server.stop();
-        server = new BardServer(SimpleServlet.class);
+        server = new BardServer(${servletClass}. class);
     }
 
     #foreach ($api in $apis)
-        public <T> T $api.handlerMethod.name (
+        public static <T> T $api.handlerMethod.name (
         #foreach ($params in $api.parameters)
             $params.rawType.name $params.name,
         #end

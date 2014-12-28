@@ -5,9 +5,7 @@ import com.bardframework.bard.core.HandlerMeta;
 import com.bardframework.bard.core.Servlet;
 import com.bardframework.bard.core.doc.Api;
 import com.bardframework.bard.core.doc.Document;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.*;
@@ -19,7 +17,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.File;
-import java.io.StringWriter;
+import java.io.FileWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -30,14 +28,8 @@ public class BardTesterMojo extends AbstractMojo {
 
     @Component
     private MavenProject mavenProject;
-    @Component
-    private MavenSession mavenSession;
-    @Component
-    private BuildPluginManager pluginManager;
     @Parameter(property = "servletClass", required = true)
     private String servletClass;
-    @Parameter(property = "outputDirectory", defaultValue = "${project.build.directory}")
-    private String outputDirectory;
 
     @Override public void execute() throws MojoExecutionException, MojoFailureException {
         Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -78,13 +70,21 @@ public class BardTesterMojo extends AbstractMojo {
                 String[] classNames = allName.split("\\.");
                 String className = classNames[classNames.length - 1];
                 String packageName = allName.replace("." + className, "");
+                File packageDir = new File(
+                    "target/generated-test-sources/java/" + packageName.replace(".", "/"));
+                if (!packageDir.exists() && !packageDir.mkdirs()) {
+                    throw new MojoExecutionException("Cannot mkdirs for generated-test-sources");
+                }
+                File fileName = new File(packageDir, className + "Tester.java");
+                FileWriter fileWriter = new FileWriter(fileName);
                 context.put("package", packageName);
+                System.out.println(servletClass);
+                context.put("servletClass", servletClass);
                 context.put("handlerClass", className);
                 context.put("apis", entry.getValue());
                 Template template = Velocity.getTemplate("GenerateTester.java.vm");
-                StringWriter sw = new StringWriter();
-                template.merge(context, sw);
-                System.out.print(sw.toString());
+                template.merge(context, fileWriter);
+                fileWriter.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
