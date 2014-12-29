@@ -92,10 +92,22 @@ public class BardTesterMojo extends AbstractMojo {
     }
 
     public String covertNameToParam(String name) {
-        return name;
-    }
-
-    public String lowerMethod(String method) {
-        return "get";
+        char[] chars = name.toCharArray();
+        String result = "";
+        int l = chars.length;
+        for (int i = 0; i < l; i++) {
+            if (!(
+                (chars[i] >= 'A' && chars[i] <= 'Z') ||
+                    (chars[i] >= 'a' && chars[i] <= 'z') ||
+                    (chars[i] >= '0' && chars[i] <= '9'))
+                ) {
+                if (i + 1 < l) {
+                    chars[i + 1] = Character.toUpperCase(chars[i + 1]);
+                }
+            } else {
+                result += chars[i];
+            }
+        }
+        return result;
     }
 }

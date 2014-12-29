@@ -43,7 +43,7 @@ public class ${handlerClass}Tester {
         #end
         Class<T> _type
     ) throws UnirestException, IOException {
-            String _c = Unirest. ${instance.lowerMethod($api.method)}(host + "$api.path")
+            String _c = Unirest. ${api.method.toLowerCase()}(host + "$api.path" )
         #foreach ($params in $api.parameters)
             #if ($params.belongs == "header")
                 #set($method = "header")
@@ -54,7 +54,7 @@ public class ${handlerClass}Tester {
             #elseif ($params.belongs == "form" || $params.belongs == "multipart" )
                 #set($method = "field")
             #end
-            .${method}("$params.name",$params.name)
+            .${method}("$params.name" ,$instance.covertNameToParam($params.name))
         #end
             .asString().getBody();
         return mapper.readValue(_c, _type);
