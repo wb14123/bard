@@ -19,6 +19,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class ${handlerClass}Tester {
     protected static String host;
@@ -38,6 +39,7 @@ public class ${handlerClass}Tester {
     ) throws Exception {
         String host = TestServer.getHost();
         String _c = Unirest.${api.method.toLowerCase()}(host + "$api.path" )
+        #set($isJson = false)
         #foreach ($params in $api.parameters)
             #if ($params.belongs == "header")
                 #set($method = "header")
@@ -47,8 +49,23 @@ public class ${handlerClass}Tester {
                 #set($method = "queryString")
             #elseif ($params.belongs == "form" || $params.belongs == "multipart" )
                 #set($method = "field")
+            #elseif ($params.belongs == "json")
+                #set($isJson = true)
             #end
-            .${method}("$params.name" ,$instance.covertNameToParam($params.name))
+            #if (!$isJson)
+                .${method}("$params.name" ,$instance.covertNameToParam($params.name))
+            #end
+        #end
+        #if ($isJson)
+            .body(mapper.writeValueAsString(new HashMap<String, Object>() {
+                {
+                    #foreach ($params in $api.parameters)
+                        #if ($params.belongs == "json")
+                    this.put("$params.name",$instance.covertNameToParam($params.name));
+                        #end
+                    #end
+                }
+            }))
         #end
             .asString().getBody();
         return mapper.readValue(_c, _type);
