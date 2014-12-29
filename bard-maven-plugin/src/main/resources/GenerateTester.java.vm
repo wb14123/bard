@@ -3,14 +3,15 @@
 #* @vtlvariable name="handlerClass" type="java.lang.String" *#
 #* @vtlvariable name="package" type="java.lang.String" *#
 #* @vtlvariable name="apis" type="java.util.Set<com.bardframework.bard.core.doc.Api>" *#
-package
-    $package;
+package $package;
 
 import com.bardframework.bard.util.server.BardServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
+
+import ${testServerPackage}.TestServer;
 
 import static com.mashape.unirest.http.Unirest.*;
 
@@ -25,25 +26,18 @@ public class ${handlerClass}Tester {
     class);
     protected static ObjectMapper mapper = new ObjectMapper();
 
-    @BeforeClass
-    public static void runBeforeClass() throws Exception {
-        host = server.startForTest();
-    }
-
-    @AfterClass
-    public static void runAfterClass() throws Exception {
-        server.stop();
-        server = new BardServer(${servletClass}. class);
+    public ${handlerClass}Tester () throws Exception {
     }
 
     #foreach ($api in $apis)
-        public static <T> T $api.handlerMethod.name (
+    public static <T> T $api.handlerMethod.name (
         #foreach ($params in $api.parameters)
-            $params.rawType.name $instance.covertNameToParam($params.name),
+        $params.rawType.name $instance.covertNameToParam($params.name),
         #end
         Class<T> _type
-    ) throws UnirestException, IOException {
-            String _c = Unirest. ${api.method.toLowerCase()}(host + "$api.path" )
+    ) throws Exception {
+        String host = TestServer.getHost();
+        String _c = Unirest.${api.method.toLowerCase()}(host + "$api.path" )
         #foreach ($params in $api.parameters)
             #if ($params.belongs == "header")
                 #set($method = "header")

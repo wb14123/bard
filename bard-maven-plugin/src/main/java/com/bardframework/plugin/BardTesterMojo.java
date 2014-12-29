@@ -22,23 +22,34 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
 
-@Mojo(name = "generate-tester", defaultPhase = LifecyclePhase.GENERATE_TEST_SOURCES,
+@Mojo(name = "generate-tester" , defaultPhase = LifecyclePhase.GENERATE_TEST_SOURCES,
     requiresDependencyResolution = ResolutionScope.COMPILE, requiresProject = true)
 public class BardTesterMojo extends AbstractMojo {
 
     @Component
     private MavenProject mavenProject;
-    @Parameter(property = "servletClass", required = true)
+    @Parameter(property = "servletClass" , required = true)
     private String servletClass;
 
+    private static String getPackageName(String allName) {
+        String className = getClassName(allName);
+        return allName.replace("." + className, "" );
+    }
+
+    private static String getClassName(String allName) {
+        String[] classNames = allName.split("\\." );
+        return classNames[classNames.length - 1];
+    }
+
     @Override public void execute() throws MojoExecutionException, MojoFailureException {
-        Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-        Velocity.setProperty("classpath.resource.loader.class",
+        Velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath" );
+        Velocity.setProperty("classpath.resource.loader.class" ,
             ClasspathResourceLoader.class.getName());
         Velocity.init();
 
 
         try {
+            // combine project classpath into current classpath
             List runtimeClasspathElements = mavenProject.getRuntimeClasspathElements();
             URL[] runtimeUrls = new URL[runtimeClasspathElements.size()];
             for (int i = 0; i < runtimeClasspathElements.size(); i++) {
@@ -49,11 +60,12 @@ public class BardTesterMojo extends AbstractMojo {
                 Thread.currentThread().getContextClassLoader());
             Thread.currentThread().setContextClassLoader(newLoader);
 
+            // get documents
             Class<? extends Servlet> c =
                 (Class<? extends Servlet>) newLoader.loadClass(servletClass);
             Servlet servlet = c.newInstance();
             HandlerMeta.annotationMapper = servlet.mapper;
-            Document document = APIDocFilter.getDocument(c, "");
+            Document document = APIDocFilter.getDocument(c, "" );
             Map<Class<?>, Set<Api>> classDocumentMap = new HashMap<>();
             for (Api api : document.apis) {
                 Class<?> handlerClass = api.getHandlerMethod().getDeclaringClass();
@@ -64,31 +76,55 @@ public class BardTesterMojo extends AbstractMojo {
                 apis.add(api);
                 classDocumentMap.put(handlerClass, apis);
             }
+
+            // generate TestServer.java
+            String servletPackageName = getPackageName(servletClass);
+            File servletPackageDir = createDirForPackage(servletPackageName);
+            File testServer = new File(servletPackageDir, "TestServer.java" );
+            FileWriter testServerWriter = new FileWriter(testServer);
+            VelocityContext gContext = new VelocityContext();
+            gContext.put("testServerPackage" , servletPackageName);
+            gContext.put("servletClass" , servletClass);
+            Template gTemplate = Velocity.getTemplate("TestServer.java.vm" );
+            gTemplate.merge(gContext, testServerWriter);
+            testServerWriter.close();
+
+            // genearte request class for each handler
             for (Map.Entry<Class<?>, Set<Api>> entry : classDocumentMap.entrySet()) {
                 VelocityContext context = new VelocityContext();
                 String allName = entry.getKey().getName();
-                String[] classNames = allName.split("\\.");
-                String className = classNames[classNames.length - 1];
-                String packageName = allName.replace("." + className, "");
-                File packageDir = new File(
-                    "target/generated-test-sources/java/" + packageName.replace(".", "/"));
-                if (!packageDir.exists() && !packageDir.mkdirs()) {
-                    throw new MojoExecutionException("Cannot mkdirs for generated-test-sources");
-                }
-                File fileName = new File(packageDir, className + "Tester.java");
+                String className = getClassName(allName);
+                String packageName = getPackageName(allName);
+                File packageDir = createDirForPackage(packageName);
+                File fileName = new File(packageDir, className + "Tester.java" );
                 FileWriter fileWriter = new FileWriter(fileName);
-                context.put("package", packageName);
-                context.put("instance", this);
-                context.put("servletClass", servletClass);
-                context.put("handlerClass", className);
-                context.put("apis", entry.getValue());
-                Template template = Velocity.getTemplate("GenerateTester.java.vm");
+                context.put("package" , packageName);
+                context.put("testServerPackage" , servletPackageName);
+                context.put("instance" , this);
+                context.put("servletClass" , servletClass);
+                context.put("handlerClass" , className);
+                context.put("apis" , entry.getValue());
+                Template template = Velocity.getTemplate("GenerateTester.java.vm" );
                 template.merge(context, fileWriter);
                 fileWriter.close();
             }
+
+            mavenProject.addTestCompileSourceRoot(mavenProject.getBasedir().getAbsolutePath()
+                + "/target/generated-test-sources/java/" );
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private File createDirForPackage(String packageName) throws MojoExecutionException {
+        String filename =
+            mavenProject.getBasedir().getAbsolutePath() + "/target/generated-test-sources/java/"
+                + packageName.replace("." , "/" );
+        File packageDir = new File(filename);
+        if (!packageDir.exists() && !packageDir.mkdirs()) {
+            throw new MojoExecutionException("Cannot mkdirs for " + filename);
+        }
+        return packageDir;
     }
 
     public String covertNameToParam(String name) {

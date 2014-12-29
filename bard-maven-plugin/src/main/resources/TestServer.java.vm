@@ -1,0 +1,26 @@
+package $testServerPackage;
+
+import com.bardframework.bard.util.server.BardServer;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+
+public class TestServer {
+    private static String host;
+    private static BardServer server = new BardServer(${servletClass}.class);
+
+    @BeforeClass
+    public static void runBeforeClass() throws Exception {
+        host = server.startForTest();
+    }
+
+    @AfterClass
+    public static void runAfterClass() throws Exception {
+        server.stop();
+        server = new BardServer(${servletClass}.class);
+    }
+
+    public static String getHost() {
+        return host;
+    }
+
+}
