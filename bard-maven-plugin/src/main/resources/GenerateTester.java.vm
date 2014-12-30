@@ -33,7 +33,7 @@ public class ${handlerClass}Tester {
     #foreach ($api in $apis)
     public static <T> T $api.handlerMethod.name (
         #foreach ($params in $api.parameters)
-        final $params.rawType.name $instance.covertNameToParam($params.name),
+        final $params.rawType.name.replace("$", ".") $instance.covertNameToParam($params.name),
         #end
         Class<T> _type
     ) throws Exception {
