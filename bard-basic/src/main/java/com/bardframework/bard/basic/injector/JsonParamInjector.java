@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.drapostolos.typeparser.TypeParser;
+import com.github.drapostolos.typeparser.TypeParserException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,11 +22,12 @@ public class JsonParamInjector extends Injector<JsonParam> {
     @HandleErrors({
         @ErrorCase(code = BardBasicError.READ_JSON_ERROR,
             exception = JsonMappingException.class,
-            description = "Read JSON data error")
+            description = "Read JSON data error" ),
+        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error" )
     })
     @Before public void getJsonParam() throws IOException {
-        context.putCustom("param", annotation.value());
-        HashMap<String, Object> jsonMap = context.getCustom("jsonParam");
+        context.putCustom("param" , annotation.value());
+        HashMap<String, Object> jsonMap = context.getCustom("jsonParam" );
         if (jsonMap == null) {
             JsonFactory factory = new JsonFactory();
             ObjectMapper mapper = new ObjectMapper(factory);
@@ -33,7 +35,7 @@ public class JsonParamInjector extends Injector<JsonParam> {
                 new TypeReference<HashMap<String, Object>>() {
                 };
             jsonMap = mapper.readValue(context.getRequest().getInputStream(), typeRef);
-            context.putCustom("jsonParam", jsonMap);
+            context.putCustom("jsonParam" , jsonMap);
         }
 
         TypeParser parser = TypeParser.newBuilder().build();

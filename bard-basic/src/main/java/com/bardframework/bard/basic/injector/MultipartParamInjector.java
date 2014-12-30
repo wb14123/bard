@@ -1,11 +1,14 @@
 package com.bardframework.bard.basic.injector;
 
+import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.basic.marker.MultipartParam;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Injector;
 import com.bardframework.bard.core.Util;
 import com.bardframework.bard.core.marker.Before;
 import com.github.drapostolos.typeparser.TypeParser;
+import com.github.drapostolos.typeparser.TypeParserException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -19,9 +22,12 @@ import java.util.Map;
 @BindTo(MultipartParam.class)
 public class MultipartParamInjector extends Injector<MultipartParam> {
     @Before
+    @HandleErrors({
+        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error" )
+    })
     public void getMultipart() throws FileUploadException {
-        context.putCustom("param", annotation.value());
-        Map<String, FileItem> fileMap = context.getCustom("multipart");
+        context.putCustom("param" , annotation.value());
+        Map<String, FileItem> fileMap = context.getCustom("multipart" );
         if (fileMap == null) {
             fileMap = new HashMap<>();
             boolean isMultipart = ServletFileUpload.isMultipartContent(context.getRequest());
@@ -31,7 +37,7 @@ public class MultipartParamInjector extends Injector<MultipartParam> {
 
             DiskFileItemFactory factory = new DiskFileItemFactory();
             File repository;
-            String pathName = Util.getConfig().getString("bard.upload.tempdir", "/tmp");
+            String pathName = Util.getConfig().getString("bard.upload.tempdir" , "/tmp" );
             repository = new File(pathName);
             factory.setRepository(repository);
             ServletFileUpload upload = new ServletFileUpload(factory);
@@ -39,7 +45,7 @@ public class MultipartParamInjector extends Injector<MultipartParam> {
             for (FileItem item : items) {
                 fileMap.put(item.getFieldName(), item);
             }
-            context.putCustom("multipart", fileMap);
+            context.putCustom("multipart" , fileMap);
         }
 
         FileItem item = fileMap.get(annotation.value());
