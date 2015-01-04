@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.bardframework</groupId>
         <artifactId>bard</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bard-maven-plugin</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>bard-maven-plugin Maven Plugin</name>
@@ -71,7 +71,7 @@
         <dependency>
             <groupId>com.bardframework</groupId>
             <artifactId>bard-util</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

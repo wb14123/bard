@@ -7,18 +7,18 @@
     <parent>
         <groupId>com.bardframework</groupId>
         <artifactId>bard</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bard-simple</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>com.bardframework</groupId>
                 <artifactId>bard-maven-plugin</artifactId>
-                <version>0.3.0-SNAPSHOT</version>
+                <version>0.4.0-SNAPSHOT</version>
                 <configuration>
                     <servletClass>org.apache.saltedpeanuts.SimpleServlet</servletClass>
                 </configuration>
@@ -79,17 +79,17 @@
         <dependency>
             <groupId>com.bardframework</groupId>
             <artifactId>bard-core</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.bardframework</groupId>
             <artifactId>bard-basic</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.bardframework</groupId>
             <artifactId>bard-util</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
