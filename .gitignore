@@ -1,4 +1,23 @@
 target/
 log/
 dependency-reduced-pom.xml
+# Mac OS X
+*.DS_Store
+
+# Generated files
+build/
+*.iml
+*.ipr
+.classpath
+.project
+.settings/
+.idea
+*/.idea
+target
+*/target
+*.class
+web/nb-configuration.xml
+nb-configuration.xml
+*.log
+makefile
 
