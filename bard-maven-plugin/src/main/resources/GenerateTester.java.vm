@@ -53,7 +53,11 @@ public class ${handlerClass}Tester {
                 #set($isJson = true)
             #end
             #if (!$isJson)
-                .${method}("$params.name" ,$instance.covertNameToParam($params.name))
+                #if ($method != "routeParam")
+                    .${method}("$params.name" ,$instance.covertNameToParam($params.name))
+                #else
+                    .${method}("$params.name" ,String.valueOf($instance.covertNameToParam($params.name)))
+                #end
             #end
         #end
         #if ($isJson)
