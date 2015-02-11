@@ -1,4 +1,4 @@
-package com.bardframework.bard.util.server;
+package com.bardframework.bard.basic.server;
 
 import com.bardframework.bard.core.Servlet;
 import com.bardframework.bard.core.Util;

@@ -5,20 +5,15 @@
 #* @vtlvariable name="apis" type="java.util.Set<com.bardframework.bard.core.doc.Api>" *#
 package $package;
 
-import com.bardframework.bard.util.server.BardServer;
+import com.bardframework.bard.basic.server.BardServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.HttpRequest;
 
 import ${testServerPackage}.TestServer;
-
-import static com.mashape.unirest.http.Unirest.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class ${handlerClass}Tester {

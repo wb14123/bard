@@ -1,6 +1,6 @@
 package $testServerPackage;
 
-import com.bardframework.bard.util.server.BardServer;
+import com.bardframework.bard.basic.server.BardServer;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
