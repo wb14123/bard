@@ -6,27 +6,20 @@
 
     <parent>
         <groupId>com.bardframework</groupId>
-        <artifactId>bard</artifactId>
+        <artifactId>bard-util</artifactId>
         <version>0.4.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>bard-util</artifactId>
+    <artifactId>bard-cache</artifactId>
     <version>0.4.0-SNAPSHOT</version>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>bard-cache</module>
-        <module>bard-db</module>
-        <module>bard-spring</module>
-        <module>bard-user</module>
-    </modules>
 
     <dependencies>
         <dependency>
-            <groupId>com.bardframework</groupId>
-            <artifactId>bard-basic</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.6.0</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

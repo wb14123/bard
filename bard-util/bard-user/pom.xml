@@ -6,27 +6,23 @@
 
     <parent>
         <groupId>com.bardframework</groupId>
-        <artifactId>bard</artifactId>
+        <artifactId>bard-util</artifactId>
         <version>0.4.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>bard-util</artifactId>
+    <artifactId>bard-user</artifactId>
     <version>0.4.0-SNAPSHOT</version>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>bard-cache</module>
-        <module>bard-db</module>
-        <module>bard-spring</module>
-        <module>bard-user</module>
-    </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.bardframework</groupId>
-            <artifactId>bard-basic</artifactId>
+            <artifactId>bard-cache</artifactId>
             <version>0.4.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 
