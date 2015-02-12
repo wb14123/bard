@@ -59,7 +59,7 @@ restart () {
     start
 }
 
-help () {
+myHelp () {
     echo "Usage: server.sh start|stop|restart|status"
 }
 
@@ -68,5 +68,5 @@ case $1 in
 	stop) stop ;;
 	restart) restart ;;
 	status) status ;;
-	*) help ;;
+	*) myHelp ;;
 esac
