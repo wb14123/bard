@@ -1,7 +1,7 @@
 package com.bardframework.bard.basic.injector;
 
 import com.bardframework.bard.basic.BardBasicError;
-import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleError;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.basic.marker.Required;
 import com.bardframework.bard.core.BindTo;
@@ -12,7 +12,7 @@ import com.bardframework.bard.core.marker.Before;
 public class RequiredInjector extends Injector<Required> {
     @Before
     @HandleErrors({
-        @ErrorCase(description = "required param doesn't provided",
+        @HandleError(description = "required param doesn't provided",
             code = BardBasicError.REQUIRED_ERROR,
             exception = RequiredNullException.class)
     })

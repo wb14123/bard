@@ -1,7 +1,7 @@
 package com.bardframework.bard.basic.injector;
 
 import com.bardframework.bard.basic.BardBasicError;
-import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleError;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.basic.marker.JsonParam;
 import com.bardframework.bard.core.BindTo;
@@ -20,10 +20,10 @@ import java.util.HashMap;
 @BindTo(JsonParam.class)
 public class JsonParamInjector extends Injector<JsonParam> {
     @HandleErrors({
-        @ErrorCase(code = BardBasicError.READ_JSON_ERROR,
+        @HandleError(code = BardBasicError.READ_JSON_ERROR,
             exception = JsonMappingException.class,
             description = "Read JSON data error"),
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
+        @HandleError(code = 400, exception = TypeParserException.class, description = "params error")
     })
     @Before public void getJsonParam() throws IOException {
         context.putCustom("param", annotation.value());

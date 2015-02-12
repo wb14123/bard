@@ -1,7 +1,7 @@
 package com.bardframework.bard.basic.injector;
 
 import com.bardframework.bard.basic.BardBasicError;
-import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleError;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Injector;
@@ -20,10 +20,10 @@ import java.util.Map;
 public class FormParamInjector extends Injector<FormParam> {
     @Before
     @HandleErrors({
-        @ErrorCase(description = "read form data error",
+        @HandleError(description = "read form data error",
             code = BardBasicError.READ_FORM_ERROR,
             exception = InvalidateFormException.class),
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
+        @HandleError(code = 400, exception = TypeParserException.class, description = "params error")
     })
     public void getParam() throws IOException, InvalidateFormException {
         context.putCustom("param", annotation.value());

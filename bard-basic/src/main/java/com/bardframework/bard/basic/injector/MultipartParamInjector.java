@@ -1,6 +1,6 @@
 package com.bardframework.bard.basic.injector;
 
-import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleError;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.basic.marker.MultipartParam;
 import com.bardframework.bard.core.BindTo;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class MultipartParamInjector extends Injector<MultipartParam> {
     @Before
     @HandleErrors({
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
+        @HandleError(code = 400, exception = TypeParserException.class, description = "params error")
     })
     public void getMultipart() throws FileUploadException {
         context.putCustom("param", annotation.value());

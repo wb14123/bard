@@ -1,6 +1,6 @@
 package com.bardframework.bard.basic.injector;
 
-import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleError;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Injector;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class PathParamInjector extends Injector<PathParam> {
     @Before
     @HandleErrors({
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
+        @HandleError(code = 400, exception = TypeParserException.class, description = "params error")
     })
     public void getParam() {
         context.putCustom("param", annotation.value());

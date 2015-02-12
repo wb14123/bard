@@ -34,7 +34,7 @@ public class ArticleHandler extends Handler {
     }
 
     @HandleErrors({
-        @ErrorCase(code = 20010, exception = ObjectNotFoundException.class,
+        @HandleError(code = 20010, exception = ObjectNotFoundException.class,
             description = "article not found")
     })
     @GET

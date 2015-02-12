@@ -1,7 +1,7 @@
 package org.apache.saltedpeanuts.handler;
 
 import com.bardframework.bard.basic.marker.Doc;
-import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleError;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.basic.marker.Required;
 import com.bardframework.bard.core.Handler;
@@ -28,7 +28,7 @@ public class UserHandler extends Handler {
     @GET
     @Path("/signup")
     @HandleErrors({
-        @ErrorCase(code = 20000,
+        @HandleError(code = 20000,
             exception = UsernameDuplicateException.class,
             description = "Username duplicate")
     })
@@ -57,7 +57,7 @@ public class UserHandler extends Handler {
     @GET
     @Path("/login")
     @HandleErrors({
-        @ErrorCase(code = 20001,
+        @HandleError(code = 20001,
             exception = InvalidatePasswordException.class,
             description = "invalidate password")
     })

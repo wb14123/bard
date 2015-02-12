@@ -1,7 +1,7 @@
 package com.bardframework.bard.basic.injector;
 
 import com.bardframework.bard.basic.BardBasicError;
-import com.bardframework.bard.basic.marker.ErrorCase;
+import com.bardframework.bard.basic.marker.HandleError;
 import com.bardframework.bard.basic.marker.HandleErrors;
 import com.bardframework.bard.core.BindTo;
 import com.bardframework.bard.core.Injector;
@@ -12,7 +12,7 @@ import javax.validation.constraints.Max;
 
 @BindTo(Max.class)
 @HandleErrors({
-    @ErrorCase(code = BardBasicError.VALIDATION_ERROR,
+    @HandleError(code = BardBasicError.VALIDATION_ERROR,
         exception = ValidationException.class, description = "Param validation error")
 })
 public class MaxInjector extends Injector<Max> {
