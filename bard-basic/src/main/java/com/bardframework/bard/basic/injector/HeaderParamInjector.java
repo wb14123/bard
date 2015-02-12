@@ -11,9 +11,9 @@ import javax.ws.rs.HeaderParam;
 public class HeaderParamInjector extends Injector<HeaderParam> {
     @Before
     public void get() {
-        context.putCustom("param" , annotation.value());
+        context.putCustom("param", annotation.value());
         String param = context.getRequest().getHeader(annotation.value());
-        if (param == null || param.equals("" )) {
+        if (param == null || param.equals("")) {
             return;
         }
         TypeParser parser = TypeParser.newBuilder().build();

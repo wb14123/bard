@@ -7,12 +7,14 @@ import com.bardframework.bard.core.marker.Before;
 
 @BindTo(CORSHeaders.class)
 public class CORSHeadersFilter extends Filter<CORSHeaders> {
-    @Before public void addHeaders() {
+    @Before
+    public void addHeaders() {
         context.getResponse().addHeader("Access-Control-Allow-Origin", annotation.origin());
         context.getResponse().addHeader("Access-Control-Allow-Methods", annotation.methods());
         context.getResponse().addHeader("Access-Control-Allow-Headers", annotation.headers());
     }
 
-    @Override public void generateDoc() {
+    @Override
+    public void generateDoc() {
     }
 }

@@ -15,17 +15,17 @@ import java.util.Map;
 public class PathParamInjector extends Injector<PathParam> {
     @Before
     @HandleErrors({
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error" )
+        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
     })
     public void getParam() {
-        context.putCustom("param" , annotation.value());
-        Map<String, String> map = context.getCustom("path-params" );
+        context.putCustom("param", annotation.value());
+        Map<String, String> map = context.getCustom("path-params");
         if (map == null) {
             context.setInjectorVariable(null);
             return;
         }
         String param = map.get(annotation.value());
-        if (param == null || param.equals("" )) {
+        if (param == null || param.equals("")) {
             return;
         }
         TypeParser parser = TypeParser.newBuilder().build();

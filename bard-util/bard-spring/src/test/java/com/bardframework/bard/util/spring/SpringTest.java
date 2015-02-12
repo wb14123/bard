@@ -1,4 +1,3 @@
-
 package com.bardframework.bard.util.spring;
 
 import com.bardframework.bard.core.Handler;
@@ -60,6 +59,7 @@ public class SpringTest {
         }
     }
 
+
     @Component
     @Path("/util/spring")
     public static class BeanHandlerTester extends Handler {
@@ -72,7 +72,8 @@ public class SpringTest {
 
         @Path("/filter-test")
         @FilterBeanTester
-        public void filterTest(){}
+        public void filterTest() {
+        }
 
         @Path("/handler-test")
         public void handlerTest() {
@@ -84,8 +85,7 @@ public class SpringTest {
     @Configuration
     @ComponentScan
     public static class Application {
-        @Bean
-        Embed mockEmbed() {
+        @Bean Embed mockEmbed() {
             return new Embed() {
                 @Override public String getMessage() {
                     return "hello";

@@ -20,37 +20,37 @@ import java.util.Map;
 public class FormParamInjector extends Injector<FormParam> {
     @Before
     @HandleErrors({
-        @ErrorCase(description = "read form data error" ,
+        @ErrorCase(description = "read form data error",
             code = BardBasicError.READ_FORM_ERROR,
             exception = InvalidateFormException.class),
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error" )
+        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
     })
     public void getParam() throws IOException, InvalidateFormException {
-        context.putCustom("param" , annotation.value());
+        context.putCustom("param", annotation.value());
         // get from cache first
-        Map<String, String> formParams = context.getCustom("form" );
+        Map<String, String> formParams = context.getCustom("form");
         if (formParams == null) {
             formParams = new HashMap<>();
             BufferedReader reader = context.getRequest().getReader();
             String line = reader.readLine();
             try {
-                String[] pairs = line.split("&" );
+                String[] pairs = line.split("&");
 
                 for (String pair : pairs) {
-                    String[] fields = pair.split("=" );
-                    String name = URLDecoder.decode(fields[0], "UTF-8" );
-                    String value = URLDecoder.decode(fields[1], "UTF-8" );
+                    String[] fields = pair.split("=");
+                    String name = URLDecoder.decode(fields[0], "UTF-8");
+                    String value = URLDecoder.decode(fields[1], "UTF-8");
                     formParams.put(name, value);
                 }
             } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-                throw new InvalidateFormException("Invalidate form format" , e);
+                throw new InvalidateFormException("Invalidate form format", e);
             }
 
-            context.putCustom("form" , formParams);
+            context.putCustom("form", formParams);
         }
 
         String param = formParams.get(annotation.value());
-        if (param == null || param.equals("" )) {
+        if (param == null || param.equals("")) {
             context.setInjectorVariable(null);
             return;
         }

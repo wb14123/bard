@@ -23,11 +23,11 @@ import java.util.Map;
 public class MultipartParamInjector extends Injector<MultipartParam> {
     @Before
     @HandleErrors({
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error" )
+        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
     })
     public void getMultipart() throws FileUploadException {
-        context.putCustom("param" , annotation.value());
-        Map<String, FileItem> fileMap = context.getCustom("multipart" );
+        context.putCustom("param", annotation.value());
+        Map<String, FileItem> fileMap = context.getCustom("multipart");
         if (fileMap == null) {
             fileMap = new HashMap<>();
             boolean isMultipart = ServletFileUpload.isMultipartContent(context.getRequest());
@@ -37,7 +37,7 @@ public class MultipartParamInjector extends Injector<MultipartParam> {
 
             DiskFileItemFactory factory = new DiskFileItemFactory();
             File repository;
-            String pathName = Util.getConfig().getString("bard.upload.tempdir" , "/tmp" );
+            String pathName = Util.getConfig().getString("bard.upload.tempdir", "/tmp");
             repository = new File(pathName);
             factory.setRepository(repository);
             ServletFileUpload upload = new ServletFileUpload(factory);
@@ -45,7 +45,7 @@ public class MultipartParamInjector extends Injector<MultipartParam> {
             for (FileItem item : items) {
                 fileMap.put(item.getFieldName(), item);
             }
-            context.putCustom("multipart" , fileMap);
+            context.putCustom("multipart", fileMap);
         }
 
         FileItem item = fileMap.get(annotation.value());

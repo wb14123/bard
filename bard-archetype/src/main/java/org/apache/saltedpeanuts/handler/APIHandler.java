@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
 public class APIHandler extends Handler {
     @Path("/api-doc")
     @GET
-    @APIDoc(value="Bard Simple", servletClass = SimpleServlet.class)
+    @APIDoc(value = "Bard Simple", servletClass = SimpleServlet.class)
     public void getAPI() {
     }
 }

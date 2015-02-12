@@ -15,12 +15,12 @@ public class QueryParamInjector extends Injector<QueryParam> {
 
     @Before
     @HandleErrors({
-        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error" )
+        @ErrorCase(code = 400, exception = TypeParserException.class, description = "params error")
     })
     public void getParams() {
-        context.putCustom("param" , annotation.value());
+        context.putCustom("param", annotation.value());
         String param = context.getRequest().getParameter(annotation.value());
-        if (param == null || param.equals("" )) {
+        if (param == null || param.equals("")) {
             return;
         }
         TypeParser parser = TypeParser.newBuilder().build();
