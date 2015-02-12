@@ -70,12 +70,7 @@
         </dependency>
         <dependency>
             <groupId>com.bardframework</groupId>
-            <artifactId>bard-db</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bardframework</groupId>
-            <artifactId>bard-user</artifactId>
+            <artifactId>bard-basic</artifactId>
             <version>0.4.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
